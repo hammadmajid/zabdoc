@@ -33,9 +33,13 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
+			"@tailwindcss/oxide",
 			"esbuild",
 			"sharp",
 			"workerd"
 		]
+	},
+	"dependencies": {
+		"mode-watcher": "^1.1.0"
 	}
 }
