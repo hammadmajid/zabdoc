@@ -9,6 +9,7 @@
 
 <svelte:head>
     <link rel="icon" href={favicon}/>
+    <title>zabcover</title>
 </svelte:head>
 
 <ModeWatcher/>
