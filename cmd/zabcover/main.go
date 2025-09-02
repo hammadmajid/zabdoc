@@ -2,25 +2,34 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
+	"time"
+
+	"github.com/hammadmajid/zabcover/internal/app"
+	"github.com/hammadmajid/zabcover/internal/routes"
 )
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	log.Printf("Received request: %s %s", r.Method, r.URL.Path)
-	_, err := fmt.Fprintf(w, "Hello, world!\n")
-	if err != nil {
-		log.Printf("Error writing response: %v", err)
-	}
-}
-
 func main() {
-	http.HandleFunc("/", handler)
-
-	addr := ":8080"
-	log.Printf("Starting server on %s", addr)
-	err := http.ListenAndServe(addr, nil)
+	port := 8080
+	zabcover, err := app.NewApp()
 	if err != nil {
-		log.Fatalf("Server failed: %v", err)
+		panic(err)
+	}
+
+	r := routes.SetupRoutes(zabcover)
+
+	server := &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      r,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: time.Minute,
+	}
+
+	zabcover.Logger.Println(fmt.Sprintf("Listening on http://localhost:%d", port))
+
+	err = server.ListenAndServe()
+	if err != nil {
+		zabcover.Logger.Fatalln(err)
 	}
 }
