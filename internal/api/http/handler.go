@@ -8,24 +8,24 @@ import (
 )
 
 type Handler struct {
-	logger *log.Logger
+	logger   *log.Logger
+	template *template.Template
 }
 
-func NewHandler(logger *log.Logger) Handler {
+func NewHandler(logger *log.Logger, template *template.Template) Handler {
 	return Handler{
-		logger: logger,
+		logger:   logger,
+		template: template,
 	}
 }
 
 //goland:noinspection GoUnusedParameter
 func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
-	var tpl = template.Must(template.ParseFiles("web/templates/index.html"))
-
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	if err := tpl.Execute(w, nil); err != nil {
+	if err := h.template.Execute(w, nil); err != nil {
 		http.Error(w, "template error", http.StatusInternalServerError)
-		log.Printf("template execute: %v", err)
+		h.logger.Printf("template execute: %v", err)
 		return
 	}
 }

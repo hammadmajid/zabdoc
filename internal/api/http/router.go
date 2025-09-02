@@ -7,7 +7,7 @@ import (
 
 func SetupRoutes(application *app.App) *chi.Mux {
 	router := chi.NewRouter()
-	handler := NewHandler(application.Logger)
+	handler := NewHandler(application.Logger, application.Template)
 
 	router.Get("/", handler.Root)
 	router.Get("/health", handler.Health)
