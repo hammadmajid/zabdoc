@@ -1,11 +1,15 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
-	http2 "github.com/hammadmajid/zabcover/internal/api/http"
+	httpapi "github.com/hammadmajid/zabcover/internal/api/http"
 	"github.com/hammadmajid/zabcover/internal/app"
 )
 
@@ -16,7 +20,7 @@ func main() {
 		panic(err)
 	}
 
-	r := http2.SetupRoutes(zabcover)
+	r := httpapi.SetupRoutes(zabcover)
 
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", port),
@@ -26,10 +30,26 @@ func main() {
 		WriteTimeout: time.Minute,
 	}
 
-	zabcover.Logger.Println(fmt.Sprintf("Listening on http://localhost:%d", port))
+	zabcover.Logger.Printf("Listening on http://localhost:%d", port)
 
-	err = server.ListenAndServe()
-	if err != nil {
-		zabcover.Logger.Fatalln(err)
+	go func() {
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			zabcover.Logger.Fatalf("Server failed to start: %v", err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	zabcover.Logger.Println("Shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		zabcover.Logger.Fatalf("Server forced to shutdown: %v", err)
 	}
+
+	zabcover.Logger.Println("Server exited")
 }
