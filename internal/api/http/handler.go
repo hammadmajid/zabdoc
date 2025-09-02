@@ -33,3 +33,11 @@ func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 func (h Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Status is available")
 }
+
+func (h Handler) Favicon(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "web/static/favicon.svg")
+}
+
+func (h Handler) Robots(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "web/static/robots.txt")
+}

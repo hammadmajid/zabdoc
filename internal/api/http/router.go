@@ -11,6 +11,8 @@ func SetupRoutes(application *app.App) *chi.Mux {
 
 	router.Get("/", handler.Root)
 	router.Get("/health", handler.HealthCheck)
+	router.Get("/favicon.svg", handler.Favicon)
+	router.Get("/robots.txt", handler.Robots)
 
 	return router
 }
