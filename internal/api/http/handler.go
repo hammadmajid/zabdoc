@@ -17,6 +17,7 @@ func NewHandler(logger *log.Logger) Handler {
 	}
 }
 
+//goland:noinspection GoUnusedParameter
 func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 	var tpl = template.Must(template.ParseFiles("web/templates/index.html"))
 
