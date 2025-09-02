@@ -18,7 +18,7 @@ func NewHandler(logger *log.Logger) Handler {
 }
 
 func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
-	var tpl = template.Must(template.ParseFiles("templates/index.html"))
+	var tpl = template.Must(template.ParseFiles("web/templates/index.html"))
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
