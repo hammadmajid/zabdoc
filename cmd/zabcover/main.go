@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	http2 "github.com/hammadmajid/zabcover/internal/api/http"
 	"github.com/hammadmajid/zabcover/internal/app"
-	"github.com/hammadmajid/zabcover/internal/routes"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		panic(err)
 	}
 
-	r := routes.SetupRoutes(zabcover)
+	r := http2.SetupRoutes(zabcover)
 
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", port),
