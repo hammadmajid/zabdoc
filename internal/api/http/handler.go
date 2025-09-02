@@ -30,7 +30,7 @@ func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 }
 
 //goland:noinspection ALL
-func (h Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
+func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Status is available")
 }
 

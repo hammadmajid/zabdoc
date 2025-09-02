@@ -10,7 +10,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	handler := NewHandler(application.Logger)
 
 	router.Get("/", handler.Root)
-	router.Get("/health", handler.HealthCheck)
+	router.Get("/health", handler.Health)
 	router.Get("/favicon.svg", handler.Favicon)
 	router.Get("/robots.txt", handler.Robots)
 
