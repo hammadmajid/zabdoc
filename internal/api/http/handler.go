@@ -1,0 +1,29 @@
+package http
+
+import (
+	"html/template"
+	"log"
+	"net/http"
+)
+
+type Handler struct {
+	logger *log.Logger
+}
+
+func NewHandler(logger *log.Logger) Handler {
+	return Handler{
+		logger: logger,
+	}
+}
+
+func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
+	var tpl = template.Must(template.ParseFiles("templates/index.html"))
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	if err := tpl.Execute(w, nil); err != nil {
+		http.Error(w, "template error", http.StatusInternalServerError)
+		log.Printf("template execute: %v", err)
+		return
+	}
+}
