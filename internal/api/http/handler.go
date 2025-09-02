@@ -42,3 +42,7 @@ func (h Handler) Favicon(w http.ResponseWriter, r *http.Request) {
 func (h Handler) Robots(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "web/static/robots.txt")
 }
+
+func (h Handler) CSS(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "web/css/terminal.css")
+}

@@ -13,6 +13,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Get("/health", handler.Health)
 	router.Get("/favicon.svg", handler.Favicon)
 	router.Get("/robots.txt", handler.Robots)
+	router.Get("/terminal.css", handler.CSS)
 
 	return router
 }
