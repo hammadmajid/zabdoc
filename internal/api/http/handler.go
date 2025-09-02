@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -26,4 +27,9 @@ func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 		log.Printf("template execute: %v", err)
 		return
 	}
+}
+
+//goland:noinspection ALL
+func (h Handler) HealthCheck(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Status is available")
 }
