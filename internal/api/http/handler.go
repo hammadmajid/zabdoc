@@ -49,3 +49,8 @@ func (h Handler) CSS(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/css; charset=utf-8")
 	http.ServeFile(w, r, "web/css/terminal.css")
 }
+
+func (h Handler) FormJs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/css; charset=utf-8")
+	http.ServeFile(w, r, "web/js/form.js")
+}

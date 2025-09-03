@@ -14,6 +14,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Get("/favicon.svg", handler.Favicon)
 	router.Get("/robots.txt", handler.Robots)
 	router.Get("/terminal.css", handler.CSS)
+	router.Get("/form.js", handler.FormJs)
 
 	return router
 }
