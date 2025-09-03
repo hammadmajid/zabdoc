@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/terminal.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="icon" href="/favicon.svg"/>
+    <script src="/form.js" defer></script>
+    `
 </head>
 <body class="container-fluid">
 <header class="container">
@@ -39,7 +41,9 @@
             </div>
             <div class="form-group">
                 <label for="class">Class</label>
-                <input type="text" id="class" name="class" placeholder="Class / Section" required>
+                <select id="class" name="class" class="select" required>
+                    <option value="">Select class</option>
+                </select>
             </div>
         </fieldset>
 
@@ -48,11 +52,14 @@
             <legend>Course Information</legend>
             <div class="form-group">
                 <label for="course">Course</label>
-                <input type="text" id="course" name="course" placeholder="Course name/code" required>
+                <select id="course" name="course" class="select" required>
+                    <option value="">Select course</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="instructor">Instructor</label>
-                <input type="text" id="instructor" name="instructor" placeholder="Instructor's name" required>
+                <input type="text" id="instructor" class="select" name="instructor" required disabled
+                       placeholder="Unknown">
             </div>
         </fieldset>
 
@@ -71,7 +78,6 @@
 
         <button type="submit" class="btn btn-primary btn-block">Generate Cover</button>
     </form>
-
 </main>
 <footer class="container"
         style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--primary-color); text-align: center;">
