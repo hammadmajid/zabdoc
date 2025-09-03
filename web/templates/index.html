@@ -26,7 +26,8 @@
 </header>
 <main class="container">
     <form class="form">
-        <fieldset>
+        <!-- Student Info -->
+        <fieldset class="fieldset-spaced">
             <legend>Student Information</legend>
             <div class="form-group">
                 <label for="studentName">Name</label>
@@ -37,24 +38,40 @@
                 <input type="text" id="regNo" name="regNo" placeholder="e.g. 2312200" required>
             </div>
             <div class="form-group">
-                <label for="instructor">Instructor</label>
-                <input type="text" id="instructor" name="instructor" placeholder="Instructor's name" required>
+                <label for="class">Class</label>
+                <input type="text" id="class" name="class" placeholder="Class / Section" required>
             </div>
+        </fieldset>
+
+        <!-- Course Info -->
+        <fieldset class="fieldset-spaced">
+            <legend>Course Information</legend>
             <div class="form-group">
                 <label for="course">Course</label>
                 <input type="text" id="course" name="course" placeholder="Course name/code" required>
             </div>
             <div class="form-group">
-                <label for="title">Assignment No</label>
-                <input type="number" id="title" name="title" placeholder="Enter title" required>
+                <label for="instructor">Instructor</label>
+                <input type="text" id="instructor" name="instructor" placeholder="Instructor's name" required>
+            </div>
+        </fieldset>
+
+        <!-- Meta -->
+        <fieldset class="fieldset-spaced">
+            <legend>Meta</legend>
+            <div class="form-group">
+                <label for="title">Document Title</label>
+                <input type="text" id="title" name="title" placeholder="Enter document title" required>
             </div>
             <div class="form-group">
                 <label for="date">Date</label>
                 <input type="date" id="date" name="date" required>
             </div>
-            <button type="submit" class="btn btn-primary">Generate Cover</button>
         </fieldset>
+
+        <button type="submit" class="btn btn-primary btn-block">Generate Cover</button>
     </form>
+
 </main>
 <footer class="container"
         style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--primary-color); text-align: center;">
