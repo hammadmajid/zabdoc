@@ -38,6 +38,13 @@ func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	logoDataURI, err := utils.GetLogoDataURI()
+	if err != nil {
+		http.Error(w, "failed to load logo", http.StatusInternalServerError)
+		h.logger.Printf("load logo: %v", err)
+		return
+	}
+
 	assignment := dto.AssignmentRequest{
 		StudentName: r.FormValue("studentName"),
 		RegNo:       r.FormValue("regNo"),
@@ -46,6 +53,7 @@ func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
 		Instructor:  r.FormValue("instructor"),
 		Number:      r.FormValue("number"),
 		Date:        r.FormValue("date"),
+		LogoDataURI: logoDataURI,
 	}
 
 	pdf, err := services.Generate(assignment)

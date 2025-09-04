@@ -41,6 +41,25 @@
         }
 
         .header {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            align-items: center;
+            margin-bottom: 18pt;
+        }
+
+        .header-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .header-logo img {
+            max-height: 60pt;
+            max-width: 100%;
+        }
+
+        .header-content {
             text-align: center;
         }
 
@@ -164,8 +183,13 @@
 <body>
 <div class="a4-page">
     <div class="header">
-        <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
-        <div class="header-line2-box"><span class="header-line2">Computer Science Department</span></div>
+        <div class="header-logo">
+            <img src={{.LogoDataURI}} alt="SZABIST Logo">
+        </div>
+        <div class="header-content">
+            <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
+            <div class="header-line2-box"><span class="header-line2">Computer Science Department</span></div>
+        </div>
     </div>
     <div class="content">
         <div class="spacer-small"></div>
