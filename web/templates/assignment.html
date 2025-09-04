@@ -1,10 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>PDF Test</title>
+    <title>Assignment Cover</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            color: #0077cc;
+        }
+        .info {
+            margin-bottom: 1em;
+        }
+        .label {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-<h1>Hello PDF</h1>
-<p>Generated from template.</p>
+    <h1>Assignment Cover Sheet</h1>
+    <div class="info"><span class="label">Student Name:</span> {{.StudentName}}</div>
+    <div class="info"><span class="label">Registration No:</span> {{.RegNo}}</div>
+    <div class="info"><span class="label">Class:</span> {{.Class}}</div>
+    <div class="info"><span class="label">Course:</span> {{.Course}}</div>
+    <div class="info"><span class="label">Instructor:</span> {{.Instructor}}</div>
+    <div class="info"><span class="label">Assignment Number:</span> {{.Number}}</div>
+    <div class="info"><span class="label">Date:</span> {{.Date}}</div>
 </body>
 </html>
