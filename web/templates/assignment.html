@@ -4,28 +4,152 @@
     <title>Assignment Cover</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
+            margin: 0;
+            padding: 40px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #fff;
+            color: #222;
         }
-        h1 {
-            color: #0077cc;
+
+        .a4-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
         }
-        .info {
-            margin-bottom: 1em;
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
         }
-        .label {
+
+        .header-line1 {
+            font-size: 1.6em;
             font-weight: bold;
+        }
+
+        .header-line2 {
+            margin-top: 8px;
+            font-size: 1.2em;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .marks {
+            text-align: right;
+            margin-bottom: 20px;
+            font-size: 1em;
+        }
+
+        .underline {
+            display: inline-block;
+            border-bottom: 1px solid #444;
+            min-width: 120px;
+            height: 1em;
+            vertical-align: bottom;
+        }
+
+        .title-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 8px;
+            box-sizing: border-box;
+        }
+
+        .course-title {
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+        }
+
+        .assignment-number {
+            text-align: center;
+            font-size: 1.3em;
+            margin-bottom: 6px;
+        }
+
+        .submission-date {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .info-table {
+            margin: 0 auto;
+            width: 70%;
+            font-size: 1.05em;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+
+        .info-label {
+            width: 180px;
+            font-weight: bold;
+        }
+
+        .info-value {
+            flex: 1;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 2px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 8px;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <h1>Assignment Cover Sheet</h1>
-    <div class="info"><span class="label">Student Name:</span> {{.StudentName}}</div>
-    <div class="info"><span class="label">Registration No:</span> {{.RegNo}}</div>
-    <div class="info"><span class="label">Class:</span> {{.Class}}</div>
-    <div class="info"><span class="label">Course:</span> {{.Course}}</div>
-    <div class="info"><span class="label">Instructor:</span> {{.Instructor}}</div>
-    <div class="info"><span class="label">Assignment Number:</span> {{.Number}}</div>
-    <div class="info"><span class="label">Date:</span> {{.Date}}</div>
+<div class="a4-container">
+    <div class="header">
+        <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
+        <div class="header-line2">Computer Science Department</div>
+    </div>
+    <div class="marks">
+        <div>Total Marks: <span class="underline">4</span></div>
+        <div>Obtained Marks: <span class="underline">&nbsp;</span></div>
+    </div>
+    <div class="title-section">
+        <div class="course-title">{{.Course}}</div>
+        <div class="assignment-number">Assignment #{{.Number}}</div>
+        <div class="submission-date">Submission date: {{.Date}}</div>
+    </div>
+    <div class="info-table">
+        <div class="info-row">
+            <div class="info-label">Student Name:</div>
+            <div class="info-value">{{.StudentName}}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Reg. Number:</div>
+            <div class="info-value">{{.RegNo}}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Submitted to:</div>
+            <div class="info-value">{{.Instructor}}</div>
+        </div>
+        <div class="info-row">
+            <div class="info-label">Class/Section:</div>
+            <div class="info-value">{{.Class}}</div>
+        </div>
+    </div>
+    <div class="footer">
+        <div>{{.Class}}</div>
+        <div>SZABIST-ISB</div>
+    </div>
+</div>
 </body>
 </html>
