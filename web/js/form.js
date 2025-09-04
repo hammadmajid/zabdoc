@@ -1,7 +1,21 @@
+// TODO: move this seprate file tagged with semester and year
 const data = {
     "BsCS-4C": {
-        "Automota Theory": "Dr. Shezad Latif",
-        "Database Management Systems": "Qanetah Ahmed"
+        "Database Systems": "Dr. Shahzad Latif",
+        "Finite Automata Theory and Formal Languages": "Dr. Shahzad Latif",
+        "Linear Algebra": "Dr. Shahzad Latif",
+        "Design and Analysis of Algorithms": "Dr. Shahzad Latif",
+        "Lab: Database Systems": "Dr. Shahzad Latif",
+    },
+    "BsCS-5A": {
+        "Natural Language Processing": "Saad Irfan khan",
+        "Technical and Business Writing": "Muhammad Qasim",
+        "Computer Networks and Data Communications": "Rana Faisal Hayat",
+        "Artificial Intelligence": "Muhammad Qasim",
+        "Web Technologies-I": "Muhammad Qasim",
+        "Android Application Development": "Zubair Ahmed Chatta",
+        "Lab: Computer Networks and Data Communications": "Muhammad Qasim",
+        "Lab: Artificial Intelligence": "Muhammad Qasim",
     }
 };
 
