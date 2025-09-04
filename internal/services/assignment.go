@@ -7,12 +7,13 @@ import (
 
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
+	"github.com/hammadmajid/zabcover/internal/api/dto"
 	"github.com/hammadmajid/zabcover/internal/utils"
 )
 
-func Generate(ctx context.Context) ([]byte, error) {
+func Generate(assignment dto.AssignmentRequest) ([]byte, error) {
 	var buf bytes.Buffer
-	err := utils.TemplateFiles[utils.Assignment].Execute(&buf, nil)
+	err := utils.TemplateFiles[utils.Assignment].Execute(&buf, assignment)
 	if err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/hammadmajid/zabcover/internal/api/dto"
 	"github.com/hammadmajid/zabcover/internal/services"
 	"github.com/hammadmajid/zabcover/internal/utils"
 )
@@ -31,15 +32,34 @@ func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
-	pdf, err := services.Generate(r.Context())
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "invalid form", http.StatusBadRequest)
+		h.logger.Printf("parse form: %v", err)
+		return
+	}
+
+	assignment := dto.AssignmentRequest{
+		StudentName: r.FormValue("studentName"),
+		RegNo:       r.FormValue("regNo"),
+		Class:       r.FormValue("class"),
+		Course:      r.FormValue("course"),
+		Instructor:  r.FormValue("instructor"),
+		Number:      r.FormValue("number"),
+		Date:        r.FormValue("date"),
+	}
+
+	pdf, err := services.Generate(assignment)
 	if err != nil {
 		http.Error(w, "failed to generate PDF", http.StatusInternalServerError)
 		h.logger.Printf("generate PDF: %v", err)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/pdf")
 	w.Header().Set("Content-Disposition", "attachment; filename=assignment.pdf")
-	w.Write(pdf)
+	if _, writeErr := w.Write(pdf); writeErr != nil {
+		h.logger.Printf("write PDF: %v", writeErr)
+	}
 }
 
 //goland:noinspection ALL
