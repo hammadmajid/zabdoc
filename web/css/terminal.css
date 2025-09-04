@@ -47,7 +47,13 @@ body {
     background-color: var(--background-color)
 }
 
-h1, h2, h3, h4, h5, h6, .logo {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.logo {
     line-height: var(--global-line-height)
 }
 
@@ -69,22 +75,43 @@ em {
     color: var(--font-color)
 }
 
-blockquote, code, em, strong {
+code,
+em,
+strong {
     line-height: var(--global-line-height)
 }
 
-blockquote, code, footer, h1, h2, h3, h4, h5, h6, header, li, ol, p, section, ul, .logo {
+code,
+footer,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+li,
+ol,
+p,
+section,
+ul,
+.logo {
     float: none;
     margin: 0;
     padding: 0
 }
 
-blockquote, h1, ol, p, ul, .logo {
+h1,
+ol,
+p,
+ul,
+.logo {
     margin-top: calc(var(--global-space) * 2);
     margin-bottom: calc(var(--global-space) * 2)
 }
 
-h1, .logo {
+h1,
+.logo {
     position: relative;
     padding: calc(var(--global-space) * 2) 0;
     margin: 0;
@@ -100,34 +127,19 @@ h1::after {
     display: var(--display-h1-decoration)
 }
 
-h1 + *, .logo + * {
+h1 + *,
+.logo + * {
     margin-top: 0
 }
 
-h2, h3, h4, h5, h6 {
+h2,
+h3,
+h4,
+h5,
+h6 {
     position: relative;
     margin-bottom: var(--global-line-height);
     font-weight: 600
-}
-
-blockquote {
-    position: relative;
-    padding-left: calc(var(--global-space) * 2);
-    overflow: hidden
-}
-
-blockquote::after {
-    content: ">\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>\A>";
-    white-space: pre;
-    position: absolute;
-    top: 0;
-    left: 0;
-    line-height: var(--global-line-height);
-    color: #9ca2ab
-}
-
-blockquote > *:last-child {
-    margin-bottom: 0
 }
 
 code {
@@ -136,12 +148,14 @@ code {
     font-family: var(--mono-font-stack), ui-monospace;
 }
 
-code::after, code::before {
+code::after,
+code::before {
     content: "`";
     display: inline
 }
 
-pre code::after, pre code::before {
+pre code::after,
+pre code::before {
     content: ""
 }
 
@@ -168,7 +182,14 @@ pre code {
     background-color: var(--block-background-color)
 }
 
-.terminal blockquote, .terminal h1, .terminal h2, .terminal h3, .terminal h4, .terminal h5, .terminal h6, .terminal strong, .terminal .logo {
+.terminal h1,
+.terminal h2,
+.terminal h3,
+.terminal h4,
+.terminal h5,
+.terminal h6,
+.terminal strong,
+.terminal .logo {
     font-size: var(--global-font-size);
     font-style: normal;
     font-family: var(--font-stack), ui-monospace
@@ -205,9 +226,11 @@ pre code {
     0% {
         opacity: 0
     }
+
     50% {
         opacity: 1
     }
+
     100% {
         opacity: 0
     }
@@ -217,15 +240,18 @@ pre code {
     0% {
         opacity: 0
     }
+
     50% {
         opacity: 1
     }
+
     100% {
         opacity: 0
     }
 }
 
-li, li > ul > li {
+li,
+li > ul > li {
     position: relative;
     display: block;
     padding-left: calc(var(--global-space) * 2)
@@ -259,7 +285,8 @@ ol ol li::before {
     counter-increment: item
 }
 
-.terminal-menu li::after, .terminal-menu li::before {
+.terminal-menu li::after,
+.terminal-menu li::before {
     display: none
 }
 
@@ -375,91 +402,14 @@ p {
     max-width: var(--page-width)
 }
 
-.container, .container-fluid {
+.container,
+.container-fluid {
     margin: 0 auto;
     padding: 0 calc(var(--global-space) * 2)
 }
 
 img {
     max-width: 100%
-}
-
-.progress-bar {
-    height: 8px;
-    background-color: var(--progress-bar-background);
-    margin: 12px 0
-}
-
-.progress-bar.progress-bar-show-percent {
-    margin-top: 38px
-}
-
-.progress-bar-filled {
-    background-color: var(--progress-bar-fill);
-    height: 100%;
-    transition: width .3s ease;
-    position: relative;
-    width: 0
-}
-
-.progress-bar-filled::before {
-    content: "";
-    border: 6px solid transparent;
-    border-top-color: var(--progress-bar-fill);
-    position: absolute;
-    top: -6px;
-    right: -6px
-}
-
-.progress-bar-filled::after {
-    color: var(--progress-bar-fill);
-    content: attr(data-filled);
-    display: block;
-    font-size: 12px;
-    white-space: nowrap;
-    position: absolute;
-    border: 6px solid transparent;
-    top: -32px;
-    right: 0;
-    transform: translateX(50%)
-}
-
-.progress-bar-no-arrow > .progress-bar-filled::before, .progress-bar-no-arrow > .progress-bar-filled::after {
-    content: "";
-    display: none;
-    visibility: hidden;
-    opacity: 0
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: var(--global-line-height) 0;
-    color: var(--font-color);
-    font-size: var(--global-font-size)
-}
-
-table td, table th {
-    vertical-align: top;
-    border: 1px solid var(--font-color);
-    line-height: var(--global-line-height);
-    padding: calc(var(--global-space) / 2);
-    font-size: 1em
-}
-
-table thead tr th {
-    font-size: 1em;
-    vertical-align: middle;
-    font-weight: 700
-}
-
-table tfoot tr th {
-    font-weight: 500
-}
-
-table caption {
-    font-size: 1em;
-    margin: 0 0 1em
 }
 
 .form {
@@ -480,7 +430,13 @@ label {
     color: var(--font-color)
 }
 
-input[type=email], input[type=text], input[type=number], input[type=password], input[type=search], input[type=date], input[type=time] {
+input[type=email],
+input[type=text],
+input[type=number],
+input[type=password],
+input[type=search],
+input[type=date],
+input[type=time] {
     border: 1px var(--input-style) var(--font-color);
     width: 100%;
     padding: .7em .5em;
@@ -492,7 +448,20 @@ input[type=email], input[type=text], input[type=number], input[type=password], i
     border-radius: 0
 }
 
-input[type=email]:active, input[type=text]:active, input[type=number]:active, input[type=password]:active, input[type=search]:active, input[type=date]:active, input[type=time]:active, input[type=email]:focus, input[type=text]:focus, input[type=number]:focus, input[type=password]:focus, input[type=search]:focus, input[type=date]:focus, input[type=time]:focus {
+input[type=email]:active,
+input[type=text]:active,
+input[type=number]:active,
+input[type=password]:active,
+input[type=search]:active,
+input[type=date]:active,
+input[type=time]:active,
+input[type=email]:focus,
+input[type=text]:focus,
+input[type=number]:focus,
+input[type=password]:focus,
+input[type=search]:focus,
+input[type=date]:focus,
+input[type=time]:focus {
     outline: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -500,16 +469,24 @@ input[type=email]:active, input[type=text]:active, input[type=number]:active, in
     border: 1px solid var(--font-color)
 }
 
-input[type=text]:not(:placeholder-shown):invalid, input[type=email]:not(:placeholder-shown):invalid, input[type=password]:not(:placeholder-shown):invalid, input[type=search]:not(:placeholder-shown):invalid, input[type=number]:not(:placeholder-shown):invalid, input[type=date]:not(:placeholder-shown):invalid, input[type=time]:not(:placeholder-shown):invalid {
+input[type=text]:not(:placeholder-shown):invalid,
+input[type=email]:not(:placeholder-shown):invalid,
+input[type=password]:not(:placeholder-shown):invalid,
+input[type=search]:not(:placeholder-shown):invalid,
+input[type=number]:not(:placeholder-shown):invalid,
+input[type=date]:not(:placeholder-shown):invalid,
+input[type=time]:not(:placeholder-shown):invalid {
     border-color: var(--error-color)
 }
 
-input, textarea {
+input,
+textarea {
     color: var(--font-color);
     background-color: var(--background-color)
 }
 
-input::placeholder, textarea::placeholder {
+input::placeholder,
+textarea::placeholder {
     color: var(--secondary-color) !important;
     opacity: 1
 }
@@ -554,7 +531,13 @@ select {
     background-position: right .5em bottom .5em
 }
 
-input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus textarea:-webkit-autofill, textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus, select:-webkit-autofill, select:-webkit-autofill:hover, select:-webkit-autofill:focus {
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
     border: 1px solid var(--font-color);
     -webkit-text-fill-color: var(--font-color);
     box-shadow: 0 0 0 1 3px var(--invert-font-color) inset;
@@ -609,12 +592,14 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     color: var(--invert-font-color)
 }
 
-.btn-default:hover, .btn-default:focus:not(.btn-ghost) {
+.btn-default:hover,
+.btn-default:focus:not(.btn-ghost) {
     background-color: var(--secondary-color);
     color: var(--invert-font-color)
 }
 
-.btn-default.btn-ghost:focus, .btn-default.btn-ghost:hover {
+.btn-default.btn-ghost:focus,
+.btn-default.btn-ghost:hover {
     border-color: var(--secondary-color);
     color: var(--secondary-color);
     z-index: 2
@@ -626,7 +611,8 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     border: 1px solid var(--error-color)
 }
 
-.btn-error:hover, .btn-error:focus:not(.btn-ghost) {
+.btn-error:hover,
+.btn-error:focus:not(.btn-ghost) {
     background-color: var(--error-color);
     border-color: var(--error-color)
 }
@@ -636,7 +622,8 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     color: var(--error-color)
 }
 
-.btn-error.btn-ghost:focus, .btn-error.btn-ghost:hover {
+.btn-error.btn-ghost:focus,
+.btn-error.btn-ghost:hover {
     border-color: var(--error-color);
     color: var(--error-color);
     z-index: 2
@@ -648,7 +635,8 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     border: 1px solid var(--primary-color)
 }
 
-.btn-primary:hover, .btn-primary:focus:not(.btn-ghost) {
+.btn-primary:hover,
+.btn-primary:focus:not(.btn-ghost) {
     background-color: var(--primary-color);
     border-color: var(--primary-color)
 }
@@ -658,7 +646,8 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     color: var(--primary-color)
 }
 
-.btn-primary.btn-ghost:focus, .btn-primary.btn-ghost:hover {
+.btn-primary.btn-ghost:focus,
+.btn-primary.btn-ghost:hover {
     border-color: var(--primary-color);
     color: var(--primary-color);
     z-index: 2
@@ -694,39 +683,6 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 
 .terminal-card > div:first-of-type {
     padding: var(--global-space)
-}
-
-.terminal-timeline {
-    position: relative;
-    padding-left: 70px
-}
-
-.terminal-timeline::before {
-    content: ' ';
-    background: var(--secondary-color);
-    display: inline-block;
-    position: absolute;
-    left: 35px;
-    width: 2px;
-    height: 100%;
-    z-index: 400
-}
-
-.terminal-timeline .terminal-card {
-    margin-bottom: 25px
-}
-
-.terminal-timeline .terminal-card::before {
-    content: ' ';
-    background: var(--invert-font-color);
-    border: 2px solid var(--secondary-color);
-    display: inline-block;
-    position: absolute;
-    margin-top: 25px;
-    left: 26px;
-    width: 15px;
-    height: 15px;
-    z-index: 400
 }
 
 .terminal-alert {
@@ -785,37 +741,6 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
     }
 }
 
-.terminal-media:not(:last-child) {
-    margin-bottom: 1.25rem
-}
-
-.terminal-media-left {
-    padding-right: var(--global-space)
-}
-
-.terminal-media-left, .terminal-media-right {
-    display: table-cell;
-    vertical-align: top
-}
-
-.terminal-media-right {
-    padding-left: var(--global-space)
-}
-
-.terminal-media-body {
-    display: table-cell;
-    vertical-align: top
-}
-
-.terminal-media-heading {
-    font-size: 1em;
-    font-weight: 700
-}
-
-.terminal-media-content {
-    margin-top: .3rem
-}
-
 .terminal-placeholder {
     background-color: var(--secondary-color);
     text-align: center;
@@ -825,15 +750,6 @@ input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:foc
 }
 
 figure > img {
-    padding: 0
-}
-
-.terminal-avatarholder {
-    width: calc(var(--global-space) * 5);
-    height: calc(var(--global-space) * 5)
-}
-
-.terminal-avatarholder img {
     padding: 0
 }
 
@@ -860,7 +776,8 @@ figure > figcaption {
     max-width: var(--page-width)
 }
 
-.terminal-banner > .container, .terminal-banner > .container-fluid {
+.terminal-banner > .container,
+.terminal-banner > .container-fluid {
     margin: 0 auto;
     padding: 0
 }
@@ -869,56 +786,4 @@ figure > figcaption {
     .terminal-banner {
         flex-direction: row
     }
-}
-
-.hljs {
-    display: block;
-    overflow-x: auto;
-    padding: .5em;
-    background: var(--block-background-color);
-    color: var(--font-color)
-}
-
-.hljs-comment, .hljs-quote {
-    color: var(--secondary-color)
-}
-
-.hljs-variable {
-    color: var(--font-color)
-}
-
-.hljs-keyword, .hljs-selector-tag, .hljs-built_in, .hljs-name, .hljs-tag {
-    color: var(--primary-color)
-}
-
-.hljs-string, .hljs-title, .hljs-section, .hljs-attribute, .hljs-literal, .hljs-template-tag, .hljs-template-variable, .hljs-type, .hljs-addition {
-    color: var(--secondary-color)
-}
-
-.hljs-string {
-    color: var(--secondary-color)
-}
-
-.hljs-deletion, .hljs-selector-attr, .hljs-selector-pseudo, .hljs-meta {
-    color: var(--primary-color)
-}
-
-.hljs-doctag {
-    color: var(--secondary-color)
-}
-
-.hljs-attr {
-    color: var(--primary-color)
-}
-
-.hljs-symbol, .hljs-bullet, .hljs-link {
-    color: var(--primary-color)
-}
-
-.hljs-emphasis {
-    font-style: italic
-}
-
-.hljs-strong {
-    font-weight: 700
 }
