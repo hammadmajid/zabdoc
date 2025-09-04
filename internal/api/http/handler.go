@@ -2,22 +2,20 @@ package http
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
 	"github.com/hammadmajid/zabcover/internal/services"
+	"github.com/hammadmajid/zabcover/internal/utils"
 )
 
 type Handler struct {
-	logger   *log.Logger
-	template *template.Template
+	logger *log.Logger
 }
 
-func NewHandler(logger *log.Logger, template *template.Template) Handler {
+func NewHandler(logger *log.Logger) Handler {
 	return Handler{
-		logger:   logger,
-		template: template,
+		logger: logger,
 	}
 }
 
@@ -25,7 +23,7 @@ func NewHandler(logger *log.Logger, template *template.Template) Handler {
 func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	if err := h.template.Execute(w, nil); err != nil {
+	if err := utils.TemplateFiles[utils.Index].Execute(w, nil); err != nil {
 		http.Error(w, "template error", http.StatusInternalServerError)
 		h.logger.Printf("template execute: %v", err)
 		return
