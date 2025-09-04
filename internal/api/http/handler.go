@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/hammadmajid/zabcover/internal/services"
 )
 
 type Handler struct {
@@ -28,6 +30,18 @@ func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 		h.logger.Printf("template execute: %v", err)
 		return
 	}
+}
+
+func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
+	pdf, err := services.Generate(r.Context())
+	if err != nil {
+		http.Error(w, "failed to generate PDF", http.StatusInternalServerError)
+		h.logger.Printf("generate PDF: %v", err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/pdf")
+	w.Header().Set("Content-Disposition", "attachment; filename=assignment.pdf")
+	w.Write(pdf)
 }
 
 //goland:noinspection ALL

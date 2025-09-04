@@ -19,5 +19,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Get("/terminal.css", handler.CSS)
 	router.Get("/form.js", handler.FormJs)
 
+	router.Post("/assignment", handler.Assignment)
+
 	return router
 }
