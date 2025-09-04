@@ -18,6 +18,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Get("/robots.txt", handler.Robots)
 	router.Get("/terminal.css", handler.CSS)
 	router.Get("/form.js", handler.FormJs)
+	router.Get("/storage.js", handler.StorageJs)
 
 	router.Post("/assignment", handler.Assignment)
 
