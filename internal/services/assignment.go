@@ -1,28 +1,31 @@
 package services
 
 import (
+	"bytes"
 	"context"
 	"strings"
 
 	"github.com/chromedp/cdproto/page"
+	"github.com/chromedp/chromedp"
+	"github.com/hammadmajid/zabcover/internal/utils"
 )
-import "github.com/chromedp/chromedp"
 
 func Generate(ctx context.Context) ([]byte, error) {
-	html := `
-			<!DOCTYPE html>
-			<html>
-			<head><title>PDF Test</title></head>
-			<body><h1>Hello PDF</h1><p>Generated from template.</p></body>
-			</html>
-		`
+	var buf bytes.Buffer
+	err := utils.TemplateFiles[utils.Assignment].Execute(&buf, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	html := buf.String()
 	dataURL := "data:text/html," + strings.ReplaceAll(html, "\n", "")
 
 	ctx, cancel := chromedp.NewContext(context.Background())
 	defer cancel()
 
 	var pdfBuf []byte
-	err := chromedp.Run(ctx,
+
+	err = chromedp.Run(ctx,
 		chromedp.Navigate(dataURL),
 		chromedp.ActionFunc(func(ctx context.Context) error {
 			buf, _, err := page.PrintToPDF().Do(ctx)
