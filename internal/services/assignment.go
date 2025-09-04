@@ -3,7 +3,7 @@ package services
 import (
 	"bytes"
 	"context"
-	"strings"
+	"net/url"
 
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
@@ -18,7 +18,7 @@ func Generate(ctx context.Context) ([]byte, error) {
 	}
 
 	html := buf.String()
-	dataURL := "data:text/html," + strings.ReplaceAll(html, "\n", "")
+	dataURL := "data:text/html," + url.PathEscape(html)
 
 	ctx, cancel := chromedp.NewContext(context.Background())
 	defer cancel()
