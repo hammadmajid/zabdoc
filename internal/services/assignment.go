@@ -33,7 +33,16 @@ func (as *assignmentService) Generate(assignment dto.AssignmentRequest) ([]byte,
 	html := buf.String()
 	dataURL := "data:text/html," + url.PathEscape(html)
 
-	ctx, cancel := chromedp.NewContext(context.Background())
+	// Force Chrome to run without sandbox (needed on Heroku)
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.Flag("no-sandbox", true),
+		chromedp.Flag("disable-setuid-sandbox", true),
+	)
+
+	allocCtx, allocCancel := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer allocCancel()
+
+	ctx, cancel := chromedp.NewContext(allocCtx)
 	defer cancel()
 
 	var pdfBuf []byte

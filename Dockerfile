@@ -32,6 +32,7 @@ COPY web ./web
 # Set environment for chromedp
 ENV CHROME_PATH=/usr/bin/chromium-browser
 ENV CHROMEDP_HEADLESS=true
+ENV CHROME_EXTRA_ARGS="--no-sandbox --disable-setuid-sandbox"
 
 # Run the app
 CMD ["./zabcover"]
