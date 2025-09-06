@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	port := 8080
+	port := os.Getenv("PORT")
 	zabcover, err := app.NewApp()
 	if err != nil {
 		panic(err)
@@ -24,14 +24,14 @@ func main() {
 	r := httpapi.SetupRoutes(zabcover)
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
+		Addr:         fmt.Sprintf(":%s", port),
 		Handler:      r,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: time.Minute,
 	}
 
-	zabcover.Logger.Printf("Listening on http://localhost:%d", port)
+	zabcover.Logger.Printf("Listening on http://localhost:%s", port)
 
 	go func() {
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {

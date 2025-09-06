@@ -26,8 +26,8 @@ COPY --from=builder /app/zabcover ./zabcover
 # Copy web assets
 COPY web ./web
 
-# Expose port (adjust if needed)
-EXPOSE 8080
+# Heroku requires the port to be set via the PORT env var
+#EXPOSE 8080
 
 # Set environment for chromedp
 ENV CHROME_PATH=/usr/bin/chromium-browser
