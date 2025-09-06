@@ -1,0 +1,56 @@
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"zabdoc/internal/app"
+	httpapi "zabdoc/internal/router"
+)
+
+func main() {
+	port := os.Getenv("PORT")
+	app, err := app.NewApp()
+	if err != nil {
+		panic(err)
+	}
+
+	r := httpapi.SetupRoutes(app)
+
+	server := &http.Server{
+		Addr:         fmt.Sprintf(":%s", port),
+		Handler:      r,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: time.Minute,
+	}
+
+	app.Logger.Printf("Listening on http://localhost:%s", port)
+
+	go func() {
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			app.Logger.Fatalf("Server failed to start: %v", err)
+		}
+	}()
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+
+	app.Logger.Println("Shutting down server...")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	if err := server.Shutdown(ctx); err != nil {
+		app.Logger.Fatalf("Server forced to shutdown: %v", err)
+	}
+
+	app.Logger.Println("Server exited")
+}
