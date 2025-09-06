@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/hammadmajid/zabcover/internal/api/http"
-	"github.com/hammadmajid/zabcover/internal/services"
+	"zabdoc/internal/api/http"
+	"zabdoc/internal/services"
 )
 
 type App struct {

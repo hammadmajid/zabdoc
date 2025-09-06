@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/hammadmajid/zabcover/internal/api/dto"
-	"github.com/hammadmajid/zabcover/internal/services"
-	"github.com/hammadmajid/zabcover/internal/utils"
+	"zabdoc/internal/api/dto"
+	"zabdoc/internal/services"
+	"zabdoc/internal/utils"
 )
 
 type Handler struct {

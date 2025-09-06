@@ -1,11 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="zabcover" type="GoApplicationRunConfiguration" factoryName="Go Application">
-    <module name="zabcover" />
+  <configuration default="false" name="zabdoc" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="zabdoc" />
     <working_directory value="$PROJECT_DIR$" />
     <kind value="PACKAGE" />
-    <package value="github.com/hammadmajid/zabcover/cmd/zabcover" />
+    <package value="github.com/hammadmajid/zabdoc/cmd/zabdoc" />
     <directory value="$PROJECT_DIR$" />
-    <filePath value="$PROJECT_DIR$/cmd/zabcover/main.go" />
+    <filePath value="$PROJECT_DIR$/cmd/zabdoc/main.go" />
     <method v="2" />
   </configuration>
 </component>

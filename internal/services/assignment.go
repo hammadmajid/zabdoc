@@ -7,11 +7,12 @@ import (
 	"net/url"
 	"time"
 
+	"zabdoc/internal/api/dto"
+	"zabdoc/internal/utils"
+
 	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
-	"github.com/hammadmajid/zabcover/internal/api/dto"
-	"github.com/hammadmajid/zabcover/internal/utils"
 )
 
 type assignmentService struct {

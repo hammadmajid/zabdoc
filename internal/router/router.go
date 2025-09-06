@@ -3,9 +3,10 @@ package router
 import (
 	"net/http"
 
+	"zabdoc/internal/app"
+	"zabdoc/internal/middleware"
+
 	"github.com/go-chi/chi/v5"
-	"github.com/hammadmajid/zabcover/internal/app"
-	"github.com/hammadmajid/zabcover/internal/middleware"
 )
 
 func SetupRoutes(application *app.App) *chi.Mux {

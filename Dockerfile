@@ -4,7 +4,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o zabcover ./cmd/zabcover/main.go
+RUN go build -o zabdoc ./cmd/zabdoc/main.go
 
 # Final stage
 FROM alpine:latest
@@ -21,7 +21,7 @@ RUN apk add --no-cache \
     libstdc++
 
 # Copy built binary
-COPY --from=builder /app/zabcover ./zabcover
+COPY --from=builder /app/zabdoc ./zabdoc
 
 # Copy web assets
 COPY web ./web
@@ -35,4 +35,4 @@ ENV CHROMEDP_HEADLESS=true
 ENV CHROME_EXTRA_ARGS="--no-sandbox --disable-setuid-sandbox"
 
 # Run the app
-CMD ["./zabcover"]
+CMD ["./zabdoc"]

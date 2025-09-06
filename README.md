@@ -1,12 +1,12 @@
-# Zabcover
+# zabdoc
 
-Zabcover is a web application for SZABIST students to generate assignment cover sheets in PDF format. Written in Go, it provides a simple, responsive web form and produces institution-branded, printable PDFs for assignment submissions.
+zabdoc is a web application for SZABIST students to generate assignment cover sheets in PDF format. Written in Go, it provides a simple, responsive web form and produces institution-branded, printable PDFs for assignment submissions.
 
 ## Architecture
 
 ### Backend
 - **Language:** Go 1.24, using [chi router](https://github.com/go-chi/chi)
-- **Entry Point:** `cmd/zabcover/main.go` (sets up server, routes, logging)
+- **Entry Point:** `cmd/zabdoc/main.go` (sets up server, routes, logging)
 - **App Logic:** `internal/app/` (dependency injection, service wiring)
 - **API/HTTP Handlers:** `internal/api/http/handler.go` (form, PDF, health)
 - **Routing:** `internal/router/router.go` (sets up endpoints, static file serving)
@@ -29,8 +29,8 @@ Zabcover is a web application for SZABIST students to generate assignment cover 
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/hammadmajid/zabcover.git
-   cd zabcover
+   git clone https://github.com/hammadmajid/zabdoc.git
+   cd zabdoc
    ```
 2. Install dependencies:
    ```sh
@@ -41,13 +41,13 @@ Zabcover is a web application for SZABIST students to generate assignment cover 
 1. Set the `PORT` environment variable (e.g. `export PORT=8080`)
 2. Start the development server:
    ```sh
-   go run ./cmd/zabcover
+   go run ./cmd/zabdoc
    ```
 3. Access the app at `http://localhost:<PORT>`
 
 ### Building for Production
 ```sh
-go build ./cmd/zabcover
+go build ./cmd/zabdoc
 ```
 
 ## Usage
