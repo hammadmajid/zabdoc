@@ -8,5 +8,4 @@ type AssignmentRequest struct {
 	Instructor  string `json:"instructor"`
 	Number      string `json:"number"`
 	Date        string `json:"date"`
-	LogoDataURI string `json:"logoDataURI"`
 }

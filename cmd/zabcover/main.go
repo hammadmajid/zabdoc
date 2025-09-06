@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -9,8 +10,8 @@ import (
 	"syscall"
 	"time"
 
-	httpapi "github.com/hammadmajid/zabcover/internal/api/http"
 	"github.com/hammadmajid/zabcover/internal/app"
+	httpapi "github.com/hammadmajid/zabcover/internal/router"
 )
 
 func main() {
@@ -33,7 +34,7 @@ func main() {
 	zabcover.Logger.Printf("Listening on http://localhost:%d", port)
 
 	go func() {
-		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			zabcover.Logger.Fatalf("Server failed to start: %v", err)
 		}
 	}()

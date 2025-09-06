@@ -3,6 +3,7 @@ package services
 import (
 	"bytes"
 	"context"
+	"log"
 	"net/url"
 	"time"
 
@@ -13,9 +14,19 @@ import (
 	"github.com/hammadmajid/zabcover/internal/utils"
 )
 
-func Generate(assignment dto.AssignmentRequest) ([]byte, error) {
+type assignmentService struct {
+	logger *log.Logger
+}
+
+func newAssignmentService(l *log.Logger) *assignmentService {
+	return &assignmentService{
+		logger: l,
+	}
+}
+
+func (as *assignmentService) Generate(assignment dto.AssignmentRequest) ([]byte, error) {
 	var buf bytes.Buffer
-	if err := utils.TemplateFiles[utils.Assignment].Execute(&buf, assignment); err != nil {
+	if err := utils.GetTemplate(utils.Assignment).Execute(&buf, assignment); err != nil {
 		return nil, err
 	}
 
@@ -59,6 +70,7 @@ func Generate(assignment dto.AssignmentRequest) ([]byte, error) {
 		}),
 	)
 	if err != nil {
+		as.logger.Printf("Error generating pdf: %v", err)
 		return nil, err
 	}
 

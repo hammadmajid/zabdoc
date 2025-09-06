@@ -11,12 +11,14 @@ import (
 )
 
 type Handler struct {
-	logger *log.Logger
+	logger   *log.Logger
+	services services.Services
 }
 
-func NewHandler(logger *log.Logger) Handler {
+func NewHandler(logger *log.Logger, sv services.Services) Handler {
 	return Handler{
-		logger: logger,
+		logger:   logger,
+		services: sv,
 	}
 }
 
@@ -24,7 +26,7 @@ func NewHandler(logger *log.Logger) Handler {
 func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	if err := utils.TemplateFiles[utils.Index].Execute(w, nil); err != nil {
+	if err := utils.GetTemplate(utils.Index).Execute(w, nil); err != nil {
 		http.Error(w, "template error", http.StatusInternalServerError)
 		h.logger.Printf("template execute: %v", err)
 		return
@@ -38,13 +40,6 @@ func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	logoDataURI, err := utils.GetLogoDataURI()
-	if err != nil {
-		http.Error(w, "failed to load logo", http.StatusInternalServerError)
-		h.logger.Printf("load logo: %v", err)
-		return
-	}
-
 	assignment := dto.AssignmentRequest{
 		StudentName: r.FormValue("studentName"),
 		RegNo:       r.FormValue("regNo"),
@@ -53,10 +48,9 @@ func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
 		Instructor:  r.FormValue("instructor"),
 		Number:      r.FormValue("number"),
 		Date:        r.FormValue("date"),
-		LogoDataURI: logoDataURI,
 	}
 
-	pdf, err := services.Generate(assignment)
+	pdf, err := h.services.AssignmentService.Generate(assignment)
 	if err != nil {
 		http.Error(w, "failed to generate PDF", http.StatusInternalServerError)
 		h.logger.Printf("generate PDF: %v", err)

@@ -1,4 +1,4 @@
-package http
+package router
 
 import (
 	"net/http"
@@ -10,19 +10,18 @@ import (
 
 func SetupRoutes(application *app.App) *chi.Mux {
 	router := chi.NewRouter()
-	handler := NewHandler(application.Logger)
 
-	router.Use(middleware.LoggingMiddleware(application))
+	router.Use(middleware.LoggingMiddleware(application.Logger))
 
-	router.Get("/", handler.Root)
-	router.Get("/health", handler.Health)
+	router.Get("/", application.APIHandler.Root)
+	router.Get("/health", application.APIHandler.Health)
 
 	// Serve static files
 	router.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
 	router.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.Dir("web/css"))))
 	router.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.Dir("web/js"))))
 
-	router.Post("/assignment", handler.Assignment)
+	router.Post("/assignment", application.APIHandler.Assignment)
 
 	return router
 }
