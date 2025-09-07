@@ -69,3 +69,14 @@ func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
 func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Status is available")
 }
+
+//goland:noinspection GoUnusedParameter
+func (h Handler) About(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	if err := utils.GetTemplate(utils.About).Execute(w, nil); err != nil {
+		http.Error(w, "template error", http.StatusInternalServerError)
+		h.logger.Printf("template execute: %v", err)
+		return
+	}
+}

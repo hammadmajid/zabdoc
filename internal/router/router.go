@@ -15,6 +15,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Use(middleware.LoggingMiddleware(application.Logger))
 
 	router.Get("/", application.APIHandler.Root)
+	router.Get("/about", application.APIHandler.About)
 	router.Get("/health", application.APIHandler.Health)
 
 	// Serve static files
