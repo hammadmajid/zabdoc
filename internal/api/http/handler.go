@@ -45,6 +45,7 @@ func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
 		RegNo:       r.FormValue("regNo"),
 		Class:       r.FormValue("class"),
 		Course:      r.FormValue("course"),
+		CourseCode:  r.FormValue("courseCode"),
 		Instructor:  r.FormValue("instructor"),
 		Number:      r.FormValue("number"),
 		Date:        r.FormValue("date"),

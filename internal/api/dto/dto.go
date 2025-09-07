@@ -5,6 +5,7 @@ type AssignmentRequest struct {
 	RegNo       string `json:"regNo"`
 	Class       string `json:"class"`
 	Course      string `json:"course"`
+	CourseCode  string `json:"courseCode"`
 	Instructor  string `json:"instructor"`
 	Number      string `json:"number"`
 	Date        string `json:"date"`
