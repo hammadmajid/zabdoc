@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="58a71c1a-8749-41b7-8221-7b263429e0e5" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/project.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/zabcover.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/zabcover.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/js/form.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/js/form.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" url="file:///usr/lib/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "hammadmajid"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/hammadmajid/zabdoc.git",
+    "accountId": "442e332b-3a38-4079-a002-aab80a255a2a"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 7
+}]]></component>
+  <component name="ProjectId" id="32NBIwGjodRIVQPwkbyZs7DFm0q" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Go Build.go build zabdoc/cmd/zabdoc.executor": "Run",
+    "Go Build.zabdoc.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.GoLinterPluginOnboarding": "true",
+    "RunOnceActivity.GoLinterPluginStorageMigration": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "git-widget-placeholder": "main",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "/home/bine",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="RunManager">
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.zabdoc" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-gosdk-f466f9b0953e-3d2cccfc42a2-org.jetbrains.plugins.go.sharedIndexes.bundled-GO-252.23892.530" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-GO-252.23892.530" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="58a71c1a-8749-41b7-8221-7b263429e0e5" name="Changes" comment="" />
+      <created>1757251074817</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1757251074817</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>

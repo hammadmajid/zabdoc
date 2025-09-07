@@ -2,8 +2,11 @@
   <configuration default="false" name="zabdoc" type="GoApplicationRunConfiguration" factoryName="Go Application">
     <module name="zabdoc" />
     <working_directory value="$PROJECT_DIR$" />
+    <envs>
+      <env name="PORT" value="8080" />
+    </envs>
     <kind value="PACKAGE" />
-    <package value="github.com/hammadmajid/zabdoc/cmd/zabdoc" />
+    <package value="zabdoc/cmd/zabdoc" />
     <directory value="$PROJECT_DIR$" />
     <filePath value="$PROJECT_DIR$/cmd/zabdoc/main.go" />
     <method v="2" />
