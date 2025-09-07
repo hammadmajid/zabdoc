@@ -670,6 +670,13 @@ select:-webkit-autofill:focus {
     margin-left: -1px
 }
 
+.footer {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--primary-color);
+    text-align: center;
+}
+
 .terminal-card {
     border: 1px solid var(--secondary-color)
 }
