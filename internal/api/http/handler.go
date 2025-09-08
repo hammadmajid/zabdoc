@@ -7,7 +7,7 @@ import (
 
 	"zabdoc/internal/api/dto"
 	"zabdoc/internal/controllers"
-	"zabdoc/internal/utils"
+	"zabdoc/internal/templates"
 )
 
 type Handler struct {
@@ -26,7 +26,7 @@ func NewHandler(logger *log.Logger, sv controllers.Services) Handler {
 func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	if err := utils.GetTemplate(utils.Index).Execute(w, nil); err != nil {
+	if err := templates.GetTemplate(templates.HomePage).Execute(w, nil); err != nil {
 		http.Error(w, "template error", http.StatusInternalServerError)
 		h.logger.Printf("template execute: %v", err)
 		return
@@ -74,7 +74,7 @@ func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
 func (h Handler) About(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	if err := utils.GetTemplate(utils.About).Execute(w, nil); err != nil {
+	if err := templates.GetTemplate(templates.AboutPage).Execute(w, nil); err != nil {
 		http.Error(w, "template error", http.StatusInternalServerError)
 		h.logger.Printf("template execute: %v", err)
 		return

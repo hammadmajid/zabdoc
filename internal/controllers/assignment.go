@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"zabdoc/internal/api/dto"
-	"zabdoc/internal/utils"
+	"zabdoc/internal/templates"
 
 	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/page"
@@ -27,7 +27,7 @@ func newAssignmentCtrl(l *log.Logger) *assignmentCtrl {
 
 func (as *assignmentCtrl) Generate(assignment dto.AssignmentRequest) ([]byte, error) {
 	var buf bytes.Buffer
-	if err := utils.GetTemplate(utils.Assignment).Execute(&buf, assignment); err != nil {
+	if err := templates.GetTemplate(templates.AssignmentPdf).Execute(&buf, assignment); err != nil {
 		return nil, err
 	}
 
