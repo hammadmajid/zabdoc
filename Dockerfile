@@ -23,9 +23,6 @@ RUN apk add --no-cache \
 # Copy built binary
 COPY --from=builder /app/zabdoc ./zabdoc
 
-# Copy web assets
-COPY web ./web
-
 # Heroku requires the port to be set via the PORT env var
 #EXPOSE 8080
 
