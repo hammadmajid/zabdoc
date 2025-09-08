@@ -1,8 +1,6 @@
 package router
 
 import (
-	"net/http"
-
 	"zabdoc/internal/app"
 	"zabdoc/internal/middleware"
 
@@ -14,16 +12,8 @@ func SetupRoutes(application *app.App) *chi.Mux {
 
 	router.Use(middleware.LoggingMiddleware(application.Logger))
 
-	router.Get("/", application.APIHandler.Root)
-	router.Get("/about", application.APIHandler.About)
 	router.Get("/health", application.APIHandler.Health)
 
-	// Serve static files
-	router.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
-	router.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.Dir("web/css"))))
-	router.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.Dir("web/js"))))
-
-	router.Get("/assignment", application.APIHandler.AssignmentPage)
 	router.Post("/assignment", application.APIHandler.AssignmentPdf)
 
 	return router

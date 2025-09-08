@@ -7,7 +7,6 @@ import (
 
 	"zabdoc/internal/api/dto"
 	"zabdoc/internal/controllers"
-	"zabdoc/internal/templates"
 )
 
 type Handler struct {
@@ -19,26 +18,6 @@ func NewHandler(logger *log.Logger, sv controllers.Services) Handler {
 	return Handler{
 		logger:   logger,
 		services: sv,
-	}
-}
-
-//goland:noinspection GoUnusedParameter
-func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	if err := templates.GetTemplate(templates.HomePage).Execute(w, nil); err != nil {
-		http.Error(w, "template error", http.StatusInternalServerError)
-		h.logger.Printf("template execute: %v", err)
-		return
-	}
-}
-
-func (h Handler) AssignmentPage(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	if err := templates.GetTemplate(templates.AssignmentPage).Execute(w, nil); err != nil {
-		http.Error(w, "template error", http.StatusInternalServerError)
-		h.logger.Printf("template execute: %v", err)
-		return
 	}
 }
 
@@ -77,15 +56,4 @@ func (h Handler) AssignmentPdf(w http.ResponseWriter, r *http.Request) {
 //goland:noinspection ALL
 func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Status is available")
-}
-
-//goland:noinspection GoUnusedParameter
-func (h Handler) About(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-
-	if err := templates.GetTemplate(templates.AboutPage).Execute(w, nil); err != nil {
-		http.Error(w, "template error", http.StatusInternalServerError)
-		h.logger.Printf("template execute: %v", err)
-		return
-	}
 }
