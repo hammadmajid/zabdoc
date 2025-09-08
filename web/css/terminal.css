@@ -142,6 +142,52 @@ h6 {
     font-weight: 600
 }
 
+.hero-section {
+    text-align: center;
+    margin-bottom: calc(var(--global-space) * 4);
+}
+
+.hero-section h1 {
+    font-size: calc(var(--global-font-size) * 2.5);
+    margin-bottom: calc(var(--global-space) * 1);
+}
+
+.hero-section p {
+    color: var(--secondary-color);
+    margin-bottom: calc(var(--global-space) * 3);
+}
+
+.primary-actions {
+    display: flex;
+    gap: var(--global-space);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: calc(var(--global-space) * 2);
+}
+
+.primary-actions .btn {
+    padding: calc(var(--global-space) * 1.2) calc(var(--global-space) * 2.5);
+    font-size: calc(var(--global-font-size) * 1.1);
+    min-width: 200px;
+}
+
+
+@media screen and (max-width: 600px) {
+    .hero-section h1 {
+        font-size: calc(var(--global-font-size) * 2);
+    }
+
+    .primary-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .primary-actions .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+}
+
 code {
     font-weight: inherit;
     background-color: var(--code-bg-color);
