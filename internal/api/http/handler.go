@@ -33,7 +33,16 @@ func (h Handler) Root(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
+func (h Handler) AssignmentPage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	if err := templates.GetTemplate(templates.AssignmentPage).Execute(w, nil); err != nil {
+		http.Error(w, "template error", http.StatusInternalServerError)
+		h.logger.Printf("template execute: %v", err)
+		return
+	}
+}
+
+func (h Handler) AssignmentPdf(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "invalid form", http.StatusBadRequest)
 		h.logger.Printf("parse form: %v", err)

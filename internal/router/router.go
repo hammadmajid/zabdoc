@@ -23,7 +23,8 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Handle("/css/*", http.StripPrefix("/css/", http.FileServer(http.Dir("web/css"))))
 	router.Handle("/js/*", http.StripPrefix("/js/", http.FileServer(http.Dir("web/js"))))
 
-	router.Post("/assignment", application.APIHandler.Assignment)
+	router.Get("/assignment", application.APIHandler.AssignmentPage)
+	router.Post("/assignment", application.APIHandler.AssignmentPdf)
 
 	return router
 }
