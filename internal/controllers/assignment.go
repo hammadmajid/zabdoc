@@ -1,4 +1,4 @@
-package services
+package controllers
 
 import (
 	"bytes"
@@ -15,17 +15,17 @@ import (
 	"github.com/chromedp/chromedp"
 )
 
-type assignmentService struct {
+type assignmentCtrl struct {
 	logger *log.Logger
 }
 
-func newAssignmentService(l *log.Logger) *assignmentService {
-	return &assignmentService{
+func newAssignmentCtrl(l *log.Logger) *assignmentCtrl {
+	return &assignmentCtrl{
 		logger: l,
 	}
 }
 
-func (as *assignmentService) Generate(assignment dto.AssignmentRequest) ([]byte, error) {
+func (as *assignmentCtrl) Generate(assignment dto.AssignmentRequest) ([]byte, error) {
 	var buf bytes.Buffer
 	if err := utils.GetTemplate(utils.Assignment).Execute(&buf, assignment); err != nil {
 		return nil, err

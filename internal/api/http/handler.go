@@ -6,16 +6,16 @@ import (
 	"net/http"
 
 	"zabdoc/internal/api/dto"
-	"zabdoc/internal/services"
+	"zabdoc/internal/controllers"
 	"zabdoc/internal/utils"
 )
 
 type Handler struct {
 	logger   *log.Logger
-	services services.Services
+	services controllers.Services
 }
 
-func NewHandler(logger *log.Logger, sv services.Services) Handler {
+func NewHandler(logger *log.Logger, sv controllers.Services) Handler {
 	return Handler{
 		logger:   logger,
 		services: sv,
@@ -51,7 +51,7 @@ func (h Handler) Assignment(w http.ResponseWriter, r *http.Request) {
 		Date:        r.FormValue("date"),
 	}
 
-	pdf, err := h.services.AssignmentService.Generate(assignment)
+	pdf, err := h.services.AssignmentCtrl.Generate(assignment)
 	if err != nil {
 		http.Error(w, "failed to generate PDF", http.StatusInternalServerError)
 		h.logger.Printf("generate PDF: %v", err)

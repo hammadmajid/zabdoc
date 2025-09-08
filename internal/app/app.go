@@ -5,18 +5,18 @@ import (
 	"os"
 
 	"zabdoc/internal/api/http"
-	"zabdoc/internal/services"
+	"zabdoc/internal/controllers"
 )
 
 type App struct {
 	Logger     *log.Logger
-	Services   services.Services
+	Services   controllers.Services
 	APIHandler http.Handler
 }
 
 func NewApp() (*App, error) {
 	l := log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
-	s := services.NewServices(l)
+	s := controllers.NewServices(l)
 	h := http.NewHandler(l, s)
 
 	return &App{
