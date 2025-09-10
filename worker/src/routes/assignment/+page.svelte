@@ -11,8 +11,12 @@
 </svelte:head>
 
 <div class="space-y-12 px-4 md:p-0">
-	<div class="prose">
-		<h1>Assignment</h1>
+	<div>
+		<h1
+			class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+		>
+			Assignment
+		</h1>
 	</div>
 	<form
 		action="/api/assignment"

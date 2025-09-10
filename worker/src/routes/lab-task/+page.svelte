@@ -11,9 +11,12 @@
 </svelte:head>
 
 <div class="space-y-12 p-4 md:p-0">
-    <div class="prose">
-        <h1>Lab Task</h1>
-        <p>Fill out the form below to generate lab task in pdf format.</p>
+    <div>
+        <h1
+            class="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"
+        >
+            Lab task
+        </h1>
     </div>
     <form
         action="/api/lab-task"
