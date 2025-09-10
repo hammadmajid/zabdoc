@@ -84,17 +84,17 @@
     const courses = $derived(
         selectedClass && selectedClass in data
             ? Object.keys(data[selectedClass]).map((courseName) => ({
-                value: courseName,
-                label: courseName,
-            }))
+                  value: courseName,
+                  label: courseName,
+              }))
             : [],
     );
 
     const courseDetails = $derived(
         selectedClass &&
-        selectedCourse &&
-        selectedClass in data &&
-        selectedCourse in data[selectedClass]
+            selectedCourse &&
+            selectedClass in data &&
+            selectedCourse in data[selectedClass]
             ? data[selectedClass][selectedCourse]
             : null,
     );
@@ -105,7 +105,7 @@
 
     const courseTriggerContent = $derived(
         courses.find((c) => c.value === selectedCourse)?.label ??
-        "Select course",
+            "Select course",
     );
 
     // Reset course selection when class changes
@@ -120,16 +120,20 @@
     <Card.Header>
         <Card.Title>Student</Card.Title>
         <CardDescription
-        >This information will be cached for you convenience.
-        </CardDescription
-        >
+            >This information will be cached for you convenience.
+        </CardDescription>
     </Card.Header>
     <Card.Content class="space-y-4">
-        <Input name="studentName" type="text" placeholder="Full name"/>
-        <Input name="regNo" type="number" placeholder="Registration no"/>
+        <Input name="studentName" type="text" placeholder="Full name" />
+        <Input name="regNo" type="number" placeholder="Registration no" />
 
         <!-- Class Selection -->
-        <Select.Root type="single" name="class" required bind:value={selectedClass}>
+        <Select.Root
+            type="single"
+            name="class"
+            required
+            bind:value={selectedClass}
+        >
             <Select.Trigger class="w-full">
                 {classTriggerContent}
             </Select.Trigger>
@@ -138,8 +142,8 @@
                     <Select.Label>Classes</Select.Label>
                     {#each classes as classItem (classItem.value)}
                         <Select.Item
-                                value={classItem.value}
-                                label={classItem.label}
+                            value={classItem.value}
+                            label={classItem.label}
                         >
                             {classItem.label}
                         </Select.Item>
@@ -154,18 +158,17 @@
     <Card.Header>
         <Card.Title>Course</Card.Title>
         <Card.Description
-        >Teacher and course code will be auto filled for you.
-        </Card.Description
-        >
+            >Teacher and course code will be auto filled for you.
+        </Card.Description>
     </Card.Header>
     <Card.Content class="space-y-4">
         <!-- Course Selection -->
         <Select.Root
-                type="single"
-                name="course"
-                required
-                bind:value={selectedCourse}
-                disabled={!selectedClass}
+            type="single"
+            name="course"
+            required
+            bind:value={selectedCourse}
+            disabled={!selectedClass}
         >
             <Select.Trigger class="w-full">
                 {courseTriggerContent}
@@ -185,18 +188,18 @@
         <!-- Auto-filled fields -->
         {#if courseDetails}
             <Input
-                    name="instructor"
-                    type="text"
-                    placeholder="Instructor"
-                    value={courseDetails.instructor}
-                    readonly
+                name="instructor"
+                type="text"
+                placeholder="Instructor"
+                value={courseDetails.instructor}
+                readonly
             />
             <Input
-                    name="courseCode"
-                    type="text"
-                    placeholder="Course Code"
-                    value={courseDetails.code}
-                    readonly
+                name="courseCode"
+                type="text"
+                placeholder="Course Code"
+                value={courseDetails.code}
+                readonly
             />
         {/if}
     </Card.Content>

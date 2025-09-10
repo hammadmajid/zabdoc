@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-    <title>assignment | zabdoc</title>
+	<title>assignment | zabdoc</title>
 </svelte:head>
 
 <div class="space-y-12 px-4 md:p-0">
@@ -32,7 +32,12 @@
 			<Card.Content class="space-y-4">
 				<DueDate />
 
-				<Input name="number" type="number" placeholder="Number" required />
+				<Input
+					name="number"
+					type="number"
+					placeholder="Number"
+					required
+				/>
 			</Card.Content>
 		</Card.Root>
 
