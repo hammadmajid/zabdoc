@@ -129,7 +129,7 @@
         <Input name="regNo" type="number" placeholder="Registration no"/>
 
         <!-- Class Selection -->
-        <Select.Root type="single" name="class" bind:value={selectedClass}>
+        <Select.Root type="single" name="class" required bind:value={selectedClass}>
             <Select.Trigger class="w-full">
                 {classTriggerContent}
             </Select.Trigger>
@@ -163,6 +163,7 @@
         <Select.Root
                 type="single"
                 name="course"
+                required
                 bind:value={selectedCourse}
                 disabled={!selectedClass}
         >
