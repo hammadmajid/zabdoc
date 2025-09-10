@@ -8,10 +8,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
         const response = await fetch("http://localhost:8080/assignment", {
             method: "POST",
-            headers: {
-                "Content-Type": "multipart/form-data"
-            },
-            body: body, // stringify the parsed JSON object
+            body: body,
         });
 
         if (!response.ok) {

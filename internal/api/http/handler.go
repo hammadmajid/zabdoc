@@ -22,9 +22,9 @@ func NewHandler(logger *log.Logger, sv controllers.Services) Handler {
 }
 
 func (h Handler) AssignmentPdf(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
+	if err := r.ParseMultipartForm(10 << 20); err != nil {
 		http.Error(w, "invalid form", http.StatusBadRequest)
-		h.logger.Printf("parse form: %v", err)
+		h.logger.Printf("parse multipart form: %v", err)
 		return
 	}
 
@@ -38,6 +38,8 @@ func (h Handler) AssignmentPdf(w http.ResponseWriter, r *http.Request) {
 		Number:      r.FormValue("number"),
 		Date:        r.FormValue("date"),
 	}
+
+	h.logger.Printf("Received form data: %+v", assignment)
 
 	pdf, err := h.services.AssignmentCtrl.Generate(assignment)
 	if err != nil {
