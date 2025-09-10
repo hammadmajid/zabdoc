@@ -27,7 +27,7 @@ func init() {
     <style>
         @font-face {
             font-family: "Times New Roman";
-            src: url("https://cdn.bine.codes/times.ttf") format("truetype");
+            src: url("https://cdn.zabdoc.xyz/times.ttf") format("truetype");
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -213,7 +213,7 @@ func init() {
 <div class="a4-page">
     <div class="header">
         <div class="header-logo">
-            <img src="https://cdn.bine.codes/szabist-logo.png" alt="SZABIST Logo">
+            <img src="https://cdn.zabdoc.xyz/szabist-logo.png" alt="SZABIST Logo">
         </div>
         <div class="header-content">
             <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
@@ -271,7 +271,7 @@ func init() {
     <style>
         @font-face {
             font-family: "Times New Roman";
-            src: url("https://cdn.bine.codes/times.ttf") format("truetype");
+            src: url("https://cdn.zabdoc.xyz/times.ttf") format("truetype");
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -457,7 +457,7 @@ func init() {
 <div class="a4-page">
     <div class="header">
         <div class="header-logo">
-            <img src="https://cdn.bine.codes/szabist-logo.png" alt="SZABIST Logo">
+            <img src="https://cdn.zabdoc.xyz/szabist-logo.png" alt="SZABIST Logo">
         </div>
         <div class="header-content">
             <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
