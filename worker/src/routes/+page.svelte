@@ -2,11 +2,7 @@
     import { Button, buttonVariants } from "$lib/components/ui/button";
 </script>
 
-<svelte:head>
-    <title>zabdoc</title>
-</svelte:head>
-
-<div class="flex flex-col items-center justify-center text-center py-20">
+<div class="flex flex-col items-center justify-center text-center h-full px-4">
     <h1 class="text-5xl font-bold tracking-tight">zabdoc</h1>
     <p class="mt-4 text-lg text-muted-foreground max-w-xl">
         Generate professional assignment cover sheets and lab tasks for SZABIST

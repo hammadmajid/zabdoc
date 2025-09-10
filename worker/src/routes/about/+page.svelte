@@ -2,7 +2,7 @@
     <title>about | zabdoc</title>
 </svelte:head>
 
-<div class="prose prose-gray max-w-5xl mx-auto">
+<div class="prose prose-gray max-w-5xl mx-auto p-4 md:p-0">
     <h1>About</h1>
 
     <p>

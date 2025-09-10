@@ -10,7 +10,7 @@
     <title>assignment | zabdoc</title>
 </svelte:head>
 
-<div class="space-y-12">
+<div class="space-y-12 px-4 md:p-0">
 	<div class="prose">
 		<h1>Assignment</h1>
 	</div>
