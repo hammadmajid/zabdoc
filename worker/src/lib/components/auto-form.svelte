@@ -126,7 +126,7 @@
     </Card.Header>
     <Card.Content class="space-y-4">
         <Input name="studentName" type="text" placeholder="Full name"/>
-        <Input name="regNumber" type="number" placeholder="Registration no"/>
+        <Input name="regNo" type="number" placeholder="Registration no"/>
 
         <!-- Class Selection -->
         <Select.Root type="single" name="class" bind:value={selectedClass}>

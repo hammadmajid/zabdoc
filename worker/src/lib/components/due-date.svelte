@@ -7,9 +7,14 @@
 
     let open = $state(false);
     let value = $state<CalendarDate | undefined>();
+    
+    const formattedDate = $derived(
+        value ? value.toDate(getLocalTimeZone()).toISOString().split('T')[0] : ""
+    );
 </script>
 
 <div class="flex flex-col gap-3">
+    <input type="hidden" name="date" value={formattedDate} />
     <Popover.Root bind:open>
         <Popover.Trigger id="date">
             {#snippet child({props})}

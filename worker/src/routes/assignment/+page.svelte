@@ -24,7 +24,7 @@
 		<Card.Content class="space-y-4">
 			<DueDate />
 
-			<Input type="number" placeholder="Number" />
+			<Input name="number" type="number" placeholder="Number" />
 		</Card.Content>
 	</Card.Root>
 
