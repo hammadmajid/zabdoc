@@ -8,14 +8,14 @@ import (
 )
 
 var CORSOptions = cors.Options{
-	// Allow requests from localhost:5173 and zabdoc.me (including subdomains)
+	// Allow requests from localhost:5173 and zabdoc.xyz (including subdomains)
 	AllowedOrigins: []string{
 		"http://localhost:5173",
 		"https://localhost:5173",
-		"https://zabdoc.me",
-		"https://*.zabdoc.me",
-		"http://zabdoc.me",
-		"http://*.zabdoc.me",
+		"https://zabdoc.xyz",
+		"https://*.zabdoc.xyz",
+		"http://zabdoc.xyz",
+		"http://*.zabdoc.xyz",
 	},
 
 	// Allow all HTTP methods

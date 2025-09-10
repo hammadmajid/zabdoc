@@ -7,9 +7,9 @@ export const POST: RequestHandler = async ({ request, url }) => {
 
         let base = "http://localhost:8080";
 
-        // Shitty hack: change hostname to zabdoc.me in prod
-        if (url.hostname === "zabdoc.me") {
-            base = "https://api.zabdoc.me"
+        // Shitty hack: change hostname to zabdoc.xyz in prod
+        if (url.hostname === "zabdoc.xyz") {
+            base = "https://api.zabdoc.xyz"
         }
 
         const response = await fetch(`${base}/assignment`, {
