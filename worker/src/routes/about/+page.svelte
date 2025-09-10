@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>about | zabdoc</title>
+</svelte:head>
+
 <div class="prose prose-gray max-w-5xl mx-auto">
     <h1>About</h1>
 
