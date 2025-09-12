@@ -3,6 +3,7 @@
     import * as Select from "$lib/components/ui/select/index.js";
     import Input from "$lib/components/ui/input/input.svelte";
     import * as Card from "$lib/components/ui/card/index.js";
+    import { browser } from "$app/environment";
 
     type CourseInfo = {
         instructor: string;
@@ -15,6 +16,27 @@
         "BsCS-4C": ClassData;
         "BsCS-5A": ClassData;
     };
+
+    // Cookie utility functions
+    function setCookie(name: string, value: string, days: number = 30) {
+        if (!browser) return;
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+    }
+
+    function getCookie(name: string): string {
+        if (!browser) return "";
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) === " ") c = c.substring(1, c.length);
+            if (c.indexOf(nameEQ) === 0)
+                return c.substring(nameEQ.length, c.length);
+        }
+        return "";
+    }
 
     const data: DataStructure = {
         "BsCS-4C": {
@@ -73,6 +95,36 @@
 
     let selectedClass = $state("" as keyof DataStructure | "");
     let selectedCourse = $state("");
+    let studentName = $state("");
+    let regNum = $state("");
+
+    // Initialize values from cookies on component mount
+    $effect(() => {
+        if (browser) {
+            studentName = getCookie("studentName") || "";
+            regNum = getCookie("regNum") || "";
+            selectedClass = (getCookie("class") as keyof DataStructure) || "";
+        }
+    });
+
+    // Update cookies when values change
+    $effect(() => {
+        if (browser && studentName) {
+            setCookie("studentName", studentName);
+        }
+    });
+
+    $effect(() => {
+        if (browser && regNum) {
+            setCookie("regNum", regNum);
+        }
+    });
+
+    $effect(() => {
+        if (browser && selectedClass) {
+            setCookie("class", selectedClass);
+        }
+    });
 
     const classes = $derived(
         Object.keys(data).map((className) => ({
@@ -124,8 +176,18 @@
         </CardDescription>
     </Card.Header>
     <Card.Content class="space-y-4">
-        <Input name="studentName" type="text" placeholder="Full name" />
-        <Input name="regNo" type="number" placeholder="Registration no" />
+        <Input
+            name="studentName"
+            type="text"
+            placeholder="Full name"
+            bind:value={studentName}
+        />
+        <Input
+            name="regNo"
+            type="number"
+            placeholder="Registration no"
+            bind:value={regNum}
+        />
 
         <!-- Class Selection -->
         <Select.Root
