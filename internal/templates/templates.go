@@ -455,14 +455,6 @@ func init() {
             page-break-inside: avoid;
         }
 
-        .task-header {
-            font-size: 16pt;
-            font-weight: bold;
-            margin-bottom: 1em;
-            border-bottom: 2px solid #222;
-            padding-bottom: 0.5em;
-        }
-
         .task-content {
             margin-bottom: 1.5em;
         }
@@ -606,9 +598,8 @@ func init() {
 <div class="content-pages">
     {{range $index, $task := .Tasks}}
     <div class="task-section">
-        <div class="task-header">Task {{add $task.Index 1}}</div>
         <div class="task-content">
-            {{$task.Content}}
+            {{html $task.Content}}
         </div>
         {{if $task.Images}}
         <div class="task-images">
