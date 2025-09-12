@@ -5,6 +5,7 @@
     import Input from "$lib/components/ui/input/input.svelte";
     import * as Card from "$lib/components/ui/card/index";
     import { Textarea } from "$lib/components/ui/textarea/index.js";
+    import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
 
     interface Task {
         id: number;
@@ -85,15 +86,31 @@
                         <div class="flex items-center justify-between">
                             <Card.Title>Task {index}</Card.Title>
                             {#if tasks.length > 1}
-                                <!-- TODO: confirm this action -->
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    onclick={() => removeTask(task.id)}
-                                >
-                                    Remove
-                                </Button>
+                                <AlertDialog.Root>
+                                    <AlertDialog.Trigger
+                                        >Remove</AlertDialog.Trigger
+                                    >
+                                    <AlertDialog.Content>
+                                        <AlertDialog.Header>
+                                            <AlertDialog.Title
+                                                >Are you absolutely sure?</AlertDialog.Title
+                                            >
+                                            <AlertDialog.Description>
+                                                This action cannot be undone.
+                                            </AlertDialog.Description>
+                                        </AlertDialog.Header>
+                                        <AlertDialog.Footer>
+                                            <AlertDialog.Cancel
+                                                >Cancel</AlertDialog.Cancel
+                                            >
+                                            <AlertDialog.Action
+                                                onclick={() =>
+                                                    removeTask(task.id)}
+                                                >Continue</AlertDialog.Action
+                                            >
+                                        </AlertDialog.Footer>
+                                    </AlertDialog.Content>
+                                </AlertDialog.Root>
                             {/if}
                         </div>
                         <Card.Description
