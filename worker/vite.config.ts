@@ -8,5 +8,9 @@ export default defineConfig({
         tailwindcss(),
         sveltekit(),
         devtoolsJson()
-    ]
+    ],
+    server: {
+        host: 'zabdoc.localhost',
+        port: 5173
+    }
 });

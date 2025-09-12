@@ -75,7 +75,7 @@ zabdoc is a web application for SZABIST students to generate assignment cover sh
    pnpm dev
    ```
 
-   The frontend will be available at `http://localhost:5173`
+   The frontend will be available at `http://zabdoc.localhost:5173`
 
 ### Building for Production
 
@@ -95,7 +95,7 @@ pnpm deploy  # deploys to Cloudflare
 
 ## Usage
 
-- Open the SvelteKit frontend in your browser (`http://localhost:5173` in development)
+- Open the SvelteKit frontend in your browser (`http://zabdoc.localhost:5173` in development)
 - Fill out the assignment form with student details
 - Submit to generate and download a PDF cover sheet via the Go backend API
 
