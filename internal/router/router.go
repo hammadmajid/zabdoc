@@ -17,6 +17,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Get("/health", application.APIHandler.Health)
 
 	router.Post("/assignment", application.APIHandler.AssignmentPdf)
+	router.Post("/lab-task", application.APIHandler.LabTask)
 
 	return router
 }
