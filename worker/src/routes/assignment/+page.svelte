@@ -19,7 +19,7 @@
 		</h1>
 	</div>
 	<form
-		action="/api/assignment"
+		action="https://api.zabdoc.xyz/assignment"
 		method="POST"
 		enctype="multipart/form-data"
 		class="grid md:grid-cols-2 gap-8"
