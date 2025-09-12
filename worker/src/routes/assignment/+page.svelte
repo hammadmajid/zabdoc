@@ -4,6 +4,15 @@
 	import Button from "$lib/components/ui/button/button.svelte";
 	import Input from "$lib/components/ui/input/input.svelte";
 	import * as Card from "$lib/components/ui/card/index";
+	import Loader2 from "@lucide/svelte/icons/loader-2";
+
+	let isLoading = false;
+
+	function handleSubmit() {
+		// The form will continue its normal submission behavior
+		// The loading state will be reset when the page potentially reloads or the PDF downloads
+		isLoading = true;
+	}
 </script>
 
 <svelte:head>
@@ -23,6 +32,7 @@
 		method="POST"
 		enctype="multipart/form-data"
 		class="space-y-8"
+		on:submit={handleSubmit}
 	>
 		<div class="grid md:grid-cols-2 gap-8">
 			<AutoForm />
@@ -56,7 +66,14 @@
 				</Card.Description>
 			</Card.Header>
 			<Card.CardContent>
-				<Button type="submit" class="w-full">Generate cover</Button>
+				<Button type="submit" class="w-full" disabled={isLoading}>
+					{#if isLoading}
+						<Loader2 class="mr-2 h-4 w-4 animate-spin" />
+						Generating PDF...
+					{:else}
+						Generate PDF
+					{/if}
+				</Button>
 			</Card.CardContent>
 		</Card.Root>
 	</form>
