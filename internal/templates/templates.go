@@ -621,7 +621,7 @@ func init() {
         {{if $task.Images}}
         <div class="task-images">
             {{range $imgIndex, $image := $task.Images}}
-            <img src="{{$image}}" alt="Task {{add $task.Index 1}} Image {{add $imgIndex 1}}" class="task-image">
+            <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Task {{add $task.Index 1}} Image {{add $imgIndex 1}}" class="task-image">
             <div class="image-caption">Figure {{add $imgIndex 1}}: Task {{add $task.Index 1}} Image</div>
             {{end}}
         </div>

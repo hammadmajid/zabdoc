@@ -2,11 +2,12 @@ package http
 
 import (
 	"bytes"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"log"
+	"mime"
 	"net/http"
-	"os"
 	"path/filepath"
 
 	"zabdoc/internal/api/dto"
@@ -111,6 +112,13 @@ func (h Handler) LabTask(w http.ResponseWriter, r *http.Request) {
 				}
 				defer file.Close()
 
+				// Detect MIME type
+				ext := filepath.Ext(fileHeader.Filename)
+				mimeType := mime.TypeByExtension(ext)
+				if mimeType == "" {
+					mimeType = "image/jpeg" // fallback
+				}
+
 				// Read file content
 				fileData, err := io.ReadAll(file)
 				if err != nil {
@@ -118,28 +126,23 @@ func (h Handler) LabTask(w http.ResponseWriter, r *http.Request) {
 					continue
 				}
 
-				// Create temporary file
-				ext := filepath.Ext(fileHeader.Filename)
-				if ext == "" {
-					ext = ".jpg" // default extension
-				}
-				tmpFile, err := os.CreateTemp("", "task_image_*"+ext)
-				if err != nil {
-					h.logger.Printf("Error creating temp file: %v", err)
+				if len(fileData) == 0 {
+					h.logger.Printf("Empty image file: %s", fileHeader.Filename)
 					continue
 				}
 
-				// Write image data to temp file
-				if _, err := tmpFile.Write(fileData); err != nil {
-					h.logger.Printf("Error writing temp file: %v", err)
-					os.Remove(tmpFile.Name())
-					tmpFile.Close()
-					continue
-				}
-				tmpFile.Close()
+				// Encode as base64
+				base64Data := base64.StdEncoding.EncodeToString(fileData)
 
-				// Store file path for later use in template
-				task.Images = append(task.Images, "file://"+tmpFile.Name())
+				// Store as TaskImage with base64 data and MIME type
+				taskImage := dto.TaskImage{
+					Data:     base64Data,
+					MimeType: mimeType,
+				}
+				task.Images = append(task.Images, taskImage)
+
+				h.logger.Printf("Image processed: %s (%d bytes → %d base64 chars)",
+					mimeType, len(fileData), len(base64Data))
 			}
 		}
 

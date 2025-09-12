@@ -11,10 +11,15 @@ type AssignmentRequest struct {
 	Date        string
 }
 
+type TaskImage struct {
+	Data     string // Base64 encoded image data
+	MimeType string // MIME type (e.g., "image/jpeg", "image/png")
+}
+
 type Task struct {
 	Index   int
-	Content string // HTML content (converted from markdown)
-	Images  []string
+	Content string      // HTML content (converted from markdown)
+	Images  []TaskImage // Base64 encoded images with MIME types
 }
 
 type LabTaskRequest struct {
