@@ -22,33 +22,37 @@
 		action="https://api.zabdoc.xyz/assignment"
 		method="POST"
 		enctype="multipart/form-data"
-		class="grid md:grid-cols-2 gap-8"
+		class="space-y-8"
 	>
-		<AutoForm />
+		<div class="grid md:grid-cols-2 gap-8">
+			<AutoForm />
+
+			<Card.Root class="">
+				<Card.Header>
+					<Card.Title>Document</Card.Title>
+					<Card.Description
+						>Information about the assignment.
+					</Card.Description>
+				</Card.Header>
+				<Card.Content class="space-y-4">
+					<DueDate />
+
+					<Input
+						name="number"
+						type="number"
+						placeholder="Number"
+						required
+					/>
+				</Card.Content>
+			</Card.Root>
+		</div>
 
 		<Card.Root class="">
 			<Card.Header>
-				<Card.Title>Document</Card.Title>
 				<Card.Description
-					>Information about the assignment.
-				</Card.Description>
-			</Card.Header>
-			<Card.Content class="space-y-4">
-				<DueDate />
-
-				<Input
-					name="number"
-					type="number"
-					placeholder="Number"
-					required
-				/>
-			</Card.Content>
-		</Card.Root>
-
-		<Card.Root class="">
-			<Card.Header>
-				<Card.Description
-					>By clicking the button below you accept terms and privacy/
+					>By clicking the button below you accept the <a
+						href="/about">Terms and Privacy Policy</a
+					>.
 				</Card.Description>
 			</Card.Header>
 			<Card.CardContent>
