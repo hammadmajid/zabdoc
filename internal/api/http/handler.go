@@ -151,8 +151,6 @@ func (h Handler) LabTask(w http.ResponseWriter, r *http.Request) {
 
 	labTask.Tasks = tasks
 
-	h.logger.Printf("Received form data: %+v", labTask)
-
 	pdf, err := h.services.LabTaskCtrl.Generate(labTask)
 	if err != nil {
 		http.Error(w, "failed to generate PDF", http.StatusInternalServerError)
