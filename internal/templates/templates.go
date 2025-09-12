@@ -36,7 +36,7 @@ func init() {
         /* Lock page size */
         @page {
             size: A4;
-            margin: 0;
+            margin: 7mm;
         }
 
         html,
@@ -60,7 +60,7 @@ func init() {
             width: 210mm;
             height: 297mm;
             box-sizing: border-box;
-            padding: 12mm 12mm;
+            padding: 5mm;
             /* use mm to match printer/PDF units */
             display: flex;
             flex-direction: column;
@@ -287,7 +287,7 @@ func init() {
         /* Lock page size */
         @page {
             size: A4;
-            margin: 5mm;
+            margin: 7mm;
         }
 
         html,
@@ -305,7 +305,7 @@ func init() {
             width: 210mm;
             height: 297mm;
             box-sizing: border-box;
-            padding: 12mm 12mm;
+            padding: 5mm;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -542,14 +542,6 @@ func init() {
             display: block;
         }
 
-        .image-caption {
-            font-size: 10pt;
-            color: #666;
-            text-align: center;
-            margin-bottom: 1em;
-            font-style: italic;
-        }
-
         /* Force backgrounds to always appear in print */
         * {
             -webkit-print-color-adjust: exact;
@@ -622,7 +614,6 @@ func init() {
         <div class="task-images">
             {{range $imgIndex, $image := $task.Images}}
             <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Task {{add $task.Index 1}} Image {{add $imgIndex 1}}" class="task-image">
-            <div class="image-caption">Figure {{add $imgIndex 1}}: Task {{add $task.Index 1}} Image</div>
             {{end}}
         </div>
         {{end}}
