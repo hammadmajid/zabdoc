@@ -262,12 +262,19 @@ func init() {
 </html>
 `))
 
-	templates[LabTask] = template.Must(template.New("tab_task").Parse(`
+	templates[LabTask] = template.Must(template.New("lab_task").Funcs(template.FuncMap{
+		"add": func(a, b int) int {
+			return a + b
+		},
+		"html": func(s string) template.HTML {
+			return template.HTML(s)
+		},
+	}).Parse(`
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Assignment Cover</title>
+    <title>Lab Task</title>
     <style>
         @font-face {
             font-family: "Times New Roman";
@@ -280,32 +287,25 @@ func init() {
         /* Lock page size */
         @page {
             size: A4;
-            margin: 0;
+            margin: 5mm;
         }
 
         html,
         body {
             margin: 0;
             padding: 0;
-            width: 210mm;
-            height: 297mm;
             font-family: "Times New Roman", serif;
             background: #fff;
-            color: #222;
+            color: #000;
+            line-height: 1.6;
         }
 
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .a4-page {
+        /* Cover Page Styles */
+        .cover-page {
             width: 210mm;
             height: 297mm;
             box-sizing: border-box;
             padding: 12mm 12mm;
-            /* use mm to match printer/PDF units */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -338,7 +338,6 @@ func init() {
 
         .header-line1 {
             font-size: 14pt;
-            /* use pt for stable scaling */
             font-weight: bold;
         }
 
@@ -445,6 +444,112 @@ func init() {
             font-size: 14pt;
         }
 
+        /* Content Pages Styles */
+        .content-pages {
+            font-size: 12pt;
+            line-height: 1.6;
+        }
+
+        .task-section {
+            margin-bottom: 2em;
+            page-break-inside: avoid;
+        }
+
+        .task-header {
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 1em;
+            border-bottom: 2px solid #222;
+            padding-bottom: 0.5em;
+        }
+
+        .task-content {
+            margin-bottom: 1.5em;
+        }
+
+        .task-content h1, .task-content h2, .task-content h3 {
+            color: #333;
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .task-content h1 {
+            font-size: 18pt;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.3em;
+        }
+
+        .task-content h2 {
+            font-size: 16pt;
+        }
+
+        .task-content h3 {
+            font-size: 14pt;
+        }
+
+        .task-content p {
+            margin-bottom: 1em;
+            text-align: justify;
+        }
+
+        .task-content ul, .task-content ol {
+            margin-bottom: 1em;
+            padding-left: 2em;
+        }
+
+        .task-content li {
+            margin-bottom: 0.5em;
+        }
+
+        .task-content pre {
+            background: #f5f5f5;
+            padding: 1em;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            overflow: auto;
+            font-family: "Courier New", monospace;
+            font-size: 10pt;
+            page-break-inside: avoid;
+        }
+
+        .task-content code {
+            background: #f5f5f5;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: "Courier New", monospace;
+            font-size: 10pt;
+        }
+
+        .task-content blockquote {
+            border-left: 4px solid #ccc;
+            margin-left: 0;
+            padding-left: 1em;
+            color: #666;
+            font-style: italic;
+        }
+
+        .task-images {
+            margin-top: 1.5em;
+        }
+
+        .task-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            page-break-inside: avoid;
+            display: block;
+        }
+
+        .image-caption {
+            font-size: 10pt;
+            color: #666;
+            text-align: center;
+            margin-bottom: 1em;
+            font-style: italic;
+        }
+
         /* Force backgrounds to always appear in print */
         * {
             -webkit-print-color-adjust: exact;
@@ -454,7 +559,8 @@ func init() {
 </head>
 
 <body>
-<div class="a4-page">
+<!-- Cover Page -->
+<div class="cover-page">
     <div class="header">
         <div class="header-logo">
             <img src="https://cdn.zabdoc.xyz/szabist-logo.png" alt="SZABIST Logo">
@@ -502,6 +608,28 @@ func init() {
         <div>SZABIST-ISB</div>
     </div>
 </div>
+
+<!-- Content Pages -->
+{{if .Tasks}}
+<div class="content-pages">
+    {{range $index, $task := .Tasks}}
+    <div class="task-section">
+        <div class="task-header">Task {{add $task.Index 1}}</div>
+        <div class="task-content">
+            {{$task.Content}}
+        </div>
+        {{if $task.Images}}
+        <div class="task-images">
+            {{range $imgIndex, $image := $task.Images}}
+            <img src="{{$image}}" alt="Task {{add $task.Index 1}} Image {{add $imgIndex 1}}" class="task-image">
+            <div class="image-caption">Figure {{add $imgIndex 1}}: Task {{add $task.Index 1}} Image</div>
+            {{end}}
+        </div>
+        {{end}}
+    </div>
+    {{end}}
+</div>
+{{end}}
 </body>
 </html>`))
 }
