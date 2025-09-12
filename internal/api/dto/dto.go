@@ -1,23 +1,30 @@
 package dto
 
 type AssignmentRequest struct {
-	StudentName string `json:"studentName"`
-	RegNo       string `json:"regNo"`
-	Class       string `json:"class"`
-	Course      string `json:"course"`
-	CourseCode  string `json:"courseCode"`
-	Instructor  string `json:"instructor"`
-	Number      string `json:"number"`
-	Date        string `json:"date"`
+	RegNo       string
+	StudentName string
+	Class       string
+	Course      string
+	CourseCode  string
+	Instructor  string
+	Number      string
+	Date        string
+}
+
+type Task struct {
+	Index   int
+	Content string // HTML content (converted from markdown)
+	Images  []string
 }
 
 type LabTaskRequest struct {
-	StudentName string `json:"studentName"`
-	RegNo       string `json:"regNo"`
-	Class       string `json:"class"`
-	Course      string `json:"course"`
-	CourseCode  string `json:"courseCode"`
-	Instructor  string `json:"instructor"`
-	Number      string `json:"number"`
-	Date        string `json:"date"`
+	StudentName string
+	RegNo       string
+	Class       string
+	Course      string
+	CourseCode  string
+	Instructor  string
+	Number      string
+	Date        string
+	Tasks       []Task
 }
