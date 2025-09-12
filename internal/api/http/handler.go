@@ -1,12 +1,18 @@
 package http
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"zabdoc/internal/api/dto"
 	"zabdoc/internal/controllers"
+
+	"github.com/yuin/goldmark"
 )
 
 type Handler struct {
@@ -72,6 +78,75 @@ func (h Handler) LabTask(w http.ResponseWriter, r *http.Request) {
 		Number:      r.FormValue("number"),
 		Date:        r.FormValue("date"),
 	}
+
+	// Process tasks
+	var tasks []dto.Task
+	for i := 0; i < 15; i++ { // Max 15 tasks as per frontend
+		contentKey := fmt.Sprintf("task-%d-content", i)
+		filesKey := fmt.Sprintf("task-%d-files", i)
+
+		content := r.FormValue(contentKey)
+		if content == "" {
+			continue // Skip empty tasks
+		}
+
+		// Convert markdown to HTML
+		var buf bytes.Buffer
+		if err := goldmark.Convert([]byte(content), &buf); err != nil {
+			panic(err)
+		}
+
+		task := dto.Task{
+			Index:   i,
+			Content: buf.String(),
+		}
+
+		// Process uploaded images
+		if files := r.MultipartForm.File[filesKey]; files != nil {
+			for _, fileHeader := range files {
+				file, err := fileHeader.Open()
+				if err != nil {
+					h.logger.Printf("Error opening file: %v", err)
+					continue
+				}
+				defer file.Close()
+
+				// Read file content
+				fileData, err := io.ReadAll(file)
+				if err != nil {
+					h.logger.Printf("Error reading file: %v", err)
+					continue
+				}
+
+				// Create temporary file
+				ext := filepath.Ext(fileHeader.Filename)
+				if ext == "" {
+					ext = ".jpg" // default extension
+				}
+				tmpFile, err := os.CreateTemp("", "task_image_*"+ext)
+				if err != nil {
+					h.logger.Printf("Error creating temp file: %v", err)
+					continue
+				}
+
+				// Write image data to temp file
+				if _, err := tmpFile.Write(fileData); err != nil {
+					h.logger.Printf("Error writing temp file: %v", err)
+					os.Remove(tmpFile.Name())
+					tmpFile.Close()
+					continue
+				}
+				tmpFile.Close()
+
+				// Store file path for later use in template
+				task.Images = append(task.Images, "file://"+tmpFile.Name())
+			}
+		}
+
+		tasks = append(tasks, task)
+	}
+
+	labTask.Tasks = tasks
 
 	h.logger.Printf("Received form data: %+v", labTask)
 

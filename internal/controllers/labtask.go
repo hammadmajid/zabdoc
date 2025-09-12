@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"context"
 	"log"
-	"net/url"
+	"os"
 	"time"
 
 	"zabdoc/internal/api/dto"
@@ -31,8 +31,20 @@ func (as *labTaskCtrl) Generate(labTask dto.LabTaskRequest) ([]byte, error) {
 		return nil, err
 	}
 
-	html := buf.String()
-	dataURL := "data:text/html," + url.PathEscape(html)
+	// Write to temporary file
+	tmpFile, err := os.CreateTemp("", "labtask_*.html")
+	if err != nil {
+		return nil, err
+	}
+	defer os.Remove(tmpFile.Name())
+	defer tmpFile.Close()
+
+	if _, err := tmpFile.Write(buf.Bytes()); err != nil {
+		return nil, err
+	}
+	tmpFile.Close()
+
+	fileURL := "file://" + tmpFile.Name()
 
 	// Force Chrome to run without sandbox (needed on Heroku)
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
@@ -48,9 +60,9 @@ func (as *labTaskCtrl) Generate(labTask dto.LabTaskRequest) ([]byte, error) {
 
 	var pdfBuf []byte
 
-	err := chromedp.Run(ctx,
-		// Load HTML
-		chromedp.Navigate(dataURL),
+	err = chromedp.Run(ctx,
+		// Load HTML file
+		chromedp.Navigate(fileURL),
 
 		// Force viewport size (avoid default 800x600)
 		emulation.SetDeviceMetricsOverride(1280, 1024, 1.0, false),
@@ -58,8 +70,8 @@ func (as *labTaskCtrl) Generate(labTask dto.LabTaskRequest) ([]byte, error) {
 		// Use print media emulation
 		emulation.SetEmulatedMedia(),
 
-		// Allow layout to settle
-		chromedp.Sleep(500*time.Millisecond),
+		// Allow time for images to load
+		chromedp.Sleep(2*time.Second),
 
 		// Render PDF with strict params
 		chromedp.ActionFunc(func(ctx context.Context) error {
