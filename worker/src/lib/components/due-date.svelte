@@ -5,11 +5,12 @@
     import ChevronDownIcon from "@lucide/svelte/icons/chevron-down";
     import {
         getLocalTimeZone,
+        today,
         type CalendarDate,
     } from "@internationalized/date";
 
     let open = $state(false);
-    let value = $state<CalendarDate | undefined>();
+    let value = $state<CalendarDate | undefined>(today(getLocalTimeZone()));
 
     const formattedDate = $derived(
         value
