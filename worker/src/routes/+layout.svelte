@@ -1,10 +1,22 @@
 <script lang="ts">
-    import "../app.css";
+    import { onNavigate } from "$app/navigation";
     import favicon from "$lib/assets/favicon.svg";
-    import { cn } from "$lib/utils";
-    import { buttonVariants } from "$lib/components/ui/button";
-    import { ModeWatcher } from "mode-watcher";
     import Theme from "$lib/components/theme.svelte";
+    import { buttonVariants } from "$lib/components/ui/button";
+    import { cn } from "$lib/utils";
+    import { ModeWatcher } from "mode-watcher";
+    import "../app.css";
+
+    onNavigate((navigation) => {
+        if (!document.startViewTransition) return;
+
+        return new Promise((resolve) => {
+            document.startViewTransition(async () => {
+                resolve();
+                await navigation.complete;
+            });
+        });
+    });
 
     let { children } = $props();
 </script>
