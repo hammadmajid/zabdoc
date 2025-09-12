@@ -13,6 +13,8 @@
         <a href="/assignment" class={buttonVariants({ variant: "default" })}>
             Assignment Cover
         </a>
-        <Button disabled>Lab Task</Button>
+        <a href="/lab-task" class={buttonVariants({ variant: "default" })}>
+            Lab task
+        </a>
     </div>
 </div>
