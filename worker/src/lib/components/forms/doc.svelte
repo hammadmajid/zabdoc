@@ -26,8 +26,10 @@
     <Card.Content class="space-y-4">
         <div class="space-y-2">
             <Label for="document-type">Type</Label>
-            <Select.Root type="single" bind:value>
-                <Select.Trigger class="w-full">{triggerContent}</Select.Trigger>
+            <Select.Root type="single" name="type" bind:value>
+                <Select.Trigger class="w-full"
+                    >{triggerContent}</Select.Trigger
+                >
                 <Select.Content>
                     {#each types as type (type.value)}
                         <Select.Item
