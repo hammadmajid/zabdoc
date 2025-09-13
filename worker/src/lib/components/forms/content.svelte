@@ -4,6 +4,9 @@
     import Label from "$lib/components/ui/label/label.svelte";
     import * as Card from "$lib/components/ui/card/index";
     import { Textarea } from "$lib/components/ui/textarea";
+    import Plus from "@lucide/svelte/icons/plus";
+    import X from "@lucide/svelte/icons/x";
+    import Separator from "../ui/separator/separator.svelte";
 
     interface Section {
         id: number;
@@ -41,13 +44,18 @@
     }
 </script>
 
-<div class="space-y-8 pt-8 border-t border-muted-foreground">
-    <Card.Header>
-        <Card.Title>Content</Card.Title>
-        <Card.Description>
-            If no content is provided only the cover page will be generated.
-        </Card.Description>
-    </Card.Header>
+<Separator />
+
+<div class="space-y-8">
+    <div class="space-y-1.5">
+        <h3 class="text-2xl font-semibold leading-none tracking-tight">
+            Content
+        </h3>
+        <p class="text-sm text-muted-foreground">
+            If no content is provided, only the cover page will be rendered.
+        </p>
+    </div>
+
     <div class="grid md:grid-cols-2 gap-4">
         {#each sections as section, index (section.id)}
             <Card.Root class="relative">
@@ -58,9 +66,11 @@
                             <Button
                                 type="button"
                                 variant="outline"
+                                size="sm"
                                 onclick={() => removesection(section.id)}
-                                >Remove</Button
                             >
+                                <X />
+                            </Button>
                         {/if}
                     </div>
                     <Card.Description
@@ -108,10 +118,6 @@
                                 );
                             }}
                         />
-                        <p class="text-xs text-muted-foreground">
-                            Upload images to support your section content.
-                            Multiple files allowed.
-                        </p>
                     </div>
                 </Card.Content>
             </Card.Root>
@@ -126,7 +132,7 @@
                         variant="outline"
                         onclick={addsection}
                     >
-                        <span class="text-lg">+</span>
+                        <Plus />
                         <span>Add New section</span>
                         <span class="text-sm text-muted-foreground"
                             >Click to add another section</span

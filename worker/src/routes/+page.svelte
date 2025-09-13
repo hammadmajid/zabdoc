@@ -51,13 +51,15 @@
     <title>zabdoc</title>
 </svelte:head>
 
-<div class="space-y-12 p-4 md:p-0">
-    <Card.Header>
-        <Card.Title>Cover</Card.Title>
-        <Card.Description>
-            Information that will be renderd on cover page.
-        </Card.Description>
-    </Card.Header>
+<div class="space-y-12 px-4">
+    <div class="space-y-1.5">
+        <h3 class="text-2xl font-semibold leading-none tracking-tight">
+            Document
+        </h3>
+        <p class="text-sm text-muted-foreground">
+            Fill out the information below to generate the document.
+        </p>
+    </div>
 
     <form class="space-y-8" onsubmit={handleSubmit}>
         <div class="grid md:grid-cols-2 gap-4">

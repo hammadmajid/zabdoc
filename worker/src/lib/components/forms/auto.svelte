@@ -113,8 +113,7 @@
     <Card.Header>
         <Card.Title>Student</Card.Title>
         <Card.Description>
-            This data is cached locally for your convenience and will not be
-            shared.
+            This data is stored locally for your convenience.
         </Card.Description>
     </Card.Header>
     <Card.Content class="space-y-4">
@@ -176,8 +175,8 @@
     <Card.Header>
         <Card.Title>Course</Card.Title>
         <Card.Description>
-            Instructor and course code are automatically filled based on your
-            selection.
+            Instructor and course code are auto filled based on the
+            course.
         </Card.Description>
     </Card.Header>
     <Card.Content class="space-y-4">
