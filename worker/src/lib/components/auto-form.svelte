@@ -1,7 +1,7 @@
 <script lang="ts">
-    import CardDescription from "$lib/components/ui/card/card-description.svelte";
     import * as Select from "$lib/components/ui/select/index.js";
     import Input from "$lib/components/ui/input/input.svelte";
+    import Label from "$lib/components/ui/label/label.svelte";
     import * as Card from "$lib/components/ui/card/index.js";
     import { browser } from "$app/environment";
     import { data, type DataStructure } from "$lib/data/data";
@@ -105,98 +105,136 @@
 <Card.Root class="">
     <Card.Header>
         <Card.Title>Student</Card.Title>
-        <CardDescription
-            >This information will be cached for you convenience.
-        </CardDescription>
+        <Card.Description>
+            This data is cached locally for your convenience and will not be
+            shared.
+        </Card.Description>
     </Card.Header>
     <Card.Content class="space-y-4">
-        <Input
-            name="studentName"
-            type="text"
-            placeholder="Full name"
-            bind:value={studentName}
-        />
-        <Input
-            name="regNo"
-            type="number"
-            placeholder="Registration no"
-            bind:value={regNum}
-        />
+        <div class="space-y-2">
+            <Label for="student-name">Full Name</Label>
+            <Input
+                id="student-name"
+                name="studentName"
+                type="text"
+                placeholder="Enter your full name"
+                bind:value={studentName}
+                required
+            />
+        </div>
 
-        <!-- Class Selection -->
-        <Select.Root
-            type="single"
-            name="class"
-            required
-            bind:value={selectedClass}
-        >
-            <Select.Trigger class="w-full">
-                {classTriggerContent}
-            </Select.Trigger>
-            <Select.Content>
-                <Select.Group>
-                    <Select.Label>Classes</Select.Label>
-                    {#each classes as classItem (classItem.value)}
-                        <Select.Item
-                            value={classItem.value}
-                            label={classItem.label}
-                        >
-                            {classItem.label}
-                        </Select.Item>
-                    {/each}
-                </Select.Group>
-            </Select.Content>
-        </Select.Root>
+        <div class="space-y-2">
+            <Label for="reg-number">Registration Number</Label>
+            <Input
+                id="reg-number"
+                name="regNo"
+                type="number"
+                placeholder="Enter your registration number"
+                bind:value={regNum}
+                required
+            />
+        </div>
+
+        <div class="space-y-2">
+            <Label for="class-select">Class</Label>
+            <!-- Class Selection -->
+            <Select.Root
+                type="single"
+                name="class"
+                required
+                bind:value={selectedClass}
+            >
+                <Select.Trigger id="class-select" class="w-full">
+                    {classTriggerContent}
+                </Select.Trigger>
+                <Select.Content>
+                    <Select.Group>
+                        <Select.Label>Available Classes</Select.Label>
+                        {#each classes as classItem (classItem.value)}
+                            <Select.Item
+                                value={classItem.value}
+                                label={classItem.label}
+                            >
+                                {classItem.label}
+                            </Select.Item>
+                        {/each}
+                    </Select.Group>
+                </Select.Content>
+            </Select.Root>
+        </div>
     </Card.Content>
 </Card.Root>
 
 <Card.Root class="">
     <Card.Header>
         <Card.Title>Course</Card.Title>
-        <Card.Description
-            >Teacher and course code will be auto filled for you.
+        <Card.Description>
+            Instructor and course code are automatically filled based on your
+            selection.
         </Card.Description>
     </Card.Header>
     <Card.Content class="space-y-4">
-        <!-- Course Selection -->
-        <Select.Root
-            type="single"
-            name="course"
-            required
-            bind:value={selectedCourse}
-            disabled={!selectedClass}
-        >
-            <Select.Trigger class="w-full">
-                {courseTriggerContent}
-            </Select.Trigger>
-            <Select.Content>
-                <Select.Group>
-                    <Select.Label>Courses</Select.Label>
-                    {#each courses as course (course.value)}
-                        <Select.Item value={course.value} label={course.label}>
-                            {course.label}
-                        </Select.Item>
-                    {/each}
-                </Select.Group>
-            </Select.Content>
-        </Select.Root>
+        <div class="space-y-2">
+            <Label for="course-select">Course</Label>
+            <!-- Course Selection -->
+            <Select.Root
+                type="single"
+                name="course"
+                required
+                bind:value={selectedCourse}
+                disabled={!selectedClass}
+            >
+                <Select.Trigger id="course-select" class="w-full">
+                    {courseTriggerContent}
+                </Select.Trigger>
+                <Select.Content>
+                    <Select.Group>
+                        <Select.Label>Available Courses</Select.Label>
+                        {#each courses as course (course.value)}
+                            <Select.Item
+                                value={course.value}
+                                label={course.label}
+                            >
+                                {course.label}
+                            </Select.Item>
+                        {/each}
+                    </Select.Group>
+                </Select.Content>
+            </Select.Root>
+            {#if !selectedClass}
+                <p class="text-xs text-muted-foreground">
+                    Please select a class first to see available courses.
+                </p>
+            {/if}
+        </div>
 
         <!-- Auto-filled fields -->
         {#if courseDetails}
-            <Input
-                name="instructor"
-                type="text"
-                placeholder="Instructor"
-                value={courseDetails.instructor}
-                readonly
-            />
-            <Input
-                name="courseCode"
-                type="text"
-                placeholder="Course Code"
-                value={courseDetails.code}
-                readonly
-            />
+            <div class="space-y-2">
+                <Label for="instructor">Instructor</Label>
+                <Input
+                    id="instructor"
+                    name="instructor"
+                    type="text"
+                    placeholder="Instructor"
+                    value={courseDetails.instructor}
+                    readonly
+                    class="bg-muted"
+                />
+            </div>
+
+            <div class="space-y-2">
+                <Label for="course-code">Course Code</Label>
+                <Input
+                    id="course-code"
+                    name="courseCode"
+                    type="text"
+                    placeholder="Course Code"
+                    value={courseDetails.code}
+                    readonly
+                    class="bg-muted"
+                />
+            </div>
         {/if}
     </Card.Content>
 </Card.Root>
