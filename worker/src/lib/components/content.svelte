@@ -1,0 +1,140 @@
+<script lang="ts">
+    import Button from "$lib/components/ui/button/button.svelte";
+    import Input from "$lib/components/ui/input/input.svelte";
+    import Label from "$lib/components/ui/label/label.svelte";
+    import * as Card from "$lib/components/ui/card/index";
+    import { Textarea } from "$lib/components/ui/textarea";
+
+    interface Section {
+        id: number;
+        content: string;
+        files: FileList | null;
+    }
+
+    let sections: Section[] = $state([{ id: 0, content: "", files: null }]);
+    let sectionCounter = $state(1);
+
+    function addsection() {
+        sectionCounter++;
+        sections = [
+            ...sections,
+            { id: sectionCounter, content: "", files: null },
+        ];
+    }
+
+    function removesection(sectionId: number) {
+        if (sections.length > 1) {
+            sections = sections.filter((section) => section.id !== sectionId);
+        }
+    }
+
+    function updatesectionContent(sectionId: number, content: string) {
+        sections = sections.map((section) =>
+            section.id === sectionId ? { ...section, content } : section,
+        );
+    }
+
+    function updatesectionFiles(sectionId: number, files: FileList | null) {
+        sections = sections.map((section) =>
+            section.id === sectionId ? { ...section, files } : section,
+        );
+    }
+</script>
+
+<div class="space-y-8 pt-8 border-t border-muted-foreground">
+    <Card.Header>
+        <Card.Title>Content</Card.Title>
+        <Card.Description>
+            If no content is provided only the cover page will be generated.
+        </Card.Description>
+    </Card.Header>
+    <div class="grid md:grid-cols-2 gap-4">
+        {#each sections as section, index (section.id)}
+            <Card.Root class="relative">
+                <Card.Header>
+                    <div class="flex items-center justify-between">
+                        <Card.Title>Section {index + 1}</Card.Title>
+                        {#if sections.length > 1}
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onclick={() => removesection(section.id)}
+                                >Remove</Button
+                            >
+                        {/if}
+                    </div>
+                    <Card.Description
+                        >Add section content and attach supporting files (images
+                        only).</Card.Description
+                    >
+                </Card.Header>
+                <Card.Content class="space-y-4">
+                    <div class="space-y-2">
+                        <Label for="section-{index}-content"
+                            >Section Content</Label
+                        >
+                        <Textarea
+                            id="section-{index}-content"
+                            rows={3}
+                            name="section-{index}-content"
+                            placeholder="Enter your content here. [Markdown formatting is supported]"
+                            bind:value={section.content}
+                            oninput={(e) => {
+                                const target =
+                                    e.target as HTMLTextAreaElement | null;
+                                if (target)
+                                    updatesectionContent(
+                                        section.id,
+                                        target.value,
+                                    );
+                            }}
+                        />
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="section-{index}-files">Attach Files</Label>
+                        <Input
+                            id="section-{index}-files"
+                            name="section-{index}-files"
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            class="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium"
+                            onchange={(e) => {
+                                const target =
+                                    e.target as HTMLInputElement | null;
+                                updatesectionFiles(
+                                    section.id,
+                                    target?.files ?? null,
+                                );
+                            }}
+                        />
+                        <p class="text-xs text-muted-foreground">
+                            Upload images to support your section content.
+                            Multiple files allowed.
+                        </p>
+                    </div>
+                </Card.Content>
+            </Card.Root>
+        {/each}
+
+        {#if sections.length < 15}
+            <Card.Root class="md:min-h-[250px] border-dashed">
+                <Card.Content class="h-full flex items-center justify-center">
+                    <Button
+                        class="w-full h-full min-h-[200px] flex flex-col gap-2"
+                        type="button"
+                        variant="outline"
+                        onclick={addsection}
+                    >
+                        <span class="text-lg">+</span>
+                        <span>Add New section</span>
+                        <span class="text-sm text-muted-foreground"
+                            >Click to add another section</span
+                        >
+                    </Button>
+                </Card.Content>
+            </Card.Root>
+        {/if}
+    </div>
+</div>
