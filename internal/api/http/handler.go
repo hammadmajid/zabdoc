@@ -19,16 +19,19 @@ import (
 	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/yuin/goldmark"
 )
 
 type Handler struct {
 	logger *log.Logger
+	policy *bluemonday.Policy
 }
 
 func NewHandler(logger *log.Logger) Handler {
 	return Handler{
 		logger: logger,
+		policy: bluemonday.UGCPolicy(),
 	}
 }
 
@@ -68,11 +71,11 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 
-		// TODO: input sanitization
+		html := h.policy.Sanitize(buf.String())
 
 		section := dto.Section{
 			Index:   i,
-			Content: buf.String(),
+			Content: html,
 		}
 
 		// Process uploaded images
