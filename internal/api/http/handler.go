@@ -70,7 +70,7 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 
 		// TODO: input sanitization
 
-		task := dto.Section{
+		section := dto.Section{
 			Index:   i,
 			Content: buf.String(),
 		}
@@ -107,19 +107,19 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 				// Encode as base64
 				base64Data := base64.StdEncoding.EncodeToString(fileData)
 
-				// Store as TaskImage with base64 data and MIME type
-				taskImage := dto.SectionImage{
+				// Store as SectionImage with base64 data and MIME type
+				sectionImage := dto.SectionImage{
 					Data:     base64Data,
 					MimeType: mimeType,
 				}
-				task.Images = append(task.Images, taskImage)
+				section.Images = append(section.Images, sectionImage)
 
 				h.logger.Printf("Image processed: %s (%d bytes → %d base64 chars)",
 					mimeType, len(fileData), len(base64Data))
 			}
 		}
 
-		sections = append(sections, task)
+		sections = append(sections, section)
 	}
 
 	data.Sections = sections
@@ -132,7 +132,7 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/pdf")
-	w.Header().Set("Content-Disposition", "attachment; filename=lab-task.pdf")
+	w.Header().Set("Content-Disposition", "attachment; filename=document.pdf")
 	if _, writeErr := w.Write(pdf); writeErr != nil {
 		h.logger.Printf("write PDF: %v", writeErr)
 	}
@@ -146,7 +146,7 @@ func (h *Handler) generate(data dto.GenerateRequest) ([]byte, error) {
 	}
 
 	// Write to temporary file
-	tmpFile, err := os.CreateTemp("", "labtask_*.html")
+	tmpFile, err := os.CreateTemp("", "section_*.html")
 	if err != nil {
 		return nil, err
 	}
