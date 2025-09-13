@@ -98,8 +98,7 @@
                             name="section-{index}-files"
                             type="file"
                             multiple
-                            accept="image/*"
-                            class="file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
                             onchange={(e) => {
                                 const target =
                                     e.target as HTMLInputElement | null;
