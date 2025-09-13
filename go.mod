@@ -8,7 +8,13 @@ require (
 	github.com/go-chi/chi/v5 v5.2.3
 )
 
-require github.com/yuin/goldmark v1.7.13 // indirect
+require (
+	github.com/aymerick/douceur v0.2.0 // indirect
+	github.com/gorilla/css v1.0.1 // indirect
+	github.com/microcosm-cc/bluemonday v1.0.27 // indirect
+	github.com/yuin/goldmark v1.7.13 // indirect
+	golang.org/x/net v0.26.0 // indirect
+)
 
 require (
 	github.com/chromedp/sysutil v1.1.0 // indirect
