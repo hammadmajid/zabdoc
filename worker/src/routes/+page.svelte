@@ -16,7 +16,11 @@
         try {
             const formData = new FormData(event.target as HTMLFormElement);
 
-            const response = await fetch("http://localhost:8080/generate", {
+            // Shitty hack to check if we are in localhost or prod
+            const apiUrl = window.location.host.includes("localhost")
+                ? "http://localhost:8080/generate"
+                : "https://api.zabdoc.xyz/generate";
+            const response = await fetch(apiUrl, {
                 method: "POST",
                 body: formData,
             });
