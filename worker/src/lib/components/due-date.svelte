@@ -3,6 +3,7 @@
     import * as Popover from "$lib/components/ui/popover/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import ChevronDownIcon from "@lucide/svelte/icons/chevron-down";
+    import CalendarIcon from "@lucide/svelte/icons/calendar";
     import {
         getLocalTimeZone,
         today,
@@ -17,6 +18,17 @@
             ? value.toDate(getLocalTimeZone()).toISOString().split("T")[0]
             : "",
     );
+
+    const displayDate = $derived(
+        value
+            ? value.toDate(getLocalTimeZone()).toLocaleDateString("en-US", {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+              })
+            : "Select due date",
+    );
 </script>
 
 <div class="flex flex-col gap-3">
@@ -27,12 +39,15 @@
                 <Button
                     {...props}
                     variant="outline"
-                    class="w-full justify-between font-normal"
+                    class="w-full justify-between font-normal {!value
+                        ? 'text-muted-foreground'
+                        : ''}"
                 >
-                    {value
-                        ? value.toDate(getLocalTimeZone()).toLocaleDateString()
-                        : "Due date"}
-                    <ChevronDownIcon />
+                    <div class="flex items-center gap-2">
+                        <CalendarIcon class="h-4 w-4" />
+                        {displayDate}
+                    </div>
+                    <ChevronDownIcon class="h-4 w-4 opacity-50" />
                 </Button>
             {/snippet}
         </Popover.Trigger>
