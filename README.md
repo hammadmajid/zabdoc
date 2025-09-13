@@ -1,36 +1,40 @@
 # zabdoc
 
-zabdoc is a web application for SZABIST students to generate assignment cover sheets and lab tasks in PDF format. It uses a hybrid architecture with a Go backend API and a SvelteKit frontend deployed on Cloudflare.
+zabdoc is a web application for SZABIST students to generate assignment cover sheets, lab tasks and lab projects in PDF format. It uses a hybrid architecture with a Go backend API and a SvelteKit frontend deployed on Cloudflare.
 
 ## Architecture
 
 ### Backend (Go API)
 
-- **Language:** Go 1.24.6, using [chi router](https://github.com/go-chi/chi)
+- **Language:** Go 1.24.6+, using [chi router](https://github.com/go-chi/chi)
+- **Deployment:** Heroku Container Stack (see [Heroku Container Registry docs](https://devcenter.heroku.com/articles/container-registry-and-runtime))
 - **App Logic:** `internal/app/app.go` (dependency injection, service wiring)
 - **API/HTTP Handlers:** `internal/api/http/handler.go` (PDF generation, health endpoints)
-- **Controllers:** `internal/controllers/` (business logic layer)
 - **Routing:** `internal/router/router.go` (sets up API endpoints with CORS)
 - **Templates:** `internal/templates/` (PDF template generation)
 - **DTOs:** `internal/api/dto/dto.go` (form data structure)
 - **Middleware:** `internal/middleware/` (CORS, logging)
+- **PDF Generation:** Uses [chromedp](https://github.com/chromedp/chromedp) for headless Chrome rendering
 
 ### Frontend (SvelteKit)
 
-- **Framework:** SvelteKit with TypeScript
-- **UI Components:** Custom Svelte components in `worker/src/lib/components/`
-- **Styling:** TailwindCSS with custom component library
-- **Deployment:** Cloudflare Workers/Pages
-- **Routes:** `worker/src/routes/` (pages and API proxy)
-- **Form Handling:** Auto-form component with date picker and validation
+- **Framework:** SvelteKit v2+ with TypeScript ([docs](https://svelte.dev))
+- **Deployment:** Cloudflare Workers ([deployment guide](https://developers.cloudflare.com/workers/))
+- **UI Components:** [Shadcn Svelte](https://shadcn-svelte.com/) components in `worker/src/lib/components/`
+- **Routes:** `worker/src/routes/`
+
+## Project Structure
+
+- **Go Backend:** Follows [Go Project Layout](https://github.com/golang-standards/project-layout)
+- **Frontend:** Follows [SvelteKit project structure](https://kit.svelte.dev/docs/project-structure)
 
 ## Setup & Usage
 
 ### Prerequisites
 
 - Go 1.24.6+
-- Node.js 18+ and pnpm
-- [chromedp](https://github.com/chromedp/chromedp) dependencies (installed via `go mod tidy`)
+- Node.js 20+ and pnpm ([install guide](https://pnpm.io/installation))
+- Docker (optional, for headless Chrome environments)
 
 ### Backend Setup
 
@@ -47,7 +51,13 @@ zabdoc is a web application for SZABIST students to generate assignment cover sh
    go mod tidy
    ```
 
-3. Run the backend API:
+3. Set environment variable
+
+   ```sh
+   export PORT=8080
+   ```
+
+4. Run the backend API:
 
    ```sh
    go run .
@@ -90,40 +100,37 @@ go build .
 ```sh
 cd worker
 pnpm build
-pnpm deploy  # deploys to Cloudflare
 ```
 
 ## Usage
 
 - Open the SvelteKit frontend in your browser (`http://zabdoc.localhost:5173` in development)
-- Fill out the assignment form with student details
-- Submit to generate and download a PDF cover sheet via the Go backend API
+- Fill out the form with student details and optional content
+- Submit to generate and download the PDF via the Go backend API
 
 ## API Endpoints
 
 ### Backend API (Go)
 
-- `/health` - Health check (returns status)
-- `/assignment` - POST, generates PDF from form data
+- `/health` - GET, Health check (returns status)
+- `/generate` - POST, generates PDF from form data
 
 ### Frontend Routes (SvelteKit)
 
-- `/` - Main assignment form page
+- `/` - Main form page
 - `/about` - About page
-- `/assignment` - Assignment form (alternative route)
-- `/lab-task` - Lab task form
-- `/api/assignment` - Proxy endpoint that forwards to Go backend
 
 ## Contributing
 
 - Follow Go idioms: dependency injection, error handling, structured logging
 - Add features via `internal/services`, update templates as needed
 - PRs welcome! See code comments for guidance
+- Use [staticcheck](https://staticcheck.io/) for linting Go code
+- Use [pnpm](https://pnpm.io/) for frontend package management
 
 ## License
 
 Project is licensed under [GNU General Public License v3](https://www.gnu.org/licenses/gpl-3.0.html).
 
 ---
-
 For questions or support, open an issue.
