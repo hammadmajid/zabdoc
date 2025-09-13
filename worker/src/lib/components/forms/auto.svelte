@@ -5,6 +5,7 @@
     import * as Card from "$lib/components/ui/card/index.js";
     import { browser } from "$app/environment";
     import { data, type DataStructure } from "$lib/data/data";
+    import { toast } from "svelte-sonner";
 
     // LocalStorage utility functions
     function setLocalStorage(key: string, value: string) {
@@ -12,7 +13,10 @@
         try {
             localStorage.setItem(key, value);
         } catch (error) {
-            console.warn(`Failed to save to localStorage: ${error}`);
+            toast.warning("Failed to save to localStorage", {
+                description: error as string,
+                position: "top-center",
+            });
         }
     }
 
@@ -21,7 +25,10 @@
         try {
             return localStorage.getItem(key) || "";
         } catch (error) {
-            console.warn(`Failed to read from localStorage: ${error}`);
+            toast.warning("Failed to read from localStorage", {
+                description: error as string,
+                position: "top-center",
+            });
             return "";
         }
     }

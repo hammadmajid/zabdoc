@@ -5,14 +5,13 @@
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import ContentForm from "$lib/components/forms/content.svelte";
     import DocForm from "$lib/components/forms/doc.svelte";
+    import { toast } from "svelte-sonner";
 
     let isLoading = $state(false);
-    let submitError = $state("");
 
     async function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         isLoading = true;
-        submitError = "";
 
         try {
             const formData = new FormData(event.target as HTMLFormElement);
@@ -38,10 +37,10 @@
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
         } catch (error) {
-            submitError =
-                error instanceof Error
-                    ? error.message
-                    : "An error occurred while generating the document";
+            toast.error("Failed to generate PDF", {
+                description: error as string,
+                position: "top-center",
+            });
         } finally {
             isLoading = false;
         }
@@ -79,13 +78,6 @@
                 </Card.Description>
             </Card.Header>
             <Card.CardContent class="space-y-4">
-                {#if submitError}
-                    <div
-                        class="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md"
-                    >
-                        {submitError}
-                    </div>
-                {/if}
                 <Button type="submit" class="w-full" disabled={isLoading}>
                     {#if isLoading}
                         <Loader2 class="mr-2 h-4 w-4 animate-spin" />
