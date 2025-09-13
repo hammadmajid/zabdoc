@@ -5,16 +5,12 @@
     import * as Card from "$lib/components/ui/card/index";
     import * as Select from "$lib/components/ui/select/index.js";
 
-    const types = [
-        { value: "assignment", label: "Assignment" },
-        { value: "lab-task", label: "Lab Task" },
-        { value: "lab-project", label: "Lab Project" },
-    ];
+    const types = ["Assignment", "Lab Task", "Lab Project"];
 
-    let value = $state(types[0].value);
+    let value = $state(types[0]);
 
     const triggerContent = $derived(
-        types.find((f) => f.value === value)?.label ?? "Select type",
+        types.find((f) => f === value) ?? "Select type",
     );
 </script>
 
@@ -27,17 +23,15 @@
         <div class="space-y-2">
             <Label for="document-type">Type</Label>
             <Select.Root type="single" name="type" bind:value>
-                <Select.Trigger class="w-full"
-                    >{triggerContent}</Select.Trigger
-                >
+                <Select.Trigger class="w-full">{triggerContent}</Select.Trigger>
                 <Select.Content>
-                    {#each types as type (type.value)}
+                    {#each types as type (type)}
                         <Select.Item
-                            value={type.value}
-                            label={type.label}
-                            disabled={type.value === "grapes"}
+                            value={type}
+                            label={type}
+                            disabled={type === "grapes"}
                         >
-                            {type.label}
+                            {type}
                         </Select.Item>
                     {/each}
                 </Select.Content>

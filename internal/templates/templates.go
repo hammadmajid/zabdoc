@@ -11,18 +11,6 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
 	"html": func(s string) template.HTML {
 		return template.HTML(s)
 	},
-	"docTypeLabel": func(docType string) string {
-		switch docType {
-		case "assignment":
-			return "Assignment"
-		case "lab-task":
-			return "Lab Task"
-		case "lab-project":
-			return "Lab Project"
-		default:
-			return docType
-		}
-	},
 }).Parse(`
 <!DOCTYPE html>
 <html lang="en">
@@ -317,7 +305,7 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
         <div class="spacer-large"></div>
         <div class="course-title-section">
             <div class="course-title">{{.Course}}</div>
-            <div class="assignment-number">{{docTypeLabel .DocType}} #{{.Number}}</div>
+            <div class="assignment-number">{{.DocType}} #{{.Number}}</div>
             <div class="submission-date">Submission date: {{.Date}}</div>
         </div>
         <div class="spacer-large"></div>
