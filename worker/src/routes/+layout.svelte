@@ -5,6 +5,7 @@
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
     import { ModeWatcher } from "mode-watcher";
+    import { Toaster } from "$lib/components/ui/sonner/index.js";
     import "../app.css";
 
     onNavigate((navigation) => {
@@ -26,6 +27,7 @@
 </svelte:head>
 
 <ModeWatcher />
+<Toaster />
 
 <div class="flex min-h-screen flex-col mx-auto max-w-5xl">
     <header class="border-b">
