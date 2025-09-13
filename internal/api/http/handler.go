@@ -17,14 +17,12 @@ import (
 )
 
 type Handler struct {
-	logger   *log.Logger
-	services controllers.Services
+	logger *log.Logger
 }
 
-func NewHandler(logger *log.Logger, sv controllers.Services) Handler {
+func NewHandler(logger *log.Logger) Handler {
 	return Handler{
-		logger:   logger,
-		services: sv,
+		logger: logger,
 	}
 }
 
