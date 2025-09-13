@@ -6,25 +6,24 @@
     import { browser } from "$app/environment";
     import { data, type DataStructure } from "$lib/data/data";
 
-    // Cookie utility functions
-    function setCookie(name: string, value: string, days: number = 30) {
+    // LocalStorage utility functions
+    function setLocalStorage(key: string, value: string) {
         if (!browser) return;
-        const expires = new Date();
-        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        try {
+            localStorage.setItem(key, value);
+        } catch (error) {
+            console.warn(`Failed to save to localStorage: ${error}`);
+        }
     }
 
-    function getCookie(name: string): string {
+    function getLocalStorage(key: string): string {
         if (!browser) return "";
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(";");
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === " ") c = c.substring(1, c.length);
-            if (c.indexOf(nameEQ) === 0)
-                return c.substring(nameEQ.length, c.length);
+        try {
+            return localStorage.getItem(key) || "";
+        } catch (error) {
+            console.warn(`Failed to read from localStorage: ${error}`);
+            return "";
         }
-        return "";
     }
 
     let selectedClass = $state("" as keyof DataStructure | "");
@@ -32,31 +31,32 @@
     let studentName = $state("");
     let regNum = $state("");
 
-    // Initialize values from cookies on component mount
+    // Initialize values from localStorage on component mount
     $effect(() => {
         if (browser) {
-            studentName = getCookie("studentName") || "";
-            regNum = getCookie("regNum") || "";
-            selectedClass = (getCookie("class") as keyof DataStructure) || "";
+            studentName = getLocalStorage("studentName") || "";
+            regNum = getLocalStorage("regNum") || "";
+            selectedClass =
+                (getLocalStorage("class") as keyof DataStructure) || "";
         }
     });
 
-    // Update cookies when values change
+    // Update localStorage when values change
     $effect(() => {
         if (browser && studentName) {
-            setCookie("studentName", studentName);
+            setLocalStorage("studentName", studentName);
         }
     });
 
     $effect(() => {
         if (browser && regNum) {
-            setCookie("regNum", regNum);
+            setLocalStorage("regNum", regNum);
         }
     });
 
     $effect(() => {
         if (browser && selectedClass) {
-            setCookie("class", selectedClass);
+            setLocalStorage("class", selectedClass);
         }
     });
 
