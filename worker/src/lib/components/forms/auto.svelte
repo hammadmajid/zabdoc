@@ -150,8 +150,8 @@
                 required
                 bind:value={selectedClass}
             >
-                <Select.Trigger id="class-select" class="w-full">
-                    {classTriggerContent}
+                <Select.Trigger id="class-select" class="!w-full whitespace-normal min-h-[2.25rem] h-auto">
+                    <span class="text-left leading-tight">{classTriggerContent}</span>
                 </Select.Trigger>
                 <Select.Content>
                     <Select.Group>
@@ -190,8 +190,8 @@
                 bind:value={selectedCourse}
                 disabled={!selectedClass}
             >
-                <Select.Trigger id="course-select" class="w-full">
-                    {courseTriggerContent}
+                <Select.Trigger id="course-select" class="!w-full whitespace-normal min-h-[2.25rem] h-auto">
+                    <span class="text-left leading-tight">{courseTriggerContent}</span>
                 </Select.Trigger>
                 <Select.Content>
                     <Select.Group>
