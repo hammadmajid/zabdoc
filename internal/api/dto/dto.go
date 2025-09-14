@@ -21,5 +21,6 @@ type GenerateRequest struct {
 	DocType     string
 	Number      string
 	Date        string
+	Marks       string
 	Sections    []Section
 }

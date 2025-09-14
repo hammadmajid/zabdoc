@@ -299,7 +299,7 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
     <div class="content">
         <div class="spacer-small"></div>
         <div class="marks">
-            <div class="marks-line">Total Marks: <span class="underline"></span></div>
+            <div class="marks-line">Total Marks: <span class="underline">{{.Marks}}</span></div>
             <div class="marks-line">Obtained Marks: <span class="underline"></span></div>
         </div>
         <div class="spacer-large"></div>

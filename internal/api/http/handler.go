@@ -52,6 +52,7 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 		DocType:     r.FormValue("type"),
 		Number:      r.FormValue("number"),
 		Date:        r.FormValue("date"),
+		Marks:       r.FormValue("marks"),
 	}
 
 	// Process sections

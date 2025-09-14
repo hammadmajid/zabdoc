@@ -26,16 +26,22 @@
                 <Select.Trigger class="w-full">{triggerContent}</Select.Trigger>
                 <Select.Content>
                     {#each types as type (type)}
-                        <Select.Item
-                            value={type}
-                            label={type}
-                            disabled={type === "grapes"}
-                        >
+                        <Select.Item value={type} label={type}>
                             {type}
                         </Select.Item>
                     {/each}
                 </Select.Content>
             </Select.Root>
+        </div>
+
+        <div class="space-y-2">
+            <Label for="marks">Marks</Label>
+            <Input
+                id="marks"
+                name="marks"
+                type="number"
+                placeholder="e.g, 4"
+            />
         </div>
 
         <div class="space-y-2">
