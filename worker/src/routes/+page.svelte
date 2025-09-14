@@ -55,7 +55,7 @@
     <title>zabdoc</title>
 </svelte:head>
 
-<div class="space-y-12 px-4">
+<div class="space-y-12">
     <div class="space-y-1.5">
         <h3 class="text-2xl font-semibold leading-none tracking-tight">
             Document

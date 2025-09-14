@@ -46,7 +46,7 @@
         </div>
     </header>
 
-    <main class="flex-1 py-8">
+    <main class="flex-1 py-8 px-4">
         {@render children?.()}
     </main>
 
