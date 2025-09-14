@@ -50,6 +50,7 @@
                 id="marks"
                 name="marks"
                 type="number"
+                step="0.5"
                 placeholder="4"
                 bind:value={marks}
             />
