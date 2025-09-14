@@ -8,10 +8,20 @@
     const types = ["Assignment", "Lab Task", "Lab Project"];
 
     let value = $state(types[0]);
+    let marks = $state("");
 
     const triggerContent = $derived(
         types.find((f) => f === value) ?? "Select type",
     );
+
+    // Auto-set marks based on document type
+    $effect(() => {
+        if (value === "Assignment") {
+            marks = "4";
+        } else if (value === "Lab Task" || value === "Lab Project") {
+            marks = "7.5";
+        }
+    });
 </script>
 
 <Card.Root>
@@ -40,7 +50,8 @@
                 id="marks"
                 name="marks"
                 type="number"
-                placeholder="e.g, 4"
+                placeholder="4"
+                bind:value={marks}
             />
         </div>
 
