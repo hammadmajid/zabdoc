@@ -5,7 +5,7 @@
     import * as Card from "$lib/components/ui/card/index";
     import * as Select from "$lib/components/ui/select/index.js";
 
-    const types = ["Assignment", "Lab Task", "Lab Project"];
+    const types = ["Assignment", "Lab Task"];
 
     let value = $state(types[0]);
     let marks = $state("");
