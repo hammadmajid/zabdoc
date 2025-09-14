@@ -6,6 +6,7 @@
     import ContentForm from "$lib/components/forms/content.svelte";
     import DocForm from "$lib/components/forms/doc.svelte";
     import { toast } from "svelte-sonner";
+    import { smartName } from "$lib/utils";
 
     let isLoading = $state(false);
 
@@ -35,7 +36,7 @@
             const a = document.createElement("a");
             a.style.display = "none";
             a.href = url;
-            a.download = "lab-section.pdf";
+            a.download = smartName(formData);
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
