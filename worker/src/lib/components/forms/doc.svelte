@@ -44,7 +44,7 @@
             </Select.Root>
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-2 hidden">
             <Label for="marks">Marks</Label>
             <Input
                 id="marks"
