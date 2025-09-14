@@ -7,60 +7,68 @@ export type ClassData = Record<string, CourseInfo>;
 
 export type DataStructure = {
     "BsCS-4C": ClassData;
-    "BsCS-5A": ClassData;
+    "BsCS-6A": ClassData;
 };
 
 export const data: DataStructure = {
     "BsCS-4C": {
         "Database Systems": {
-            instructor: "Dr. Shahzad Latif",
+            instructor: "Muhammad Qasim",
             code: "CSC 2203",
         },
         "Finite Automata Theory and Formal Languages": {
-            instructor: "Dr. Shahzad Latif",
+            instructor: "Taseer Ul Islam",
             code: "CSC 2204",
         },
         "Linear Algebra": {
-            instructor: "Dr. Shahzad Latif",
+            instructor: "Dr. Sajjad Ghouri",
             code: "CSC 2206",
         },
         "Design and Analysis of Algorithms": {
-            instructor: "Dr. Shahzad Latif",
+            instructor: "Aniqa",
             code: "CSC 3202",
         },
+        "Management Pricncipe": {
+            instructor: "Dr. Beenish Ambreen",
+            code: "CSC 4603"
+        },
+        "Lab: Database Systems": {
+            instructor: "Mr. Farhan Sami",
+            code: "CSCL 2203",
+        },
     },
-    "BsCS-5A": {
+    "BsCS-6A": {
         "Natural Language Processing": {
             instructor: "Saad Irfan khan",
-            code: "CSC 4207",
+            code: "AIC 3603",
         },
         "Technical and Business Writing": {
-            instructor: "Muhammad Qasim",
-            code: "ENG 3201",
+            instructor: "Aneela Kanwal",
+            code: "CSC 1205",
         },
         "Computer Networks and Data Communications": {
             instructor: "Rana Faisal Hayat",
-            code: "CSC 4203",
+            code: "CSC 3205",
         },
         "Artificial Intelligence": {
             instructor: "Muhammad Qasim",
-            code: "CSC 4204",
+            code: "CSC 4101",
         },
         "Web Technologies-I": {
-            instructor: "Muhammad Qasim",
-            code: "CSC 4205",
+            instructor: "Zubair Ahmed Chatta ",
+            code: "CSC 4717",
         },
         "Android Application Development": {
-            instructor: "Zubair Ahmed Chatta",
-            code: "CSC 4206",
+            instructor: "Muhammad Azhar",
+            code: "CSC 4802",
         },
         "Lab: Computer Networks and Data Communications": {
-            instructor: "Muhammad Qasim",
-            code: "CSC 4208",
+            instructor: "Shafaq Rasheed",
+            code: "CSCL 3205",
         },
         "Lab: Artificial Intelligence": {
-            instructor: "Muhammad Qasim",
-            code: "CSC 4209",
+            instructor: "Muhammad Usama",
+            code: "CSCL 4101",
         },
     },
 };
