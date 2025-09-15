@@ -7,6 +7,8 @@
     import Plus from "@lucide/svelte/icons/plus";
     import X from "@lucide/svelte/icons/x";
     import Separator from "../ui/separator/separator.svelte";
+    import { scale } from "svelte/transition";
+    import { quintOut } from "svelte/easing";
 
     interface Section {
         id: number;
@@ -58,88 +60,92 @@
 
     <div class="grid md:grid-cols-2 gap-4">
         {#each sections as section, index (section.id)}
-            <Card.Root class="relative">
-                <Card.Header>
-                    <div class="flex items-center justify-between">
-                        <Card.Title>Section {index + 1}</Card.Title>
-                        {#if sections.length > 1}
-                            <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onclick={() => removesection(section.id)}
-                            >
-                                <X />
-                            </Button>
-                        {/if}
-                    </div>
-                    <Card.Description
-                        >Add section content and attach supporting files (images
-                        only).</Card.Description
-                    >
-                </Card.Header>
-                <Card.Content class="space-y-4">
-                    <div class="space-y-2">
-                        <Label for="section-{index}-content"
-                            >Section Content</Label
+            <div in:scale={{duration: 400, easing: quintOut}} out:scale={{duration: 300, easing: quintOut}}>
+                <Card.Root class="relative">
+                    <Card.Header>
+                        <div class="flex items-center justify-between">
+                            <Card.Title>Section {index + 1}</Card.Title>
+                            {#if sections.length > 1}
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    onclick={() => removesection(section.id)}
+                                >
+                                    <X />
+                                </Button>
+                            {/if}
+                        </div>
+                        <Card.Description
+                            >Add section content and attach supporting files (images
+                            only).</Card.Description
                         >
-                        <Textarea
-                            id="section-{index}-content"
-                            rows={3}
-                            name="section-{index}-content"
-                            placeholder="Enter your content here. [Markdown formatting is supported]"
-                            bind:value={section.content}
-                            oninput={(e) => {
-                                const target =
-                                    e.target as HTMLTextAreaElement | null;
-                                if (target)
-                                    updatesectionContent(
-                                        section.id,
-                                        target.value,
-                                    );
-                            }}
-                        />
-                    </div>
+                    </Card.Header>
+                    <Card.Content class="space-y-4">
+                        <div class="space-y-2">
+                            <Label for="section-{index}-content"
+                                >Section Content</Label
+                            >
+                            <Textarea
+                                id="section-{index}-content"
+                                rows={3}
+                                name="section-{index}-content"
+                                placeholder="Enter your content here. [Markdown formatting is supported]"
+                                bind:value={section.content}
+                                oninput={(e) => {
+                                    const target =
+                                        e.target as HTMLTextAreaElement | null;
+                                    if (target)
+                                        updatesectionContent(
+                                            section.id,
+                                            target.value,
+                                        );
+                                }}
+                            />
+                        </div>
 
-                    <div class="space-y-2">
-                        <Label for="section-{index}-files">Attach Files</Label>
-                        <Input
-                            id="section-{index}-files"
-                            name="section-{index}-files"
-                            type="file"
-                            multiple
-                            accept="image/jpeg,image/jpg,image/png,image/webp"
-                            onchange={(e) => {
-                                const target =
-                                    e.target as HTMLInputElement | null;
-                                updatesectionFiles(
-                                    section.id,
-                                    target?.files ?? null,
-                                );
-                            }}
-                        />
-                    </div>
-                </Card.Content>
-            </Card.Root>
+                        <div class="space-y-2">
+                            <Label for="section-{index}-files">Attach Files</Label>
+                            <Input
+                                id="section-{index}-files"
+                                name="section-{index}-files"
+                                type="file"
+                                multiple
+                                accept="image/jpeg,image/jpg,image/png,image/webp"
+                                onchange={(e) => {
+                                    const target =
+                                        e.target as HTMLInputElement | null;
+                                    updatesectionFiles(
+                                        section.id,
+                                        target?.files ?? null,
+                                    );
+                                }}
+                            />
+                        </div>
+                    </Card.Content>
+                </Card.Root>
+            </div>
         {/each}
 
         {#if sections.length < 15}
-            <Card.Root class="md:min-h-[250px] border-dashed">
-                <Card.Content class="h-full flex items-center justify-center">
-                    <Button
-                        class="w-full h-full min-h-[200px] flex flex-col gap-2"
-                        type="button"
-                        variant="outline"
-                        onclick={addsection}
-                    >
-                        <Plus />
-                        <span>Add New section</span>
-                        <span class="text-sm text-muted-foreground"
-                            >Click to add another section</span
+            <div in:scale={{duration: 400, easing: quintOut, delay: 100}}>
+                <Card.Root class="md:min-h-[250px] h-full border-dashed">
+                    <Card.Content class="h-full flex items-center justify-center">
+                        <Button
+                            class="w-full h-full min-h-[200px] flex flex-col gap-2"
+                            type="button"
+                            variant="outline"
+                            onclick={addsection}
                         >
-                    </Button>
-                </Card.Content>
-            </Card.Root>
+                            <Plus />
+                            <span>Add New section</span>
+                            <span class="text-sm text-muted-foreground"
+                                >Click to add another section</span
+                            >
+                        </Button>
+                    </Card.Content>
+                </Card.Root>
+            </div>
         {/if}
     </div>
 </div>
