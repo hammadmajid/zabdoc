@@ -28,7 +28,7 @@ export const data: DataStructure = {
             instructor: "Aniqa",
             code: "CSC 3202",
         },
-        "Management Pricncipe": {
+        "Management Principle": {
             instructor: "Dr. Beenish Ambreen",
             code: "CSC 4603"
         },
