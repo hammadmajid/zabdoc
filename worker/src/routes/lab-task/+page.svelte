@@ -4,9 +4,11 @@
     import * as Card from "$lib/components/ui/card/index";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import ContentForm from "$lib/components/forms/content.svelte";
-    import DocForm from "$lib/components/forms/doc.svelte";
     import { toast } from "svelte-sonner";
     import { smartName } from "$lib/utils";
+    import { Label } from "$lib/components/ui/label";
+    import { Input } from "$lib/components/ui/input";
+    import DueDate from "$lib/components/forms/fields/due-date.svelte";
 
     let isLoading = $state(false);
 
@@ -69,7 +71,48 @@
     <form class="space-y-8" onsubmit={handleSubmit}>
         <div class="grid md:grid-cols-2 gap-4">
             <AutoForm />
-            <DocForm />
+            <Card.Root>
+                <Card.Header>
+                    <Card.Title>Document</Card.Title>
+                    <Card.Description
+                        >Information about the lab task.</Card.Description
+                    >
+                </Card.Header>
+                <Card.Content class="space-y-4">
+                    <div class="space-y-2 hidden">
+                        <Label for="document-type">Type</Label>
+                        <Input name="type" value="Lab Task" />
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="marks">Total Marks</Label>
+                        <Input
+                            id="marks"
+                            name="marks"
+                            type="number"
+                            step="0.5"
+                            placeholder="7.5"
+                            value="7.5"
+                        />
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="document-number">Number</Label>
+                        <Input
+                            id="document-number"
+                            name="number"
+                            type="number"
+                            placeholder="1-15"
+                            required
+                        />
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="due-date">Due Date</Label>
+                        <DueDate />
+                    </div>
+                </Card.Content>
+            </Card.Root>
         </div>
 
         <ContentForm />
