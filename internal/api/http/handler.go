@@ -69,7 +69,9 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 		// Convert markdown to HTML
 		var buf bytes.Buffer
 		if err := goldmark.Convert([]byte(content), &buf); err != nil {
-			panic(err)
+			http.Error(w, fmt.Sprintf("failed to parse markdown for section %d: %v", i, err), http.StatusBadRequest)
+			h.logger.Printf("goldmark (section %d): %v", i, err)
+			return
 		}
 
 		html := h.policy.Sanitize(buf.String())
