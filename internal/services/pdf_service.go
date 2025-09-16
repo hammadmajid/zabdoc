@@ -16,8 +16,11 @@ import (
 
 // PDFService handles PDF generation from HTML.
 type PDFService struct {
-	ctx context.Context
-	cb  *gobreaker.CircuitBreaker
+	ctx         context.Context
+	cancel      context.CancelFunc
+	allocCtx    context.Context
+	allocCancel context.CancelFunc
+	cb          *gobreaker.CircuitBreaker
 }
 
 func NewPDFService() *PDFService {
@@ -27,8 +30,8 @@ func NewPDFService() *PDFService {
 		chromedp.Flag("disable-setuid-sandbox", true),
 	)
 
-	allocCtx, _ := chromedp.NewExecAllocator(context.Background(), opts...)
-	ctx, _ := chromedp.NewContext(allocCtx)
+	allocCtx, allocCancel := chromedp.NewExecAllocator(context.Background(), opts...)
+	ctx, cancel := chromedp.NewContext(allocCtx)
 
 	// TODO: send notification to maintainer(s)
 	// if chromedp crashes multiple times then prevent further requests
@@ -45,8 +48,11 @@ func NewPDFService() *PDFService {
 	})
 
 	return &PDFService{
-		ctx: ctx,
-		cb:  cb,
+		ctx:         ctx,
+		cancel:      cancel,
+		allocCtx:    allocCtx,
+		allocCancel: allocCancel,
+		cb:          cb,
 	}
 }
 
@@ -104,4 +110,13 @@ func (ps *PDFService) GeneratePDF(data dto.GenerateRequest) ([]byte, error) {
 		return nil, err
 	}
 	return result.([]byte), nil
+}
+
+func (ps *PDFService) Shutdown() {
+	if ps.cancel != nil {
+		ps.cancel()
+	}
+	if ps.allocCancel != nil {
+		ps.allocCancel()
+	}
 }

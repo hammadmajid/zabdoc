@@ -13,7 +13,7 @@ type Handler struct {
 	logger            *log.Logger
 	validationService *services.ValidationService
 	fileService       *services.FileService
-	pdfService        *services.PDFService
+	PdfService        *services.PDFService
 	markdownService   *services.MarkdownService
 }
 
@@ -22,7 +22,7 @@ func NewHandler(logger *log.Logger) Handler {
 		logger:            logger,
 		validationService: services.NewValidationService(),
 		fileService:       services.NewFileService(logger),
-		pdfService:        services.NewPDFService(),
+		PdfService:        services.NewPDFService(),
 		markdownService:   services.NewMarkdownService(),
 	}
 }
@@ -93,7 +93,7 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 
 	data.Sections = sections
 
-	pdf, err := h.pdfService.GeneratePDF(data)
+	pdf, err := h.PdfService.GeneratePDF(data)
 	if err != nil {
 		http.Error(w, "failed to generate PDF", http.StatusInternalServerError)
 		h.logger.Printf("generate PDF: %v", err)
@@ -118,7 +118,7 @@ func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
 		h.logger.Println("Health check failed: FileService unavailable")
 		return
 	}
-	if h.pdfService == nil {
+	if h.PdfService == nil {
 		http.Error(w, "PDFService unavailable", http.StatusServiceUnavailable)
 		h.logger.Println("Health check failed: PDFService unavailable")
 		return
