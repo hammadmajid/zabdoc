@@ -107,9 +107,28 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Removed generate method; PDF generation is now handled by PDFService
-
-//goland:noinspection ALL
 func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
+	if h.validationService == nil {
+		http.Error(w, "ValidationService unavailable", http.StatusServiceUnavailable)
+		h.logger.Println("Health check failed: ValidationService unavailable")
+		return
+	}
+	if h.fileService == nil {
+		http.Error(w, "FileService unavailable", http.StatusServiceUnavailable)
+		h.logger.Println("Health check failed: FileService unavailable")
+		return
+	}
+	if h.pdfService == nil {
+		http.Error(w, "PDFService unavailable", http.StatusServiceUnavailable)
+		h.logger.Println("Health check failed: PDFService unavailable")
+		return
+	}
+	if h.markdownService == nil {
+		http.Error(w, "MarkdownService unavailable", http.StatusServiceUnavailable)
+		h.logger.Println("Health check failed: MarkdownService unavailable")
+		return
+	}
+
+	// All dependencies healthy
 	fmt.Fprintf(w, "Status is available")
 }
