@@ -2,7 +2,6 @@ package app
 
 import (
 	"log"
-	"os"
 
 	"zabdoc/internal/api/http"
 )
@@ -12,12 +11,10 @@ type App struct {
 	APIHandler http.Handler
 }
 
-func NewApp() (*App, error) {
-	l := log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
-	h := http.NewHandler(l)
-
+// NewApp constructs an App with injected dependencies.
+func NewApp(logger *log.Logger, handler http.Handler) *App {
 	return &App{
-		Logger:     l,
-		APIHandler: h,
-	}, nil
+		Logger:     logger,
+		APIHandler: handler,
+	}
 }

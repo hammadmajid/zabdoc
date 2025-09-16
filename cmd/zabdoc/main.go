@@ -4,14 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	http2 "zabdoc/internal/api/http"
 	"zabdoc/internal/app"
-	httpapi "zabdoc/internal/router"
+	"zabdoc/internal/router"
 )
 
 func main() {
@@ -20,12 +22,12 @@ func main() {
 		panic("env PORT is not defined")
 	}
 
-	app, err := app.NewApp()
-	if err != nil {
-		panic(err)
-	}
+	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
+	handler := http2.NewHandler(logger)
 
-	r := httpapi.SetupRoutes(app)
+	app := app.NewApp(logger, handler)
+
+	r := router.SetupRoutes(app)
 
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%s", port),
