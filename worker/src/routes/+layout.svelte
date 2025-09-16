@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onNavigate } from "$app/navigation";
     import favicon from "$lib/assets/favicon.svg";
-    import Theme from "$lib/components/theme.svelte";
+    import Settings from "@lucide/svelte/icons/settings";
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
     import { ModeWatcher } from "mode-watcher";
@@ -37,10 +37,18 @@
                     zabdoc
                 </a>
             </nav>
-            <nav class="flex items-center gap-6">
-                <Theme />
+            <nav class="flex items-center gap-2">
+                <a href="/help" class={buttonVariants({ variant: "ghost" })}>
+                    help
+                </a>
                 <a href="/about" class={buttonVariants({ variant: "ghost" })}>
                     about
+                </a>
+                <a
+                    href="/settings"
+                    class={buttonVariants({ variant: "ghost" })}
+                >
+                    <Settings />
                 </a>
             </nav>
         </div>
