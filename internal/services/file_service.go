@@ -21,40 +21,61 @@ func NewFileService(logger *log.Logger) *FileService {
 
 // ProcessUploadedImages processes uploaded image files and returns SectionImage slices.
 func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader, filesKey string) ([]dto.SectionImage, error) {
-	var images []dto.SectionImage
+	type result struct {
+		img dto.SectionImage
+		err error
+	}
+	results := make(chan result, len(fileHeaders)) // Buffered channel to collect results from goroutines
+
 	for _, fileHeader := range fileHeaders {
-		file, err := fileHeader.Open()
-		if err != nil {
-			fs.Logger.Printf("Error opening file: %v", err)
-			return nil, err
-		}
-		defer file.Close()
+		// Launch a goroutine for each file to process them concurrently
+		go func(fh *multipart.FileHeader) {
+			file, err := fh.Open()
+			if err != nil {
+				fs.Logger.Printf("Error opening file: %v", err)
+				results <- result{err: err}
+				return
+			}
+			defer file.Close()
 
-		ext := filepath.Ext(fileHeader.Filename)
-		mimeType := mime.TypeByExtension(ext)
-		if mimeType == "" {
-			mimeType = "image/jpeg"
-		}
+			ext := filepath.Ext(fh.Filename)
+			mimeType := mime.TypeByExtension(ext)
+			if mimeType == "" {
+				mimeType = "image/jpeg"
+			}
 
-		fileData, err := io.ReadAll(file)
-		if err != nil {
-			fs.Logger.Printf("Error reading file: %v", err)
-			return nil, err
-		}
+			fileData, err := io.ReadAll(file)
+			if err != nil {
+				fs.Logger.Printf("Error reading file: %v", err)
+				results <- result{err: err}
+				return
+			}
 
-		if len(fileData) == 0 {
-			fs.Logger.Printf("Empty image file: %s", fileHeader.Filename)
-			return nil, err
-		}
+			if len(fileData) == 0 {
+				fs.Logger.Printf("Empty image file: %s", fh.Filename)
+				results <- result{err: err}
+				return
+			}
 
-		base64Data := base64.StdEncoding.EncodeToString(fileData)
+			base64Data := base64.StdEncoding.EncodeToString(fileData)
 
-		sectionImage := dto.SectionImage{
-			Data:     base64Data,
-			MimeType: mimeType,
+			sectionImage := dto.SectionImage{
+				Data:     base64Data,
+				MimeType: mimeType,
+			}
+			fs.Logger.Printf("Image processed: %s (%d bytes → %d base64 chars)", mimeType, len(fileData), len(base64Data))
+			results <- result{img: sectionImage} // Send result back to main goroutine
+		}(fileHeader)
+	}
+
+	var images []dto.SectionImage
+	// Collect results from all goroutines
+	for range fileHeaders {
+		res := <-results // Wait for each goroutine to send its result
+		if res.err != nil {
+			return nil, res.err
 		}
-		images = append(images, sectionImage)
-		fs.Logger.Printf("Image processed: %s (%d bytes → %d base64 chars)", mimeType, len(fileData), len(base64Data))
+		images = append(images, res.img)
 	}
 	return images, nil
 }
