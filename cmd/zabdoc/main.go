@@ -16,6 +16,10 @@ import (
 
 func main() {
 	port := os.Getenv("PORT")
+	if port == "" {
+		panic("env PORT is not defined")
+	}
+
 	app, err := app.NewApp()
 	if err != nil {
 		panic(err)
