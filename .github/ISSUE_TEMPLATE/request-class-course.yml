@@ -1,0 +1,74 @@
+name: Request Class/Course Addition
+description: Request to add a new class or courses to zabdoc
+title: "[REQUEST] Add class: "
+labels: ["enhancement", "course-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve zabdoc! Please provide information for **ALL courses** offered to the specific class you're requesting.
+
+  - type: input
+    id: class-name
+    attributes:
+      label: Class Name
+      description: Enter the exact class name (e.g., BsCS-8A, BsCS-2B)
+      placeholder: "BsCS-8A"
+    validations:
+      required: true
+
+  - type: input
+    id: semester-year
+    attributes:
+      label: Semester/Year
+      description: Which semester and year is this for?
+      placeholder: "Fall 2025"
+    validations:
+      required: true
+
+  - type: textarea
+    id: courses-list
+    attributes:
+      label: Complete Course List
+      description: |
+        Please provide **ALL courses** for this class. Use the following format for each course:
+
+        ```
+        Course Name: [Full course name]
+        Course Code: [Official course code]
+        Instructor: [Instructor name with title if applicable]
+        ```
+
+        **Example:**
+        ```
+        Course Name: Software Engineering
+        Course Code: CSC 3301
+        Instructor: Dr. John Smith
+
+        Course Name: Database Management Systems
+        Course Code: CSC 3201
+        Instructor: Prof. Jane Doe
+        ```
+      placeholder: |
+        Course Name: Software Engineering
+        Course Code: CSC 3301
+        Instructor: Dr. John Smith
+
+        Course Name: Database Management Systems
+        Course Code: CSC 3201
+        Instructor: Prof. Jane Doe
+      render: text
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: Verification
+      options:
+        - label: I have provided information for **ALL courses** offered to this class
+          required: true
+        - label: I have verified the course codes and instructor names are correct
+          required: true
+        - label: I understand this information will be publicly visible in the application
+          required: true
