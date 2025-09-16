@@ -55,7 +55,7 @@
 </script>
 
 <svelte:head>
-    <title>zabdoc</title>
+    <title>assignment | zabdoc</title>
 </svelte:head>
 
 <div class="space-y-12">
