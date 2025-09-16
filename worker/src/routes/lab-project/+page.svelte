@@ -6,6 +6,8 @@
     import ContentForm from "$lib/components/forms/content.svelte";
     import { toast } from "svelte-sonner";
     import { smartName } from "$lib/utils";
+    import Microscope from "@lucide/svelte/icons/microscope";
+    import { Separator } from "$lib/components/ui/separator";
 
     let isLoading = $state(false);
 
@@ -57,11 +59,14 @@
 
 <div class="space-y-12">
     <div class="space-y-1.5">
-        <h3 class="text-2xl font-semibold leading-none tracking-tight">
-            Document
+        <h3
+            class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-start gap-2"
+        >
+            <Microscope />
+            Lab Project
         </h3>
         <p class="text-sm text-muted-foreground">
-            Fill out the information below to generate the document.
+            Fill out the information below to generate the lab project.
         </p>
     </div>
 
@@ -70,6 +75,7 @@
             <AutoForm />
         </div>
 
+        <Separator />
         <ContentForm />
 
         <Card.Root class="">

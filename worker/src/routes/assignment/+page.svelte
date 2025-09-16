@@ -3,13 +3,12 @@
     import Button from "$lib/components/ui/button/button.svelte";
     import * as Card from "$lib/components/ui/card/index";
     import Loader2 from "@lucide/svelte/icons/loader-2";
-    import DocForm from "$lib/components/forms/doc.svelte";
     import { toast } from "svelte-sonner";
     import { smartName } from "$lib/utils";
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
-    import * as Select from "$lib/components/ui/select/index.js";
+    import FileText from "@lucide/svelte/icons/file-text";
 
     let isLoading = $state(false);
 
@@ -61,11 +60,12 @@
 
 <div class="space-y-12">
     <div class="space-y-1.5">
-        <h3 class="text-2xl font-semibold leading-none tracking-tight">
-            Document
+        <h3 class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-start gap-2">
+            <FileText />
+            Assignment
         </h3>
         <p class="text-sm text-muted-foreground">
-            Fill out the information below to generate the document.
+            Fill out the information below to generate the assignment cover.
         </p>
     </div>
 
@@ -83,7 +83,7 @@
                 <Card.Content class="space-y-4">
                     <div class="space-y-2 hidden">
                         <Label for="document-type">Type</Label>
-                        <Input  name="type" value="Assignment" />
+                        <Input name="type" value="Assignment" />
                     </div>
 
                     <div class="space-y-2">

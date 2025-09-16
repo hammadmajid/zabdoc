@@ -9,6 +9,8 @@
     import { Label } from "$lib/components/ui/label";
     import { Input } from "$lib/components/ui/input";
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
+    import ClipboardList from "@lucide/svelte/icons/clipboard-list";
+    import { Separator } from "$lib/components/ui/separator";
 
     let isLoading = $state(false);
 
@@ -60,11 +62,14 @@
 
 <div class="space-y-12">
     <div class="space-y-1.5">
-        <h3 class="text-2xl font-semibold leading-none tracking-tight">
-            Document
+        <h3
+            class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-start gap-2"
+        >
+            <ClipboardList />
+            Lab Task
         </h3>
         <p class="text-sm text-muted-foreground">
-            Fill out the information below to generate the document.
+            Fill out the information below to generate the lab task.
         </p>
     </div>
 
@@ -115,6 +120,7 @@
             </Card.Root>
         </div>
 
+        <Separator />
         <ContentForm />
 
         <Card.Root class="">
