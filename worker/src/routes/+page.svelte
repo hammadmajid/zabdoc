@@ -1,11 +1,14 @@
 <script lang="ts">
-    import * as Card from "$lib/components/ui/card/index";
     import FileText from "@lucide/svelte/icons/file-text";
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
     import Microscope from "@lucide/svelte/icons/microscope";
     import { buttonVariants } from "$lib/components/ui/button";
     import CardDescription from "$lib/components/ui/card/card-description.svelte";
 </script>
+
+<svelte:head>
+    <title>zabdoc</title>
+</svelte:head>
 
 <div class="flex flex-col items-center justify-center text-center h-full px-4">
     <h1 class="text-5xl font-bold tracking-tight">zabdoc</h1>
