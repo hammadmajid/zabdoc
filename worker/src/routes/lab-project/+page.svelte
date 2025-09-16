@@ -4,7 +4,6 @@
     import * as Card from "$lib/components/ui/card/index";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import ContentForm from "$lib/components/forms/content.svelte";
-    import DocForm from "$lib/components/forms/doc.svelte";
     import { toast } from "svelte-sonner";
     import { smartName } from "$lib/utils";
 
@@ -69,7 +68,6 @@
     <form class="space-y-8" onsubmit={handleSubmit}>
         <div class="grid md:grid-cols-2 gap-4">
             <AutoForm />
-            <DocForm />
         </div>
 
         <ContentForm />
@@ -85,7 +83,7 @@
                 </Card.Description>
             </Card.Header>
             <Card.CardContent class="space-y-4">
-                <Button type="submit" class="w-full" disabled={isLoading}>
+                <Button type="submit" class="w-full" disabled>
                     {#if isLoading}
                         <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                         Generating Document...
