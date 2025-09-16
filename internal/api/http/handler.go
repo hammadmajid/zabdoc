@@ -27,8 +27,10 @@ func NewHandler(logger *log.Logger) Handler {
 	}
 }
 
+const maxMultipartMemory int64 = 100 << 20 // 100 MBs
+
 func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseMultipartForm(10 << 20); err != nil {
+	if err := r.ParseMultipartForm(maxMultipartMemory); err != nil {
 		http.Error(w, "invalid form", http.StatusBadRequest)
 		h.logger.Printf("parse multipart form: %v", err)
 		return
