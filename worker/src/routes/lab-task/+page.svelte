@@ -47,12 +47,11 @@
             document.body.removeChild(a);
         } catch (error) {
             toast.error("Failed to generate PDF", {
-                description: error as string,
+                description: `${error}`,
                 position: "top-center",
             });
-        } finally {
-            isLoading = false;
         }
+        isLoading = false;
     }
 </script>
 

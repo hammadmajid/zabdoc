@@ -45,12 +45,11 @@
             document.body.removeChild(a);
         } catch (error) {
             toast.error("Failed to generate PDF", {
-                description: error as string,
+                description: `${error}`,
                 position: "top-center",
             });
-        } finally {
-            isLoading = false;
         }
+        isLoading = false;
     }
 </script>
 
@@ -60,7 +59,9 @@
 
 <div class="space-y-12">
     <div class="space-y-1.5">
-        <h3 class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-start gap-2">
+        <h3
+            class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-start gap-2"
+        >
             <FileText />
             Assignment
         </h3>
