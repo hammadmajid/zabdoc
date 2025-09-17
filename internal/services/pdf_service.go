@@ -16,11 +16,12 @@ import (
 
 // PDFService handles PDF generation from HTML.
 type PDFService struct {
-	ctx         context.Context
-	cancel      context.CancelFunc
-	allocCtx    context.Context
-	allocCancel context.CancelFunc
-	cb          *gobreaker.CircuitBreaker
+	ctx             context.Context
+	cancel          context.CancelFunc
+	allocCtx        context.Context
+	allocCancel     context.CancelFunc
+	cb              *gobreaker.CircuitBreaker
+	templateBuilder *templates.TemplateBuilder
 }
 
 func NewPDFService() *PDFService {
@@ -32,6 +33,12 @@ func NewPDFService() *PDFService {
 
 	allocCtx, allocCancel := chromedp.NewExecAllocator(context.Background(), opts...)
 	ctx, cancel := chromedp.NewContext(allocCtx)
+
+	// Initialize template builder
+	templateBuilder, err := templates.NewTemplateBuilder()
+	if err != nil {
+		panic(err) // Handle this better in production
+	}
 
 	// TODO: send notification to maintainer(s)
 	// if chromedp crashes multiple times then prevent further requests
@@ -48,18 +55,26 @@ func NewPDFService() *PDFService {
 	})
 
 	return &PDFService{
-		ctx:         ctx,
-		cancel:      cancel,
-		allocCtx:    allocCtx,
-		allocCancel: allocCancel,
-		cb:          cb,
+		ctx:             ctx,
+		cancel:          cancel,
+		allocCtx:        allocCtx,
+		allocCancel:     allocCancel,
+		cb:              cb,
+		templateBuilder: templateBuilder,
 	}
 }
 
-func (ps *PDFService) GeneratePDF(data dto.GenerateRequest) ([]byte, error) {
-	result, err := ps.cb.Execute(func() (interface{}, error) {
-		var buf bytes.Buffer
-		if err := templates.Tpl.Execute(&buf, data); err != nil {
+// GeneratePDFWithConfig generates a PDF with custom configuration
+func (ps *PDFService) GeneratePDF(data dto.GenerateRequest, config templates.TemplateConfig) ([]byte, error) {
+	result, err := ps.cb.Execute(func() (any, error) {
+		htmlBytes, err := ps.templateBuilder.Execute(config, data)
+		if err != nil {
+			return nil, err
+		}
+
+		// Render header and footer templates directly using the cached templates
+		var headerBuf, footerBuf bytes.Buffer
+		if err := ps.templateBuilder.ExecuteHeaderFooter(&headerBuf, &footerBuf, data); err != nil {
 			return nil, err
 		}
 
@@ -70,7 +85,7 @@ func (ps *PDFService) GeneratePDF(data dto.GenerateRequest) ([]byte, error) {
 		defer os.Remove(tmpFile.Name())
 		defer tmpFile.Close()
 
-		if _, err := tmpFile.Write(buf.Bytes()); err != nil {
+		if _, err := tmpFile.Write(htmlBytes); err != nil {
 			return nil, err
 		}
 		tmpFile.Close()
@@ -88,10 +103,13 @@ func (ps *PDFService) GeneratePDF(data dto.GenerateRequest) ([]byte, error) {
 					WithPrintBackground(true).
 					WithScale(1).
 					WithPreferCSSPageSize(true).
-					WithMarginTop(0).
-					WithMarginBottom(0).
-					WithMarginLeft(0).
-					WithMarginRight(0).
+					WithDisplayHeaderFooter(true).
+					WithHeaderTemplate(headerBuf.String()).
+					WithFooterTemplate(footerBuf.String()).
+					WithMarginTop(0.6).
+					WithMarginBottom(0.6).
+					WithMarginLeft(0.25).
+					WithMarginRight(0.25).
 					Do(ctx)
 				if err != nil {
 					return err

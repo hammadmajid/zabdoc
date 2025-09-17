@@ -7,6 +7,7 @@ import (
 
 	"zabdoc/internal/api/dto"
 	"zabdoc/internal/services"
+	"zabdoc/internal/templates"
 )
 
 type Handler struct {
@@ -93,7 +94,12 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 
 	data.Sections = sections
 
-	pdf, err := h.PdfService.GeneratePDF(data)
+	config := templates.TemplateConfig{
+		TemplateType:       templates.Assignment,
+		IncludeContentPage: false,
+	}
+
+	pdf, err := h.PdfService.GeneratePDF(data, config)
 	if err != nil {
 		http.Error(w, "failed to generate PDF", http.StatusInternalServerError)
 		h.logger.Printf("generate PDF: %v", err)

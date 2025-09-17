@@ -1,0 +1,70 @@
+{{define "pdf-header"}}
+<style>
+    @font-face {
+        font-family: "Times New Roman";
+        src: url("https://cdn.zabdoc.xyz/times.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    /* Minimal styles for header in Chrome PrintToPDF context */
+    .header {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        align-items: center;
+        width: 100%;
+        font-family: "Times New Roman", serif;
+        color: #000;
+    }
+    .header-logo { display: flex; justify-content: center; align-items: center; height: 100%; }
+    .header-logo img { max-height: 60pt; max-width: 100%; }
+    .header-content { text-align: center; }
+    .header-line1 { font-size: 14pt; font-weight: bold; }
+    .header-line2-box { border: 2px solid #222; padding: 4pt 10pt; margin-top: 6pt; font-size: 12pt; font-weight: bold; letter-spacing: 1pt; background: #f7f7f7; }
+    .header-line2 { text-transform: uppercase; }
+
+    /* Avoid Chrome default margins inside header */
+    body, div { margin: 0; padding: 0; }
+</style>
+<div class="pdf-header">
+    {{template "header" .}}
+    <script>
+      // Prevent empty extra space issues by ensuring the header height stabilizes
+      (function(){ document.body.style.margin = '0'; })();
+    </script>
+    <!-- Chrome replaces variables like date/pageNumber if used; not needed here -->
+  </div>
+{{end}}
+
+{{define "pdf-footer"}}
+<style>
+    @font-face {
+        font-family: "Times New Roman";
+        src: url("https://cdn.zabdoc.xyz/times.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    .footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        font-size: 10pt;
+        font-family: "Times New Roman", serif;
+        color: #000;
+    }
+    .page-number { font-size: 10pt; color: #444; }
+</style>
+<div class="pdf-footer">
+    <div class="footer">
+        <div>{{.CourseCode}}</div>
+        <div>{{.Class}}</div>
+        <div>
+            <span class="page-number"><span class="pageNumber"></span>/<span class="totalPages"></span></span>
+        </div>
+    </div>
+  </div>
+{{end}}

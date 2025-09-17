@@ -1,0 +1,36 @@
+{{define "cover-page"}}
+<div class="cover-page">
+    <div class="content">
+        <div class="spacer-small"></div>
+        <div class="marks">
+            <div class="marks-line">Total Marks: <span class="underline">{{.Marks}}</span></div>
+            <div class="marks-line">Obtained Marks: <span class="underline"></span></div>
+        </div>
+        <div class="spacer-large"></div>
+        <div class="course-title-section">
+            <div class="course-title">{{.Course}}</div>
+            <div class="assignment-number">{{.DocType}} #{{.Number}}</div>
+            <div class="submission-date">Submission date: {{.Date}}</div>
+        </div>
+        <div class="spacer-large"></div>
+        <div class="info-table">
+            <div class="info-row">
+                <div class="info-label">Student Name:</div>
+                <div class="info-value">{{.StudentName}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Reg. Number:</div>
+                <div class="info-value">{{.RegNo}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Submitted to:</div>
+                <div class="info-value">{{.Instructor}}</div>
+            </div>
+            <div class="info-row">
+                <div class="info-label">Class/Section:</div>
+                <div class="info-value">{{.Class}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}

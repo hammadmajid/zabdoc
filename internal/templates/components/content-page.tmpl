@@ -1,0 +1,20 @@
+{{define "content-page"}}
+    {{if .Sections}}
+    <div class="content-pages">
+        {{range $index, $section := .Sections}}
+        <div class="section-section">
+            <div class="section-content">
+                {{html $section.Content}}
+            </div>
+            {{if $section.Images}}
+            <div class="section-images">
+                {{range $imgIndex, $image := $section.Images}}
+                <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Section {{add $section.Index 1}} Image {{add $imgIndex 1}}" class="section-image">
+                {{end}}
+            </div>
+            {{end}}
+        </div>
+        {{end}}
+    </div>
+    {{end}}
+{{end}}
