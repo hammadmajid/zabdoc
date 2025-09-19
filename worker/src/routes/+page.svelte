@@ -19,19 +19,31 @@
     <div class="py-12 grid grid-cols-2 gap-4">
         <a
             href="/assignment"
-            class={buttonVariants({ variant: "outline", size: "lg" })}
+            class={buttonVariants({
+                variant: "outline",
+                size: "lg",
+                className: "px-12 py-6",
+            })}
         >
             <FileText /> Assignment
         </a>
         <a
             href="/lab-task"
-            class={buttonVariants({ variant: "outline", size: "lg" })}
+            class={buttonVariants({
+                variant: "outline",
+                size: "lg",
+                className: "px-12 py-6",
+            })}
         >
             <ClipboardList /> Lab Task
         </a>
         <a
             href="/lab-project"
-            class={buttonVariants({ variant: "outline", size: "lg" })}
+            class={buttonVariants({
+                variant: "outline",
+                size: "lg",
+                className: "px-12 py-6",
+            })}
         >
             <Microscope /> Lab Project
         </a>
