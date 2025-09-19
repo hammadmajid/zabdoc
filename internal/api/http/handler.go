@@ -37,16 +37,17 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := dto.GenerateRequest{
-		StudentName: r.FormValue("studentName"),
-		RegNo:       r.FormValue("regNo"),
-		Class:       r.FormValue("class"),
-		Course:      r.FormValue("course"),
-		CourseCode:  r.FormValue("courseCode"),
-		Instructor:  r.FormValue("instructor"),
-		DocType:     r.FormValue("type"),
-		Number:      r.FormValue("number"),
-		Date:        r.FormValue("date"),
-		Marks:       r.FormValue("marks"),
+		StudentName:  r.FormValue("studentName"),
+		RegNo:        r.FormValue("regNo"),
+		Class:        r.FormValue("class"),
+		Course:       r.FormValue("course"),
+		CourseCode:   r.FormValue("courseCode"),
+		Instructor:   r.FormValue("instructor"),
+		DocType:      r.FormValue("type"),
+		Number:       r.FormValue("number"),
+		Date:         r.FormValue("date"),
+		Marks:        r.FormValue("marks"),
+		ProjectTitle: r.FormValue("projectTitle"),
 	}
 
 	// Validate form data

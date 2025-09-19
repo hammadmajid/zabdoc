@@ -12,15 +12,16 @@ type Section struct {
 }
 
 type GenerateRequest struct {
-	StudentName string
-	RegNo       string
-	Class       string
-	Course      string
-	CourseCode  string
-	Instructor  string
-	DocType     string
-	Number      string
-	Date        string
-	Marks       string
-	Sections    []Section
+	StudentName  string
+	RegNo        string
+	Class        string
+	Course       string
+	CourseCode   string
+	Instructor   string
+	DocType      string
+	Number       string
+	Date         string
+	Marks        string
+	ProjectTitle string
+	Sections     []Section
 }
