@@ -6,10 +6,15 @@
     import ContentForm from "$lib/components/forms/content.svelte";
     import { toast } from "svelte-sonner";
     import { smartName } from "$lib/utils";
+    import { Label } from "$lib/components/ui/label";
+    import { Input } from "$lib/components/ui/input";
+    import * as Select from "$lib/components/ui/select/index";
+    import DueDate from "$lib/components/forms/fields/due-date.svelte";
     import Microscope from "@lucide/svelte/icons/microscope";
     import { Separator } from "$lib/components/ui/separator";
 
     let isLoading = $state(false);
+    let selectedProjectType = $state("");
 
     async function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
@@ -72,6 +77,77 @@
     <form class="space-y-8" onsubmit={handleSubmit}>
         <div class="grid md:grid-cols-2 gap-4">
             <AutoForm />
+            <Card.Root>
+                <Card.Header>
+                    <Card.Title>Project</Card.Title>
+                    <Card.Description
+                        >Information about the lab project.</Card.Description
+                    >
+                </Card.Header>
+                <Card.Content class="space-y-4">
+                    <div class="space-y-2">
+                        <Label for="project-type">Project Type</Label>
+                        <Select.Root
+                            type="single"
+                            name="type"
+                            required
+                            bind:value={selectedProjectType}
+                        >
+                            <Select.Trigger id="project-type" class="w-full">
+                                <span
+                                    >{selectedProjectType ||
+                                        "Select Project Type"}</span
+                                >
+                            </Select.Trigger>
+                            <Select.Content>
+                                <Select.Group>
+                                    <Select.Label>Project Types</Select.Label>
+                                    <Select.Item
+                                        value="Mid Term Project"
+                                        label="Mid Term Project"
+                                    >
+                                        Mid Term Project
+                                    </Select.Item>
+                                    <Select.Item
+                                        value="Final Term Project"
+                                        label="Final Term Project"
+                                    >
+                                        Final Term Project
+                                    </Select.Item>
+                                </Select.Group>
+                            </Select.Content>
+                        </Select.Root>
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="project-title">Project Title</Label>
+                        <Input
+                            id="project-title"
+                            name="projectTitle"
+                            type="text"
+                            placeholder="Enter your project title"
+                            required
+                        />
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="marks">Total Marks</Label>
+                        <Input
+                            id="marks"
+                            name="marks"
+                            type="number"
+                            step="0.5"
+                            placeholder="7.5"
+                            value="7.5"
+                        />
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="due-date">Due Date</Label>
+                        <DueDate />
+                    </div>
+                </Card.Content>
+            </Card.Root>
         </div>
 
         <Separator />
@@ -88,7 +164,7 @@
                 </Card.Description>
             </Card.Header>
             <Card.CardContent class="space-y-4">
-                <Button type="submit" class="w-full" disabled>
+                <Button type="submit" class="w-full" disabled={isLoading}>
                     {#if isLoading}
                         <Loader2 class="mr-2 h-4 w-4 animate-spin" />
                         Generating Document...

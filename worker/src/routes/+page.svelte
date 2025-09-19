@@ -3,7 +3,6 @@
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
     import Microscope from "@lucide/svelte/icons/microscope";
     import { buttonVariants } from "$lib/components/ui/button";
-    import CardDescription from "$lib/components/ui/card/card-description.svelte";
 </script>
 
 <svelte:head>
@@ -34,10 +33,7 @@
             href="/lab-project"
             class={buttonVariants({ variant: "outline", size: "lg" })}
         >
-            <Microscope /> Lab Project [WIP]
+            <Microscope /> Lab Project
         </a>
-    </div>
-    <div>
-        <CardDescription>*WIP: Work in Progress</CardDescription>
     </div>
 </div>
