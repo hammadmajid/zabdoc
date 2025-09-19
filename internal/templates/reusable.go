@@ -93,8 +93,8 @@ const StylesTemplate = `
         flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
-        gap: 24pt;
+        justify-content: flex-start;
+        gap: 0;
     }
 
     .marks {
@@ -131,6 +131,10 @@ const StylesTemplate = `
         font-size: 25pt;
         font-weight: 600;
         margin-bottom: 4pt;
+    }
+
+    .project-title-section {
+        text-align: center;
     }
 
     .project-title {

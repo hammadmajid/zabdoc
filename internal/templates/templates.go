@@ -31,13 +31,18 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
         <div class="course-title-section">
             <div class="course-title">{{.Course}}</div>
             {{if .ProjectTitle}}
-                <div class="project-title">{{.ProjectTitle}}</div>
                 <div class="assignment-number">{{.DocType}}</div>
             {{else}}
                 <div class="assignment-number">{{.DocType}} #{{.Number}}</div>
             {{end}}
             <div class="submission-date">Submission date: {{.Date}}</div>
         </div>
+        {{if .ProjectTitle}}
+        <div class="spacer-small"></div>
+        <div class="project-title-section">
+            <div class="project-title">{{.ProjectTitle}}</div>
+        </div>
+        {{end}}
         <div class="spacer-large"></div>
         ` + InfoTableTemplate + `
     </div>
