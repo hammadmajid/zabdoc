@@ -9,6 +9,7 @@
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
     import FileText from "@lucide/svelte/icons/file-text";
+    import SEO from "$lib/components/seo.svelte";
 
     let isLoading = $state(false);
 
@@ -53,9 +54,12 @@
     }
 </script>
 
-<svelte:head>
-    <title>assignment | zabdoc</title>
-</svelte:head>
+<SEO
+    title="assignment | zabdoc"
+    description="Generate assignment cover sheets for SZABIST students."
+    canonical="https://zabdoc.xyz/assignment"
+    url="https://zabdoc.xyz/assignment"
+/>
 
 <div class="space-y-12">
     <div class="space-y-1.5">

@@ -11,6 +11,7 @@
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
     import { Separator } from "$lib/components/ui/separator";
+    import SEO from "$lib/components/seo.svelte";
 
     let isLoading = $state(false);
 
@@ -55,9 +56,12 @@
     }
 </script>
 
-<svelte:head>
-    <title>lab task | zabdoc</title>
-</svelte:head>
+<SEO title="lab task | zabdoc"
+     description="Generate lab task PDFs for SZABIST students."
+     canonical="https://zabdoc.xyz/lab-task"
+     url="https://zabdoc.xyz/lab-task"
+/>
+
 
 <div class="space-y-12">
     <div class="space-y-1.5">

@@ -1,6 +1,13 @@
-<svelte:head>
-    <title>about | zabdoc</title>
-</svelte:head>
+<script lang="ts">
+    import SEO from "$lib/components/seo.svelte";
+</script>
+
+<SEO
+    title="about | zabdoc"
+    description="Learn about zabdoc, an independent tool for SZABIST students to generate assignment and lab PDFs. Not affiliated with SZABIST."
+    canonical="https://zabdoc.xyz/about"
+    url="https://zabdoc.xyz/about"
+/>
 
 <div class="prose prose-neutral dark:prose-invert max-w-5xl mx-auto">
     <h1>About</h1>

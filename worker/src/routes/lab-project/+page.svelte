@@ -12,6 +12,7 @@
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
     import Microscope from "@lucide/svelte/icons/microscope";
     import { Separator } from "$lib/components/ui/separator";
+    import SEO from "$lib/components/seo.svelte";
 
     let isLoading = $state(false);
     let selectedProjectType = $state("");
@@ -57,9 +58,12 @@
     }
 </script>
 
-<svelte:head>
-    <title>lab project | zabdoc</title>
-</svelte:head>
+<SEO title="lab project | zabdoc"
+     description="Generate lab project PDFs for SZABIST students."
+     canonical="https://zabdoc.xyz/lab-project"
+     url="https://zabdoc.xyz/lab-project"
+/>
+
 
 <div class="space-y-12">
     <div class="space-y-1.5">

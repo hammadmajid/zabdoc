@@ -1,6 +1,13 @@
-<svelte:head>
-    <title>help | zabdoc</title>
-</svelte:head>
+<script lang="ts">
+    import SEO from '$lib/components/seo.svelte';
+</script>
+
+<SEO title="help | zabdoc"
+     description="Help and FAQ for zabdoc. Learn how to generate assignment, lab task, and lab project PDFs for SZABIST students."
+     canonical="https://zabdoc.xyz/help"
+     url="https://zabdoc.xyz/help"
+/>
+
 
 <div class="prose prose-neutral dark:prose-invert max-w-5xl mx-auto">
     <h1>Help</h1>

@@ -3,11 +3,15 @@
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
     import Microscope from "@lucide/svelte/icons/microscope";
     import { buttonVariants } from "$lib/components/ui/button";
+    import SEO from "$lib/components/seo.svelte";
 </script>
 
-<svelte:head>
-    <title>zabdoc</title>
-</svelte:head>
+<SEO
+    title="zabdoc"
+    description="Generate assignment, lab task, and lab project PDFs for SZABIST students."
+    canonical="https://zabdoc.xyz/"
+    url="https://zabdoc.xyz/"
+/>
 
 <div class="flex flex-col items-center justify-center text-center h-full px-4">
     <h1 class="text-5xl font-bold tracking-tight">zabdoc</h1>

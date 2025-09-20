@@ -4,6 +4,7 @@
     import Theme from "$lib/components/theme.svelte";
     import { browser } from "$app/environment";
     import { toast } from "svelte-sonner";
+    import SEO from "$lib/components/seo.svelte";
 
     function clearLocalStorage() {
         if (!browser) return;
@@ -29,9 +30,12 @@
     }
 </script>
 
-<svelte:head>
-    <title>settings | zabdoc</title>
-</svelte:head>
+<SEO
+    title="settings | zabdoc"
+    description="Manage your zabdoc preferences and local data."
+    canonical="https://zabdoc.xyz/settings"
+    url="https://zabdoc.xyz/settings"
+/>
 
 <div class="space-y-6 max-w-2xl mx-auto">
     <div>
