@@ -37,47 +37,49 @@
     url="https://zabdoc.xyz/settings"
 />
 
-<div class="space-y-6 max-w-2xl mx-auto">
+<div class="space-y-6 max-w-5xl mx-auto">
     <div>
         <h1 class="text-3xl font-bold tracking-tight">Settings</h1>
         <p class="text-muted-foreground">Manage your preferences and data.</p>
     </div>
 
-    <!-- Theme Settings -->
-    <Card.Root>
-        <Card.Header>
-            <Card.Title>Appearance</Card.Title>
-            <Card.Description>
-                Customize how zabdoc looks on your device.
-            </Card.Description>
-        </Card.Header>
-        <Card.Content>
-            <Theme />
-        </Card.Content>
-    </Card.Root>
+    <div class="w-full grid md:grid-cols-2 gap-4">
+        <!-- Theme Settings -->
+        <Card.Root>
+            <Card.Header>
+                <Card.Title>Appearance</Card.Title>
+                <Card.Description>
+                    Customize how zabdoc looks on your device.
+                </Card.Description>
+            </Card.Header>
+            <Card.Content>
+                <Theme />
+            </Card.Content>
+        </Card.Root>
 
-    <!-- Storage Settings -->
-    <Card.Root>
-        <Card.Header>
-            <Card.Title>Storage</Card.Title>
-            <Card.Description>
-                Manage your locally stored data.
-            </Card.Description>
-        </Card.Header>
-        <Card.Content class="space-y-4">
-            <div class="space-y-2">
-                <h4 class="text-sm font-medium">Local Data</h4>
-                <p class="text-sm text-muted-foreground">
-                    Your name, registration number, and class selection are
-                    stored locally in your browser for convenience.
-                </p>
-            </div>
+        <!-- Storage Settings -->
+        <Card.Root>
+            <Card.Header>
+                <Card.Title>Storage</Card.Title>
+                <Card.Description>
+                    Manage your locally stored data.
+                </Card.Description>
+            </Card.Header>
+            <Card.Content class="space-y-4">
+                <div class="space-y-2">
+                    <h4 class="text-sm font-medium">Local Data</h4>
+                    <p class="text-sm text-muted-foreground">
+                        Your name, registration number, and class selection are
+                        stored locally in your browser for convenience.
+                    </p>
+                </div>
 
-            <div class="pt-2">
-                <Button variant="destructive" onclick={clearLocalStorage}>
-                    Delete Local Data
-                </Button>
-            </div>
-        </Card.Content>
-    </Card.Root>
+                <div class="pt-2">
+                    <Button variant="destructive" onclick={clearLocalStorage}>
+                        Delete Local Data
+                    </Button>
+                </div>
+            </Card.Content>
+        </Card.Root>
+    </div>
 </div>
