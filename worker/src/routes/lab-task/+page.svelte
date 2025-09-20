@@ -1,67 +1,22 @@
 <script lang="ts">
+    import Form from "$lib/components/form.svelte";
     import AutoForm from "$lib/components/forms/auto.svelte";
-    import Button from "$lib/components/ui/button/button.svelte";
-    import * as Card from "$lib/components/ui/card/index";
-    import Loader2 from "@lucide/svelte/icons/loader-2";
     import ContentForm from "$lib/components/forms/content.svelte";
-    import { toast } from "svelte-sonner";
-    import { smartName } from "$lib/utils";
-    import { Label } from "$lib/components/ui/label";
-    import { Input } from "$lib/components/ui/input";
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
-    import ClipboardList from "@lucide/svelte/icons/clipboard-list";
-    import { Separator } from "$lib/components/ui/separator";
     import SEO from "$lib/components/seo.svelte";
-
-    let isLoading = $state(false);
-
-    async function handleSubmit(event: SubmitEvent) {
-        event.preventDefault();
-        isLoading = true;
-
-        try {
-            const formData = new FormData(event.target as HTMLFormElement);
-
-            // Shitty hack to check if we are in localhost or prod
-            const apiUrl = window.location.host.includes("localhost")
-                ? "http://localhost:8080/generate"
-                : "https://api.zabdoc.xyz/generate";
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            // Handle PDF download
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.style.display = "none";
-            a.href = url;
-            a.download = smartName(formData);
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        } catch (error) {
-            toast.error("Failed to generate PDF", {
-                description: `${error}`,
-                position: "top-center",
-            });
-        }
-        isLoading = false;
-    }
+    import * as Card from "$lib/components/ui/card/index";
+    import { Input } from "$lib/components/ui/input";
+    import { Label } from "$lib/components/ui/label";
+    import { Separator } from "$lib/components/ui/separator";
+    import ClipboardList from "@lucide/svelte/icons/clipboard-list";
 </script>
 
-<SEO title="lab task | zabdoc"
-     description="Generate lab task PDFs for SZABIST students."
-     canonical="https://zabdoc.xyz/lab-task"
-     url="https://zabdoc.xyz/lab-task"
+<SEO
+    title="lab task | zabdoc"
+    description="Generate lab task PDFs for SZABIST students."
+    canonical="https://zabdoc.xyz/lab-task"
+    url="https://zabdoc.xyz/lab-task"
 />
-
 
 <div class="space-y-12">
     <div class="space-y-1.5">
@@ -76,7 +31,7 @@
         </p>
     </div>
 
-    <form class="space-y-8" onsubmit={handleSubmit}>
+    <Form>
         <div class="grid md:grid-cols-2 gap-4">
             <AutoForm />
             <Card.Root>
@@ -125,27 +80,5 @@
 
         <Separator />
         <ContentForm />
-
-        <Card.Root class="">
-            <Card.Header>
-                <Card.Description>
-                    By clicking the button below you accept the <a
-                        href="/about"
-                        class="text-primary underline hover:no-underline"
-                        >Terms and Privacy Policy</a
-                    >.
-                </Card.Description>
-            </Card.Header>
-            <Card.CardContent class="space-y-4">
-                <Button type="submit" class="w-full" disabled={isLoading}>
-                    {#if isLoading}
-                        <Loader2 class="mr-2 h-4 w-4 animate-spin" />
-                        Generating Document...
-                    {:else}
-                        Generate Document
-                    {/if}
-                </Button>
-            </Card.CardContent>
-        </Card.Root>
-    </form>
+    </Form>
 </div>
