@@ -4,6 +4,7 @@
     import Microscope from "@lucide/svelte/icons/microscope";
     import { buttonVariants } from "$lib/components/ui/button";
     import SEO from "$lib/components/seo.svelte";
+    import CardDescription from "$lib/components/ui/card/card-description.svelte";
 </script>
 
 <SEO
@@ -17,7 +18,7 @@
     <h1 class="text-5xl font-bold tracking-tight">zabdoc</h1>
     <p class="mt-4 text-lg text-muted-foreground max-w-xl">
         web application for
-        <span class="border-b border-dotted border-foreground/50">SZABIST</span>
+        <span class="border-b border-dotted border-foreground/50">*SZABIST</span>
         students to generate assignment, lab tasks and lab projects in PDF format.
     </p>
     <div class="py-12 grid grid-cols-2 gap-4">
@@ -52,4 +53,9 @@
             <Microscope /> Lab Project
         </a>
     </div>
+    <CardDescription
+        >*this project is{" "}
+        <em>not sponsored, affiliated, endorsed, or approved by</em> SZABIST.
+        <a href="/about#disclaimer" class="underline">Learn more.</a></CardDescription
+    >
 </div>
