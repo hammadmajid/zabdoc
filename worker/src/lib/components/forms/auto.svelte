@@ -3,9 +3,13 @@
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
     import * as Card from "$lib/components/ui/card/index.js";
+    import { Switch } from "$lib/components/ui/switch/index.js";
+    import Button from "$lib/components/ui/button/button.svelte";
     import { browser } from "$app/environment";
     import { data, type DataStructure } from "$lib/data/data";
     import { toast } from "svelte-sonner";
+    import Plus from "@lucide/svelte/icons/plus";
+    import X from "@lucide/svelte/icons/x";
 
     // LocalStorage utility functions
     function setLocalStorage(key: string, value: string) {
@@ -33,10 +37,24 @@
         }
     }
 
+    interface Student {
+        id: number;
+        name: string;
+        regNo: string;
+    }
+
     let selectedClass = $state("" as keyof DataStructure | "");
     let selectedCourse = $state("");
     let studentName = $state("");
     let regNum = $state("");
+    let isMultiMode = $state(false);
+    let students = $state<Student[]>([
+        { id: 1, name: "", regNo: "" },
+        { id: 2, name: "", regNo: "" },
+    ]);
+    let studentCounter = $state(2);
+
+    const STUDENT_LIMIT = 6;
 
     // Initialize values from localStorage on component mount
     $effect(() => {
@@ -45,6 +63,7 @@
             regNum = getLocalStorage("regNum") || "";
             selectedClass =
                 (getLocalStorage("class") as keyof DataStructure) || "";
+            isMultiMode = getLocalStorage("isMultiMode") === "true";
         }
     });
 
@@ -66,6 +85,38 @@
             setLocalStorage("class", selectedClass);
         }
     });
+
+    $effect(() => {
+        if (browser) {
+            setLocalStorage("isMultiMode", isMultiMode.toString());
+        }
+    });
+
+    function addStudent() {
+        if (students.length < 6) {
+            studentCounter++;
+            students = [
+                ...students,
+                { id: studentCounter, name: "", regNo: "" },
+            ];
+        }
+    }
+
+    function removeStudent(studentId: number) {
+        if (students.length > 2) {
+            students = students.filter((student) => student.id !== studentId);
+        }
+    }
+
+    function updateStudent(
+        studentId: number,
+        field: "name" | "regNo",
+        value: string,
+    ) {
+        students = students.map((student) =>
+            student.id === studentId ? { ...student, [field]: value } : student,
+        );
+    }
 
     const classes = $derived(
         Object.keys(data).map((className) => ({
@@ -111,35 +162,132 @@
 
 <Card.Root class="">
     <Card.Header>
-        <Card.Title>Student</Card.Title>
-        <Card.Description>
-            This data is stored locally for your convenience.
-        </Card.Description>
+        <div class="flex items-center justify-between">
+            <div>
+                <Card.Title>Student</Card.Title>
+                <Card.Description>Student information.</Card.Description>
+            </div>
+            <div class="flex items-center gap-2">
+                <Label for="multi-toggle" class="text-sm">Group</Label>
+                <Switch id="multi-toggle" bind:checked={isMultiMode} />
+            </div>
+        </div>
     </Card.Header>
     <Card.Content class="space-y-4">
-        <div class="space-y-2">
-            <Label for="student-name">Full Name</Label>
-            <Input
-                id="student-name"
-                name="studentName"
-                type="text"
-                placeholder="Enter your full name"
-                bind:value={studentName}
-                required
-            />
-        </div>
+        {#if !isMultiMode}
+            <div class="space-y-2">
+                <Label for="student-name">Full Name</Label>
+                <Input
+                    id="student-name"
+                    name="studentName"
+                    type="text"
+                    placeholder="Enter your full name"
+                    bind:value={studentName}
+                    required
+                />
+            </div>
 
-        <div class="space-y-2">
-            <Label for="reg-number">Registration Number</Label>
-            <Input
-                id="reg-number"
-                name="regNo"
-                type="number"
-                placeholder="Enter your registration number"
-                bind:value={regNum}
-                required
-            />
-        </div>
+            <div class="space-y-2">
+                <Label for="reg-number">Registration Number</Label>
+                <Input
+                    id="reg-number"
+                    name="regNo"
+                    type="number"
+                    placeholder="Enter your registration number"
+                    bind:value={regNum}
+                    required
+                />
+            </div>
+        {:else}
+            <div class="space-y-4">
+                {#each students as student (student.id)}
+                    <div
+                        class="grid gap-3"
+                        style="grid-template-columns: 4fr 2fr 1fr;"
+                    >
+                        <div class="space-y-1">
+                            <Label
+                                for="student-{student.id}-name"
+                                class="text-xs sr-only">Name</Label
+                            >
+                            <Input
+                                id="student-{student.id}-name"
+                                name="student-{student.id}-name"
+                                type="text"
+                                placeholder="Student name"
+                                bind:value={student.name}
+                                oninput={(e) =>
+                                    updateStudent(
+                                        student.id,
+                                        "name",
+                                        (e.target as HTMLInputElement).value,
+                                    )}
+                                required
+                            />
+                        </div>
+                        <div class="space-y-1">
+                            <Label
+                                for="student-{student.id}-regNo"
+                                class="text-xs sr-only">Reg. number</Label
+                            >
+                            <Input
+                                id="student-{student.id}-regNo"
+                                name="student-{student.id}-regNo"
+                                type="text"
+                                placeholder="Reg. no"
+                                bind:value={student.regNo}
+                                oninput={(e) =>
+                                    updateStudent(
+                                        student.id,
+                                        "regNo",
+                                        (e.target as HTMLInputElement).value,
+                                    )}
+                                required
+                            />
+                        </div>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onclick={() => removeStudent(student.id)}
+                            disabled={students.length <= 2}
+                        >
+                            <X class="w-3 h-3" />
+                        </Button>
+                    </div>
+                {/each}
+                {#if students.length < STUDENT_LIMIT}
+                    <Button
+                        type="button"
+                        variant="outline"
+                        class="w-full border-dashed"
+                        onclick={addStudent}
+                    >
+                        <Plus class="w-4 h-4 mr-2" />
+                        Add student
+                    </Button>
+                {/if}
+            </div>
+        {/if}
+
+        <!-- Hidden inputs for multi-mode -->
+        {#if isMultiMode}
+            <input type="hidden" name="isMultiMode" value="true" />
+            {#each students as student, index}
+                <input
+                    type="hidden"
+                    name="student-{index + 1}-name"
+                    value={student.name}
+                />
+                <input
+                    type="hidden"
+                    name="student-{index + 1}-regNo"
+                    value={student.regNo}
+                />
+            {/each}
+        {:else}
+            <input type="hidden" name="isMultiMode" value="false" />
+        {/if}
 
         <div class="space-y-2">
             <Label for="class-select">Class</Label>
@@ -150,8 +298,13 @@
                 required
                 bind:value={selectedClass}
             >
-                <Select.Trigger id="class-select" class="!w-full whitespace-normal min-h-[2.25rem] h-auto">
-                    <span class="text-left leading-tight">{classTriggerContent}</span>
+                <Select.Trigger
+                    id="class-select"
+                    class="!w-full whitespace-normal min-h-[2.25rem] h-auto"
+                >
+                    <span class="text-left leading-tight"
+                        >{classTriggerContent}</span
+                    >
                 </Select.Trigger>
                 <Select.Content>
                     <Select.Group>
@@ -175,8 +328,7 @@
     <Card.Header>
         <Card.Title>Course</Card.Title>
         <Card.Description>
-            Instructor and course code are auto filled based on the
-            course.
+            Instructor and course code are auto filled based on the course.
         </Card.Description>
     </Card.Header>
     <Card.Content class="space-y-4">
@@ -190,8 +342,13 @@
                 bind:value={selectedCourse}
                 disabled={!selectedClass}
             >
-                <Select.Trigger id="course-select" class="!w-full whitespace-normal min-h-[2.25rem] h-auto">
-                    <span class="text-left leading-tight">{courseTriggerContent}</span>
+                <Select.Trigger
+                    id="course-select"
+                    class="!w-full whitespace-normal min-h-[2.25rem] h-auto"
+                >
+                    <span class="text-left leading-tight"
+                        >{courseTriggerContent}</span
+                    >
                 </Select.Trigger>
                 <Select.Content>
                     <Select.Group>
