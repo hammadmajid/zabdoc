@@ -44,7 +44,12 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
         </div>
         {{end}}
         <div class="spacer-large"></div>
+        {{if .IsMultiMode}}
+        ` + SharedInfoTableTemplate + `
+        ` + StudentInfoTableTemplate + `
+        {{else}}
         ` + InfoTableTemplate + `
+        {{end}}
     </div>
     ` + FooterTemplate + `
 </div>

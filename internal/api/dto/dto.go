@@ -11,9 +11,16 @@ type Section struct {
 	Images  []SectionImage // Base64 encoded images with MIME types
 }
 
+type Student struct {
+	Name  string
+	RegNo string
+}
+
 type GenerateRequest struct {
 	StudentName  string
 	RegNo        string
+	Students     []Student // For multi-student mode
+	IsMultiMode  bool
 	Class        string
 	Course       string
 	CourseCode   string

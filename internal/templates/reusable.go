@@ -174,6 +174,12 @@ const StylesTemplate = `
         text-align: center;
     }
 
+    .info-value2 {
+        flex: 1;
+        padding-bottom: 2pt;
+        text-align: center;
+    }
+
     .footer {
         display: flex;
         justify-content: space-between;
@@ -320,6 +326,32 @@ const InfoTableTemplate = `
         <div class="info-label">Class/Section:</div>
         <div class="info-value">{{.Class}}</div>
     </div>
+</div>`
+
+const SharedInfoTableTemplate = `
+<div class="info-table">
+    <div class="info-row">
+        <div class="info-label">Submitted to:</div>
+        <div class="info-value">{{.Instructor}}</div>
+    </div>
+    <div class="info-row">
+        <div class="info-label">Class/Section:</div>
+        <div class="info-value">{{.Class}}</div>
+    </div>
+</div>`
+
+const StudentInfoTableTemplate = `
+<div class="info-table" style="margin-top: 20pt;">
+    <div class="info-row" style="font-weight: bold; border-bottom: 2px solid #333; margin-bottom: 8pt; padding-bottom: 4pt;">
+        <div class="info-label">Student Name</div>
+        <div class="info-value2">Reg. Number</div>
+    </div>
+    {{range .Students}}
+    <div class="info-row">
+        <div class="info-value2">{{.Name}}</div>
+        <div class="info-value2">{{.RegNo}}</div>
+    </div>
+    {{end}}
 </div>`
 
 const ContentPagesTemplate = `

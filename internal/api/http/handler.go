@@ -48,6 +48,27 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 		Date:         r.FormValue("date"),
 		Marks:        r.FormValue("marks"),
 		ProjectTitle: r.FormValue("projectTitle"),
+		IsMultiMode:  r.FormValue("isMultiMode") == "true",
+	}
+
+	// Handle multiple students
+	if data.IsMultiMode {
+		var students []dto.Student
+		for i := 1; i <= 6; i++ { // Max 6 students
+			nameKey := fmt.Sprintf("student-%d-name", i)
+			regNoKey := fmt.Sprintf("student-%d-regNo", i)
+
+			name := r.FormValue(nameKey)
+			regNo := r.FormValue(regNoKey)
+
+			if name != "" && regNo != "" {
+				students = append(students, dto.Student{
+					Name:  name,
+					RegNo: regNo,
+				})
+			}
+		}
+		data.Students = students
 	}
 
 	// Validate form data
