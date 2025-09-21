@@ -167,12 +167,12 @@
         <div class="flex items-center justify-between">
             <div>
                 <Card.Title>Student</Card.Title>
-                <Card.Description>Student information.</Card.Description>
+                <Card.Description>This information will be cached locally.</Card.Description>
             </div>
-            <div class="flex items-center gap-2">
+            <!-- <div class="flex items-center gap-2">
                 <Label for="multi-toggle" class="text-sm">Group</Label>
                 <Switch id="multi-toggle" bind:checked={isMultiMode} />
-            </div>
+            </div> -->
         </div>
     </Card.Header>
     <Card.Content class="space-y-4">

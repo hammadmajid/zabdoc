@@ -5,6 +5,7 @@
     import { buttonVariants } from "$lib/components/ui/button";
     import SEO from "$lib/components/seo.svelte";
     import CardDescription from "$lib/components/ui/card/card-description.svelte";
+    import Button from "$lib/components/ui/button/button.svelte";
 </script>
 
 <SEO
@@ -18,7 +19,8 @@
     <h1 class="text-5xl font-bold tracking-tight">zabdoc</h1>
     <p class="mt-4 text-lg text-muted-foreground max-w-xl">
         web application for
-        <span class="border-b border-dotted border-foreground/50">*SZABIST</span>
+        <span class="border-b border-dotted border-foreground/50">*SZABIST</span
+        >
         students to generate assignment, lab tasks and lab projects in PDF format.
     </p>
     <div class="py-12 grid grid-cols-2 gap-4">
@@ -42,8 +44,9 @@
         >
             <ClipboardList /> Lab Task
         </a>
-        <a
-            href="/lab-project"
+        <Button
+            variant="outline"
+            disabled
             class={buttonVariants({
                 variant: "outline",
                 size: "lg",
@@ -51,11 +54,12 @@
             })}
         >
             <Microscope /> Lab Project
-        </a>
+        </Button>
     </div>
     <CardDescription
         >*this project is{" "}
         <em>not sponsored, affiliated, endorsed, or approved by</em> SZABIST.
-        <a href="/about#disclaimer" class="underline">Learn more.</a></CardDescription
+        <a href="/about#disclaimer" class="underline">Learn more.</a
+        ></CardDescription
     >
 </div>
