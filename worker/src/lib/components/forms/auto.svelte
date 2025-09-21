@@ -10,6 +10,8 @@
     import { toast } from "svelte-sonner";
     import Plus from "@lucide/svelte/icons/plus";
     import X from "@lucide/svelte/icons/x";
+    import { scale } from "svelte/transition";
+    import { quintOut } from "svelte/easing";
 
     // LocalStorage utility functions
     function setLocalStorage(key: string, value: string) {
@@ -204,6 +206,8 @@
                     <div
                         class="grid gap-3"
                         style="grid-template-columns: 4fr 2fr 1fr;"
+                        in:scale={{ duration: 400, easing: quintOut }}
+                        out:scale={{ duration: 300, easing: quintOut }}
                     >
                         <div class="space-y-1">
                             <Label
@@ -257,15 +261,17 @@
                     </div>
                 {/each}
                 {#if students.length < STUDENT_LIMIT}
-                    <Button
-                        type="button"
-                        variant="outline"
-                        class="w-full border-dashed"
-                        onclick={addStudent}
-                    >
-                        <Plus class="w-4 h-4 mr-2" />
-                        Add student
-                    </Button>
+                    <div in:scale={{ duration: 400, easing: quintOut, delay: 100 }}>
+                        <Button
+                            type="button"
+                            variant="outline"
+                            class="w-full border-dashed"
+                            onclick={addStudent}
+                        >
+                            <Plus class="w-4 h-4 mr-2" />
+                            Add student
+                        </Button>
+                    </div>
                 {/if}
             </div>
         {/if}
