@@ -201,76 +201,102 @@
                 />
             </div>
         {:else}
-            <div class="space-y-4">
-                {#each students as student (student.id)}
+            <div class="space-y-3">
+                {#each students as student, index (student.id)}
                     <div
-                        class="grid gap-3"
-                        style="grid-template-columns: 4fr 2fr 1fr;"
                         in:scale={{ duration: 400, easing: quintOut }}
                         out:scale={{ duration: 300, easing: quintOut }}
                     >
-                        <div class="space-y-1">
-                            <Label
-                                for="student-{student.id}-name"
-                                class="text-xs sr-only">Name</Label
-                            >
-                            <Input
-                                id="student-{student.id}-name"
-                                name="student-{student.id}-name"
-                                type="text"
-                                placeholder="Student name"
-                                bind:value={student.name}
-                                oninput={(e) =>
-                                    updateStudent(
-                                        student.id,
-                                        "name",
-                                        (e.target as HTMLInputElement).value,
-                                    )}
-                                required
-                            />
-                        </div>
-                        <div class="space-y-1">
-                            <Label
-                                for="student-{student.id}-regNo"
-                                class="text-xs sr-only">Reg. number</Label
-                            >
-                            <Input
-                                id="student-{student.id}-regNo"
-                                name="student-{student.id}-regNo"
-                                type="text"
-                                placeholder="Reg. no"
-                                bind:value={student.regNo}
-                                oninput={(e) =>
-                                    updateStudent(
-                                        student.id,
-                                        "regNo",
-                                        (e.target as HTMLInputElement).value,
-                                    )}
-                                required
-                            />
-                        </div>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onclick={() => removeStudent(student.id)}
-                            disabled={students.length <= 2}
-                        >
-                            <X class="w-3 h-3" />
-                        </Button>
+                        <Card.Root class="relative">
+                            <Card.Header>
+                                <div class="flex items-center justify-between">
+                                    <Card.Title class="text-sm font-medium"
+                                        >Student {index + 1}</Card.Title
+                                    >
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        onclick={() =>
+                                            removeStudent(student.id)}
+                                        disabled={students.length <= 2}
+                                    >
+                                        <X class="w-3 h-3" />
+                                    </Button>
+                                </div>
+                            </Card.Header>
+                            <Card.Content class="space-y-3">
+                                <div class="space-y-2">
+                                    <Label
+                                        for="student-{student.id}-name"
+                                        class="text-xs font-medium"
+                                        >Full Name</Label
+                                    >
+                                    <Input
+                                        id="student-{student.id}-name"
+                                        name="student-{student.id}-name"
+                                        type="text"
+                                        placeholder="Enter full name"
+                                        bind:value={student.name}
+                                        oninput={(e) =>
+                                            updateStudent(
+                                                student.id,
+                                                "name",
+                                                (e.target as HTMLInputElement)
+                                                    .value,
+                                            )}
+                                        required
+                                    />
+                                </div>
+                                <div class="space-y-2">
+                                    <Label
+                                        for="student-{student.id}-regNo"
+                                        class="text-xs font-medium"
+                                        >Registration Number</Label
+                                    >
+                                    <Input
+                                        id="student-{student.id}-regNo"
+                                        name="student-{student.id}-regNo"
+                                        type="text"
+                                        placeholder="Enter registration number"
+                                        bind:value={student.regNo}
+                                        oninput={(e) =>
+                                            updateStudent(
+                                                student.id,
+                                                "regNo",
+                                                (e.target as HTMLInputElement)
+                                                    .value,
+                                            )}
+                                        required
+                                    />
+                                </div>
+                            </Card.Content>
+                        </Card.Root>
                     </div>
                 {/each}
                 {#if students.length < STUDENT_LIMIT}
-                    <div in:scale={{ duration: 400, easing: quintOut, delay: 100 }}>
-                        <Button
-                            type="button"
-                            variant="outline"
-                            class="w-full border-dashed"
-                            onclick={addStudent}
-                        >
-                            <Plus class="w-4 h-4 mr-2" />
-                            Add student
-                        </Button>
+                    <div
+                        in:scale={{
+                            duration: 400,
+                            easing: quintOut,
+                            delay: 100,
+                        }}
+                    >
+                        <Card.Root class="border-dashed">
+                            <Card.Content
+                                class="flex items-center justify-center py-6"
+                            >
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    class="w-full"
+                                    onclick={addStudent}
+                                >
+                                    <Plus class="w-4 h-4 mr-2" />
+                                    Add Student
+                                </Button>
+                            </Card.Content>
+                        </Card.Root>
                     </div>
                 {/if}
             </div>
