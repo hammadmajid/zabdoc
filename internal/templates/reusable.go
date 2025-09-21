@@ -35,7 +35,7 @@ const StylesTemplate = `
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        /* border: 1px solid #000; */
+        border: 1px solid #000;
         page-break-after: always;
     }
 
