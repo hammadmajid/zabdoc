@@ -28,6 +28,7 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
         <div class="spacer-small"></div>
         ` + MarksTemplate + `
         <div class="spacer-large"></div>
+        <div class="spacer-large"></div>
         <div class="course-title-section">
             <div class="course-title">{{.Course}}</div>
             {{if .ProjectTitle}}
@@ -43,6 +44,7 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
             <div class="project-title">{{.ProjectTitle}}</div>
         </div>
         {{end}}
+        <div class="spacer-large"></div>
         <div class="spacer-large"></div>
         {{if .IsMultiMode}}
         ` + SharedInfoTableTemplate + `
