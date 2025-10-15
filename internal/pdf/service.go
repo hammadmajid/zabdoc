@@ -77,7 +77,7 @@ func (s *Service) generateCoverPage(data dto.GenerateRequest) error {
 	currentY += SpacerLarge * 2
 
 	// Draw student info
-	currentY = s.drawStudentInfo(currentY, data)
+	_ = s.drawStudentInfo(currentY, data)
 
 	// Footer will be added automatically by gopdf
 
