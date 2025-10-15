@@ -11,6 +11,7 @@ var CORSOptions = cors.Options{
 	// Allow requests from localhost:5173 and zabdoc.xyz (including subdomains)
 	AllowedOrigins: []string{
 		"http://zabdoc.localhost:5173",
+		"http://localhost:5173",
 		"https://zabdoc.localhost:5173",
 		"https://zabdoc.xyz",
 		"https://*.zabdoc.xyz",
