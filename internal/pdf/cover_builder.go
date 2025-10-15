@@ -2,59 +2,7 @@ package pdf
 
 import (
 	"zabdoc/internal/api/dto"
-
-	"github.com/signintech/gopdf"
 )
-
-// drawHeader draws the header section with logo and institution info
-func (s *Service) drawHeader(startY float64) float64 {
-	// Load and draw logo
-	logoX := ContentX + 20.0
-	logoY := startY
-
-	if err := s.pdf.Image(LogoPath, logoX, logoY, &gopdf.Rect{
-		W: HeaderLogoWidth,
-		H: HeaderLogoHeight,
-	}); err != nil {
-		// If logo fails to load, continue without it
-	}
-
-	// Header text starts after logo
-	headerTextX := logoX + HeaderLogoWidth + 20.0
-	headerY := startY + 10.0
-
-	// Line 1: Institution name
-	s.pdf.SetFont(FontFamily, "", FontSizeHeader1)
-	s.pdf.SetTextColor(ColorBlack.R, ColorBlack.G, ColorBlack.B)
-	s.pdf.SetXY(headerTextX, headerY)
-	s.pdf.Cell(nil, "Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology")
-
-	// Line 2: Department in box
-	headerY += 20.0
-	boxPadding := 4.0
-	boxText := "COMPUTER SCIENCE DEPARTMENT"
-
-	// Calculate box dimensions
-	textWidth, _ := s.pdf.MeasureTextWidth(boxText)
-	boxWidth := textWidth + (boxPadding * 2) + 10.0
-	boxHeight := FontSizeHeader2 + (boxPadding * 2)
-	boxX := headerTextX
-	boxY := headerY
-
-	// Draw box background
-	s.pdf.SetFillColor(ColorHeaderBox.R, ColorHeaderBox.G, ColorHeaderBox.B)
-	s.pdf.SetStrokeColor(ColorDarkGray.R, ColorDarkGray.G, ColorDarkGray.B)
-	s.pdf.SetLineWidth(2.0)
-	s.pdf.RectFromUpperLeftWithStyle(boxX, boxY, boxWidth, boxHeight, "FD")
-
-	// Draw text in box
-	s.pdf.SetFont(FontFamily, "", FontSizeHeader2)
-	s.pdf.SetTextColor(ColorBlack.R, ColorBlack.G, ColorBlack.B)
-	s.pdf.SetXY(boxX+boxPadding+5.0, boxY+boxPadding+2.0)
-	s.pdf.Cell(nil, boxText)
-
-	return headerY + boxHeight + 18.0
-}
 
 // drawMarks draws the marks section (right-aligned)
 func (s *Service) drawMarks(startY float64, marks string) float64 {
@@ -223,28 +171,4 @@ func (s *Service) drawInfoRow(x, y, width float64, label, value string) float64 
 	s.pdf.Line(valueX, y+FontSizeInfoTable+2.0, valueX+valueWidth, y+FontSizeInfoTable+2.0)
 
 	return y + FontSizeInfoTable + 10.0
-}
-
-// drawFooter draws the footer with course code, class, and location
-func (s *Service) drawFooter(data dto.GenerateRequest) {
-	footerY := PageHeight - PageMargin - 25.0
-
-	s.pdf.SetFont(FontFamily, "", FontSizeFooter)
-	s.pdf.SetTextColor(ColorBlack.R, ColorBlack.G, ColorBlack.B)
-
-	// Left: Course code
-	s.pdf.SetXY(ContentX+10.0, footerY)
-	s.pdf.Cell(nil, data.CourseCode)
-
-	// Center: Class
-	centerX := PageWidth / 2.0
-	classWidth, _ := s.pdf.MeasureTextWidth(data.Class)
-	s.pdf.SetXY(centerX-(classWidth/2.0), footerY)
-	s.pdf.Cell(nil, data.Class)
-
-	// Right: Location
-	location := "SZABIST-ISB"
-	locWidth, _ := s.pdf.MeasureTextWidth(location)
-	s.pdf.SetXY(PageWidth-ContentX-10.0-locWidth, footerY)
-	s.pdf.Cell(nil, location)
 }
