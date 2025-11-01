@@ -195,14 +195,13 @@ const StylesTemplate = `
 
     .content-page {
         width: 210mm;
-        min-height: 297mm;
+        height: 297mm;
         box-sizing: border-box;
         padding: 5mm;
-        display: flex;
-        flex-direction: column;
         border: 1px solid #000;
         page-break-after: always;
-        position: relative;
+        display: flex;
+        flex-direction: column;
     }
 
     .content-page:last-child {
@@ -210,21 +209,23 @@ const StylesTemplate = `
     }
 
     .content-page-header {
-        margin-bottom: 12pt;
+        flex-shrink: 0;
+        margin-bottom: 8pt;
     }
 
     .content-page-body {
         flex: 1;
-        padding: 8pt 0;
+        overflow: hidden;
+        padding: 4pt 0;
     }
 
     .content-page-footer {
-        margin-top: 12pt;
+        flex-shrink: 0;
+        margin-top: 8pt;
     }
 
     .section-section {
         margin-bottom: 2em;
-        page-break-inside: avoid;
     }
 
     .section-content {
