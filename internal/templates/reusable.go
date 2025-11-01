@@ -193,6 +193,35 @@ const StylesTemplate = `
         line-height: 1.6;
     }
 
+    .content-page {
+        width: 210mm;
+        min-height: 297mm;
+        box-sizing: border-box;
+        padding: 5mm;
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #000;
+        page-break-after: always;
+        position: relative;
+    }
+
+    .content-page:last-child {
+        page-break-after: auto;
+    }
+
+    .content-page-header {
+        margin-bottom: 12pt;
+    }
+
+    .content-page-body {
+        flex: 1;
+        padding: 8pt 0;
+    }
+
+    .content-page-footer {
+        margin-top: 12pt;
+    }
+
     .section-section {
         margin-bottom: 2em;
         page-break-inside: avoid;
@@ -358,17 +387,39 @@ const ContentPagesTemplate = `
 {{if .Sections}}
 <div class="content-pages">
     {{range $index, $section := .Sections}}
-    <div class="section-section">
-        <div class="section-content">
-            {{html $section.Content}}
+    <div class="content-page">
+        <div class="content-page-header">
+            <div class="header">
+                <div class="header-logo">
+                    <img src="https://cdn.zabdoc.xyz/szabist-logo.png" alt="SZABIST Logo">
+                </div>
+                <div class="header-content">
+                    <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
+                    <div class="header-line2-box"><span class="header-line2">Computer Science Department</span></div>
+                </div>
+            </div>
         </div>
-        {{if $section.Images}}
-        <div class="section-images">
-            {{range $imgIndex, $image := $section.Images}}
-            <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Section {{add $section.Index 1}} Image {{add $imgIndex 1}}" class="section-image">
-            {{end}}
+        <div class="content-page-body">
+            <div class="section-section">
+                <div class="section-content">
+                    {{html $section.Content}}
+                </div>
+                {{if $section.Images}}
+                <div class="section-images">
+                    {{range $imgIndex, $image := $section.Images}}
+                    <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Section {{add $section.Index 1}} Image {{add $imgIndex 1}}" class="section-image">
+                    {{end}}
+                </div>
+                {{end}}
+            </div>
         </div>
-        {{end}}
+        <div class="content-page-footer">
+            <div class="footer">
+                <div>{{$.CourseCode}}</div>
+                <div>{{$.Class}}</div>
+                <div>SZABIST-ISB</div>
+            </div>
+        </div>
     </div>
     {{end}}
 </div>
