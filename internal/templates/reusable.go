@@ -89,6 +89,15 @@ const StylesTemplate = `
         height: 44pt;
     }
 
+    /* Adaptive spacers for multi-student mode */
+    .spacer-adaptive {
+        height: 3vh;
+    }
+
+    .spacer-adaptive-large {
+        height: 6vh;
+    }
+
     .content {
         flex: 1;
         display: flex;
@@ -178,6 +187,67 @@ const StylesTemplate = `
         flex: 1;
         padding-bottom: 2pt;
         text-align: center;
+    }
+
+    /* Multi-student table styles with adaptive sizing */
+    .student-info-table {
+        width: 85%;
+        margin: 1vh auto 2vh;
+        font-size: 16pt;
+    }
+
+    .student-info-table.compact {
+        font-size: 14pt;
+        margin: 0.5vh auto 1vh;
+    }
+
+    .student-table-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        font-weight: bold;
+        border-bottom: 2px solid #333;
+        margin-bottom: 6pt;
+        padding-bottom: 4pt;
+        gap: 20pt;
+    }
+
+    .student-table-body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20pt;
+    }
+
+    .student-column {
+        display: flex;
+        flex-direction: column;
+        gap: 6pt;
+    }
+
+    .student-column.compact {
+        gap: 4pt;
+    }
+
+    .student-entry {
+        display: flex;
+        justify-content: space-between;
+        padding: 3pt 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .student-entry.compact {
+        padding: 2pt 0;
+    }
+
+    .student-name {
+        flex: 1;
+        text-align: left;
+        padding-right: 8pt;
+    }
+
+    .student-regno {
+        flex: 1;
+        text-align: right;
+        padding-left: 8pt;
     }
 
     .footer {
@@ -371,17 +441,34 @@ const SharedInfoTableTemplate = `
 </div>`
 
 const StudentInfoTableTemplate = `
-<div class="info-table" style="margin-top: 20pt;">
-    <div class="info-row" style="font-weight: bold; border-bottom: 2px solid #333; margin-bottom: 8pt; padding-bottom: 4pt;">
-        <div class="info-label">Student Name</div>
-        <div class="info-value2">Reg. Number</div>
+<div class="student-info-table{{if gt (len .Students) 4}} compact{{end}}">
+    <div class="student-table-header">
+        <div style="text-align: left;">Student Name</div>
+        <div style="text-align: right;">Reg. Number</div>
     </div>
-    {{range .Students}}
-    <div class="info-row">
-        <div class="info-value2">{{.Name}}</div>
-        <div class="info-value2">{{.RegNo}}</div>
+    <div class="student-table-body">
+        {{$mid := div (add (len .Students) 1) 2}}
+        <div class="student-column{{if gt (len .Students) 4}} compact{{end}}">
+            {{range $index, $student := .Students}}
+                {{if lt $index $mid}}
+                <div class="student-entry{{if gt (len $.Students) 4}} compact{{end}}">
+                    <div class="student-name">{{$student.Name}}</div>
+                    <div class="student-regno">{{$student.RegNo}}</div>
+                </div>
+                {{end}}
+            {{end}}
+        </div>
+        <div class="student-column{{if gt (len .Students) 4}} compact{{end}}">
+            {{range $index, $student := .Students}}
+                {{if ge $index $mid}}
+                <div class="student-entry{{if gt (len $.Students) 4}} compact{{end}}">
+                    <div class="student-name">{{$student.Name}}</div>
+                    <div class="student-regno">{{$student.RegNo}}</div>
+                </div>
+                {{end}}
+            {{end}}
+        </div>
     </div>
-    {{end}}
 </div>`
 
 const ContentPagesTemplate = `
