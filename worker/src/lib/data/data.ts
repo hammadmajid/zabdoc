@@ -7,6 +7,7 @@ export type ClassData = Record<string, CourseInfo>;
 
 export type DataStructure = {
     "BsCS-4C": ClassData;
+    "BsCS-5C": ClassData;
     "BsCS-6A": ClassData;
 };
 
@@ -30,11 +31,37 @@ export const data: DataStructure = {
         },
         "Management Principle": {
             instructor: "Dr. Beenish Ambreen",
-            code: "CSC 4603"
+            code: "CSC 4603",
         },
         "Lab: Database Systems": {
             instructor: "Mr. Farhan Sami",
             code: "CSCL 2203",
+        },
+    },
+    "BsCS-5C": {
+        "Differential Equations": {
+            instructor: "Hamid Qureshi",
+            code: "CSC 2122",
+        },
+        "Graph Theory": {
+            instructor: "Zahoor Shah",
+            code: "CSC 2123",
+        },
+        "Operating Systems": {
+            instructor: "Ghaffar Ahmed",
+            code: "CSC 2205",
+        },
+        "Software Engineering": {
+            instructor: "Awais Nawaz",
+            code: "CSC 3109",
+        },
+        "Compiler Construction": {
+            instructor: "Hassan Ayaz",
+            code: "CSC 3201",
+        },
+        "Lab: Operating Systems": {
+            instructor: "Adeel Ahmed",
+            code: "CSCL 2205",
         },
     },
     "BsCS-6A": {
@@ -55,7 +82,7 @@ export const data: DataStructure = {
             code: "CSC 4101",
         },
         "Web Technologies-I": {
-            instructor: "Zubair Ahmed Chatta ",
+            instructor: "Zubair Ahmed Chatta",
             code: "CSC 4717",
         },
         "Android Application Development": {
