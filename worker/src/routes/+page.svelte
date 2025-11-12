@@ -44,9 +44,8 @@
         >
             <ClipboardList /> Lab Task
         </a>
-        <Button
-            variant="outline"
-            disabled
+        <a
+            href="/lab-project"
             class={buttonVariants({
                 variant: "outline",
                 size: "lg",
@@ -54,7 +53,7 @@
             })}
         >
             <Microscope /> Lab Project
-        </Button>
+        </a>
     </div>
     <CardDescription
         >*this project is{" "}
