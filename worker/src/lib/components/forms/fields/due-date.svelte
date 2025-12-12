@@ -15,14 +15,17 @@
 
     const formattedDate = $derived(
         value
-            ? value.toDate(getLocalTimeZone()).toISOString().split("T")[0]
+            ? value.toDate(getLocalTimeZone()).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+              })
             : "",
     );
 
     const displayDate = $derived(
         value
             ? value.toDate(getLocalTimeZone()).toLocaleDateString("en-US", {
-                  weekday: "short",
                   year: "numeric",
                   month: "short",
                   day: "numeric",
