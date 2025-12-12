@@ -411,16 +411,16 @@ const FooterTemplate = `
 const InfoTableTemplate = `
 <div class="info-table">
     <div class="info-row">
+        <div class="info-label">Submitted to:</div>
+        <div class="info-value">{{.Instructor}}</div>
+    </div>
+    <div class="info-row">
         <div class="info-label">Student Name:</div>
         <div class="info-value">{{.StudentName}}</div>
     </div>
     <div class="info-row">
         <div class="info-label">Reg. Number:</div>
         <div class="info-value">{{.RegNo}}</div>
-    </div>
-    <div class="info-row">
-        <div class="info-label">Submitted to:</div>
-        <div class="info-value">{{.Instructor}}</div>
     </div>
     <div class="info-row">
         <div class="info-label">Class/Section:</div>
