@@ -1,11 +1,13 @@
 <script lang="ts">
     import Form from "$lib/components/form.svelte";
     import AutoForm from "$lib/components/forms/auto.svelte";
+    import ContentForm from "$lib/components/forms/content.svelte";
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
     import SEO from "$lib/components/seo.svelte";
     import * as Card from "$lib/components/ui/card/index";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
+    import { Separator } from "$lib/components/ui/separator";
     import FileText from "@lucide/svelte/icons/file-text";
 </script>
 
@@ -76,5 +78,7 @@
                 </Card.Content>
             </Card.Root>
         </div>
+        <Separator />
+        <ContentForm />
     </Form>
 </div>
