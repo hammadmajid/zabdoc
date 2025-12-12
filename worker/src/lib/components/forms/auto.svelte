@@ -172,7 +172,7 @@
          <div class="flex items-center gap-2">
                 <Label for="multi-toggle" class="text-sm">Group</Label>
                 <Switch id="multi-toggle" bind:checked={isMultiMode} />
-            </div> 
+            </div>
         </div>
     </Card.Header>
     <Card.Content class="space-y-4">
@@ -185,7 +185,6 @@
                     type="text"
                     placeholder="Enter your full name"
                     bind:value={studentName}
-                    required
                 />
             </div>
 
@@ -197,7 +196,6 @@
                     type="number"
                     placeholder="Enter your registration number"
                     bind:value={regNum}
-                    required
                 />
             </div>
         {:else}
