@@ -5,6 +5,7 @@
     import Label from "$lib/components/ui/label/label.svelte";
     import BookOpen from "@lucide/svelte/icons/book-open";
     import GraduationCap from "@lucide/svelte/icons/graduation-cap";
+    import ClipboardList from "@lucide/svelte/icons/clipboard-list";
     import { scale } from "svelte/transition";
     import { quintOut } from "svelte/easing";
 </script>
@@ -94,7 +95,7 @@
 
             {#if !formStore.selectedClass}
                 <p class="text-sm text-muted-foreground bg-muted neo-border-sm px-3 py-2">
-                    👆 Please select a class first to see available courses.
+                    Please select a class first to see available courses.
                 </p>
             {/if}
         </div>
@@ -106,7 +107,10 @@
                 in:scale={{ duration: 300, easing: quintOut }}
             >
                 <div class="flex items-center gap-2 mb-2">
-                    <span class="font-bold uppercase text-sm">📋 Auto-filled Details</span>
+                    <div class="neo-border-sm bg-secondary p-2">
+                        <ClipboardList class="size-5" />
+                    </div>
+                    <span class="font-bold uppercase text-sm">Auto-filled Details</span>
                 </div>
 
                 <div class="grid sm:grid-cols-2 gap-4">
