@@ -88,7 +88,6 @@
                             <div class="neo-border-sm bg-accent px-3 py-1">
                                 <span class="text-sm font-black">#{index + 1}</span>
                             </div>
-                            <span class="font-bold uppercase text-sm">Student</span>
                         </div>
                         <Button
                             type="button"
