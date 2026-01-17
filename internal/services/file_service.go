@@ -20,20 +20,22 @@ func NewFileService(logger *log.Logger) *FileService {
 }
 
 // ProcessUploadedImages processes uploaded image files and returns Image slices.
+// Order is preserved to match the original upload order.
 func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader) ([]dto.Image, error) {
 	type result struct {
-		img dto.Image
-		err error
+		index int
+		img   dto.Image
+		err   error
 	}
 	results := make(chan result, len(fileHeaders)) // Buffered channel to collect results from goroutines
 
-	for _, fileHeader := range fileHeaders {
+	for i, fileHeader := range fileHeaders {
 		// Launch a goroutine for each file to process them concurrently
-		go func(fh *multipart.FileHeader) {
+		go func(idx int, fh *multipart.FileHeader) {
 			file, err := fh.Open()
 			if err != nil {
 				fs.Logger.Printf("Error opening file: %v", err)
-				results <- result{err: err}
+				results <- result{index: idx, err: err}
 				return
 			}
 			defer file.Close()
@@ -47,13 +49,13 @@ func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader
 			fileData, err := io.ReadAll(file)
 			if err != nil {
 				fs.Logger.Printf("Error reading file: %v", err)
-				results <- result{err: err}
+				results <- result{index: idx, err: err}
 				return
 			}
 
 			if len(fileData) == 0 {
 				fs.Logger.Printf("Empty image file: %s", fh.Filename)
-				results <- result{err: err}
+				results <- result{index: idx, err: err}
 				return
 			}
 
@@ -64,18 +66,20 @@ func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader
 				MimeType: mimeType,
 			}
 			fs.Logger.Printf("Image processed: %s (%d bytes → %d base64 chars)", mimeType, len(fileData), len(base64Data))
-			results <- result{img: image} // Send result back to main goroutine
-		}(fileHeader)
+			results <- result{index: idx, img: image} // Send result back to main goroutine
+		}(i, fileHeader)
 	}
 
-	var images []dto.Image
+	// Pre-allocate slice to maintain order
+	images := make([]dto.Image, len(fileHeaders))
+
 	// Collect results from all goroutines
 	for range fileHeaders {
 		res := <-results // Wait for each goroutine to send its result
 		if res.err != nil {
 			return nil, res.err
 		}
-		images = append(images, res.img)
+		images[res.index] = res.img // Place at original index
 	}
 	return images, nil
 }
