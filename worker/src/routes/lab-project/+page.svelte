@@ -1,7 +1,7 @@
 <script lang="ts">
     import Form from "$lib/components/form.svelte";
     import AutoForm from "$lib/components/forms/auto.svelte";
-    import ContentForm from "$lib/components/forms/content.svelte";
+    import ImagesForm from "$lib/components/forms/images.svelte";
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
     import SEO from "$lib/components/seo.svelte";
     import * as Card from "$lib/components/ui/card/index";
@@ -111,6 +111,6 @@
         </div>
 
         <Separator />
-        <ContentForm />
+        <ImagesForm />
     </Form>
 </div>

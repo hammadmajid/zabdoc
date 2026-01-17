@@ -14,7 +14,6 @@ type Handler struct {
 	validationService *services.ValidationService
 	fileService       *services.FileService
 	PdfService        *services.PDFService
-	markdownService   *services.MarkdownService
 }
 
 func NewHandler(logger *log.Logger) Handler {
@@ -23,7 +22,6 @@ func NewHandler(logger *log.Logger) Handler {
 		validationService: services.NewValidationService(),
 		fileService:       services.NewFileService(logger),
 		PdfService:        services.NewPDFService(),
-		markdownService:   services.NewMarkdownService(),
 	}
 }
 
@@ -78,42 +76,16 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var sections []dto.Section
-	for i := range 15 { // max 15 sections as per frontend
-		contentKey := fmt.Sprintf("section-%d-content", i)
-		filesKey := fmt.Sprintf("section-%d-files", i)
-
-		content := r.FormValue(contentKey)
-		if content == "" {
-			continue
-		}
-
-		html, err := h.markdownService.ParseAndSanitize(content)
+	// Process uploaded images
+	if r.MultipartForm != nil && r.MultipartForm.File["images"] != nil {
+		images, err := h.fileService.ProcessUploadedImages(r.MultipartForm.File["images"])
 		if err != nil {
-			http.Error(w, fmt.Sprintf("failed to parse markdown for section %d: %v", i, err), http.StatusBadRequest)
-			h.logger.Printf("markdown parse (section %d): %v", i, err)
+			http.Error(w, "failed to process images", http.StatusBadRequest)
+			h.logger.Printf("file processing error: %v", err)
 			return
 		}
-
-		section := dto.Section{
-			Index:   i,
-			Content: html,
-		}
-
-		// Process uploaded images using FileService
-		if r.MultipartForm != nil && r.MultipartForm.File[filesKey] != nil {
-			images, err := h.fileService.ProcessUploadedImages(r.MultipartForm.File[filesKey], filesKey)
-			if err != nil {
-				h.logger.Printf("file processing error: %v", err)
-			} else {
-				section.Images = append(section.Images, images...)
-			}
-		}
-
-		sections = append(sections, section)
+		data.Images = images
 	}
-
-	data.Sections = sections
 
 	pdf, err := h.PdfService.GeneratePDF(data)
 	if err != nil {
@@ -143,11 +115,6 @@ func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
 	if h.PdfService == nil {
 		http.Error(w, "PDFService unavailable", http.StatusServiceUnavailable)
 		h.logger.Println("Health check failed: PDFService unavailable")
-		return
-	}
-	if h.markdownService == nil {
-		http.Error(w, "MarkdownService unavailable", http.StatusServiceUnavailable)
-		h.logger.Println("Health check failed: MarkdownService unavailable")
 		return
 	}
 

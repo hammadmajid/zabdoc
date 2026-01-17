@@ -294,75 +294,6 @@ const StylesTemplate = `
         margin-top: 8pt;
     }
 
-    .section-section {
-        margin-bottom: 2em;
-    }
-
-    .section-content {
-        margin-bottom: 1.5em;
-    }
-
-    .section-content h1, .section-content h2, .section-content h3 {
-        color: #333;
-        margin-top: 1.5em;
-        margin-bottom: 0.5em;
-    }
-
-    .section-content h1 {
-        font-size: 18pt;
-        border-bottom: 1px solid #ccc;
-        padding-bottom: 0.3em;
-    }
-
-    .section-content h2 {
-        font-size: 16pt;
-    }
-
-    .section-content h3 {
-        font-size: 14pt;
-    }
-
-    .section-content p {
-        margin-bottom: 1em;
-        text-align: justify;
-    }
-
-    .section-content ul, .section-content ol {
-        margin-bottom: 1em;
-        padding-left: 2em;
-    }
-
-    .section-content li {
-        margin-bottom: 0.5em;
-    }
-
-    .section-content pre {
-        background: #f5f5f5;
-        padding: 1em;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        overflow: auto;
-        font-family: "Courier New", monospace;
-        font-size: 10pt;
-        page-break-inside: avoid;
-    }
-
-    .section-content code {
-        background: #f5f5f5;
-        padding: 2px 4px;
-        border-radius: 3px;
-        font-family: "Courier New", monospace;
-        font-size: 10pt;
-    }
-
-    .section-content blockquote {
-        border-left: 4px solid #ccc;
-        margin-left: 0;
-        padding-left: 1em;
-        color: #666;
-        font-style: italic;
-    }
-
     .section-images {
         margin-top: 1.5em;
     }
@@ -472,9 +403,8 @@ const StudentInfoTableTemplate = `
 </div>`
 
 const ContentPagesTemplate = `
-{{if .Sections}}
+{{if .Images}}
 <div class="content-pages">
-    {{range $index, $section := .Sections}}
     <div class="content-page">
         <div class="content-page-header">
             <div class="header">
@@ -488,16 +418,9 @@ const ContentPagesTemplate = `
             </div>
         </div>
         <div class="content-page-body">
-            <div class="section-section">
-                <div class="section-content">
-                    {{html $section.Content}}
-                </div>
-                {{if $section.Images}}
-                <div class="section-images">
-                    {{range $imgIndex, $image := $section.Images}}
-                    <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Section {{add $section.Index 1}} Image {{add $imgIndex 1}}" class="section-image">
-                    {{end}}
-                </div>
+            <div class="section-images">
+                {{range $imgIndex, $image := .Images}}
+                <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Image {{add $imgIndex 1}}" class="section-image">
                 {{end}}
             </div>
         </div>
@@ -509,7 +432,6 @@ const ContentPagesTemplate = `
             </div>
         </div>
     </div>
-    {{end}}
 </div>
 {{end}}`
 

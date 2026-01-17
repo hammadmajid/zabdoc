@@ -19,10 +19,10 @@ func NewFileService(logger *log.Logger) *FileService {
 	return &FileService{Logger: logger}
 }
 
-// ProcessUploadedImages processes uploaded image files and returns SectionImage slices.
-func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader, filesKey string) ([]dto.SectionImage, error) {
+// ProcessUploadedImages processes uploaded image files and returns Image slices.
+func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader) ([]dto.Image, error) {
 	type result struct {
-		img dto.SectionImage
+		img dto.Image
 		err error
 	}
 	results := make(chan result, len(fileHeaders)) // Buffered channel to collect results from goroutines
@@ -59,16 +59,16 @@ func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader
 
 			base64Data := base64.StdEncoding.EncodeToString(fileData)
 
-			sectionImage := dto.SectionImage{
+			image := dto.Image{
 				Data:     base64Data,
 				MimeType: mimeType,
 			}
 			fs.Logger.Printf("Image processed: %s (%d bytes → %d base64 chars)", mimeType, len(fileData), len(base64Data))
-			results <- result{img: sectionImage} // Send result back to main goroutine
+			results <- result{img: image} // Send result back to main goroutine
 		}(fileHeader)
 	}
 
-	var images []dto.SectionImage
+	var images []dto.Image
 	// Collect results from all goroutines
 	for range fileHeaders {
 		res := <-results // Wait for each goroutine to send its result

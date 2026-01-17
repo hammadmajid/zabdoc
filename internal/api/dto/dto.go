@@ -1,14 +1,8 @@
 package dto
 
-type SectionImage struct {
+type Image struct {
 	Data     string // Base64 encoded image data
 	MimeType string // MIME type (e.g., "image/jpeg", "image/png")
-}
-
-type Section struct {
-	Index   int
-	Content string         // HTML content (converted from markdown)
-	Images  []SectionImage // Base64 encoded images with MIME types
 }
 
 type Student struct {
@@ -30,5 +24,5 @@ type GenerateRequest struct {
 	Date         string
 	Marks        string
 	ProjectTitle string
-	Sections     []Section
+	Images       []Image
 }

@@ -8,9 +8,6 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
 	"add": func(a, b int) int {
 		return a + b
 	},
-	"html": func(s string) template.HTML {
-		return template.HTML(s)
-	},
 	"div": func(a, b int) int {
 		if b == 0 {
 			return 0
