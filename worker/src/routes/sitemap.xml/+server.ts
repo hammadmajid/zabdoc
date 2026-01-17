@@ -16,24 +16,6 @@ export async function GET() {
                 <priority>0.8</priority>
             </url>
             <url>
-                <loc>https://zabdoc.xyz/assignment</loc>
-                <lastmod>2025-09-20</lastmod>
-                <changefreq>weekly</changefreq>
-                <priority>0.9</priority>
-            </url>
-            <url>
-                <loc>https://zabdoc.xyz/help</loc>
-                <lastmod>2025-09-20</lastmod>
-                <changefreq>weekly</changefreq>
-                <priority>0.7</priority>
-            </url>
-            <url>
-                <loc>https://zabdoc.xyz/lab-task</loc>
-                <lastmod>2025-09-20</lastmod>
-                <changefreq>weekly</changefreq>
-                <priority>0.9</priority>
-            </url>
-            <url>
                 <loc>https://zabdoc.xyz/settings</loc>
                 <lastmod>2025-09-20</lastmod>
                 <changefreq>weekly</changefreq>
