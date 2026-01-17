@@ -201,53 +201,59 @@ const StylesTemplate = `
         margin: 0.5vh auto 1vh;
     }
 
-    .student-table-header {
+    /* Simple two-column layout for 1-3 students */
+    .student-table-header-simple {
         display: grid;
         grid-template-columns: 1fr 1fr;
         font-weight: bold;
         border-bottom: 2px solid #333;
         margin-bottom: 6pt;
         padding-bottom: 4pt;
-        gap: 20pt;
+        text-align: center;
     }
 
-    .student-table-body {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20pt;
-    }
-
-    .student-column {
+    .student-table-body-simple {
         display: flex;
         flex-direction: column;
-        gap: 6pt;
     }
 
-    .student-column.compact {
-        gap: 4pt;
-    }
-
-    .student-entry {
-        display: flex;
-        justify-content: space-between;
+    .student-entry-simple {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
         padding: 3pt 0;
         border-bottom: 1px solid #ddd;
+        text-align: center;
     }
 
-    .student-entry.compact {
-        padding: 2pt 0;
+    /* Four-column grid layout for 4+ students */
+    .student-table-header {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        font-weight: bold;
+        border-bottom: 2px solid #333;
+        margin-bottom: 6pt;
+        padding-bottom: 4pt;
+        gap: 10pt;
+        text-align: center;
+    }
+
+    .student-table-body-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        gap: 10pt;
+        row-gap: 6pt;
     }
 
     .student-name {
-        flex: 1;
-        text-align: left;
-        padding-right: 8pt;
+        text-align: center;
+        padding: 2pt 0;
+        border-bottom: 1px solid #ddd;
     }
 
     .student-regno {
-        flex: 1;
-        text-align: right;
-        padding-left: 8pt;
+        text-align: center;
+        padding: 2pt 0;
+        border-bottom: 1px solid #ddd;
     }
 
     .footer {
@@ -372,34 +378,46 @@ const SharedInfoTableTemplate = `
 </div>`
 
 const StudentInfoTableTemplate = `
-<div class="student-info-table{{if gt (len .Students) 4}} compact{{end}}">
+<div class="student-info-table{{if ge (len .Students) 4}} compact{{end}}">
+    {{if ge (len .Students) 4}}
+    {{/* 4+ students: split into two side-by-side tables */}}
     <div class="student-table-header">
-        <div style="text-align: left;">Student Name</div>
-        <div style="text-align: right;">Reg. Number</div>
+        <div>Student Name</div>
+        <div>Reg. Number</div>
+        <div>Student Name</div>
+        <div>Reg. Number</div>
     </div>
-    <div class="student-table-body">
+    <div class="student-table-body-grid">
         {{$mid := div (add (len .Students) 1) 2}}
-        <div class="student-column{{if gt (len .Students) 4}} compact{{end}}">
-            {{range $index, $student := .Students}}
-                {{if lt $index $mid}}
-                <div class="student-entry{{if gt (len $.Students) 4}} compact{{end}}">
-                    <div class="student-name">{{$student.Name}}</div>
-                    <div class="student-regno">{{$student.RegNo}}</div>
-                </div>
-                {{end}}
+        {{range $index, $student := .Students}}
+            {{if lt $index $mid}}
+            <div class="student-name">{{$student.Name}}</div>
+            <div class="student-regno">{{$student.RegNo}}</div>
+            {{with index $.Students (add $index $mid)}}
+            <div class="student-name">{{.Name}}</div>
+            <div class="student-regno">{{.RegNo}}</div>
+            {{else}}
+            <div class="student-name"></div>
+            <div class="student-regno"></div>
             {{end}}
-        </div>
-        <div class="student-column{{if gt (len .Students) 4}} compact{{end}}">
-            {{range $index, $student := .Students}}
-                {{if ge $index $mid}}
-                <div class="student-entry{{if gt (len $.Students) 4}} compact{{end}}">
-                    <div class="student-name">{{$student.Name}}</div>
-                    <div class="student-regno">{{$student.RegNo}}</div>
-                </div>
-                {{end}}
             {{end}}
-        </div>
+        {{end}}
     </div>
+    {{else}}
+    {{/* 1-3 students: simple two-column layout */}}
+    <div class="student-table-header-simple">
+        <div>Student Name</div>
+        <div>Reg. Number</div>
+    </div>
+    <div class="student-table-body-simple">
+        {{range $student := .Students}}
+        <div class="student-entry-simple">
+            <div>{{$student.Name}}</div>
+            <div>{{$student.RegNo}}</div>
+        </div>
+        {{end}}
+    </div>
+    {{end}}
 </div>`
 
 const ContentPagesTemplate = `
