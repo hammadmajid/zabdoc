@@ -48,46 +48,6 @@
   --neo-border-sm: 2px solid oklch(0.15 0 0);
 }
 
-.dark {
-  --background: oklch(0.18 0.02 280);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.22 0.03 280);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.22 0.03 280);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.75 0.2 50);
-  --primary-foreground: oklch(0.15 0 0);
-  --secondary: oklch(0.7 0.2 170);
-  --secondary-foreground: oklch(0.15 0 0);
-  --muted: oklch(0.28 0.03 280);
-  --muted-foreground: oklch(0.7 0 0);
-  --accent: oklch(0.75 0.25 310);
-  --accent-foreground: oklch(0.15 0 0);
-  --destructive: oklch(0.7 0.25 25);
-  --border: oklch(0.98 0 0);
-  --input: oklch(0.98 0 0);
-  --ring: oklch(0.75 0.2 50);
-  --chart-1: oklch(0.75 0.2 50);
-  --chart-2: oklch(0.7 0.2 170);
-  --chart-3: oklch(0.75 0.25 310);
-  --chart-4: oklch(0.7 0.2 200);
-  --chart-5: oklch(0.8 0.2 60);
-  --sidebar: oklch(0.22 0.03 280);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.75 0.2 50);
-  --sidebar-primary-foreground: oklch(0.15 0 0);
-  --sidebar-accent: oklch(0.7 0.2 170);
-  --sidebar-accent-foreground: oklch(0.15 0 0);
-  --sidebar-border: oklch(0.98 0 0);
-  --sidebar-ring: oklch(0.75 0.2 50);
-
-  /* Neobrutalism specific - dark */
-  --neo-shadow: 4px 4px 0px oklch(0.98 0 0);
-  --neo-shadow-sm: 2px 2px 0px oklch(0.98 0 0);
-  --neo-shadow-lg: 6px 6px 0px oklch(0.98 0 0);
-  --neo-border: 3px solid oklch(0.98 0 0);
-  --neo-border-sm: 2px solid oklch(0.98 0 0);
-}
 
 @theme inline {
   --radius-sm: calc(var(--radius));

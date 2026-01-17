@@ -6,7 +6,6 @@
     import Github from "@lucide/svelte/icons/github";
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
-    import { ModeWatcher } from "mode-watcher";
     import { Toaster } from "$lib/components/ui/sonner/index.js";
     import "../app.css";
 
@@ -28,7 +27,6 @@
     <link rel="icon" href={favicon} />
 </svelte:head>
 
-<ModeWatcher />
 <Toaster />
 
 <div class="flex min-h-screen flex-col mx-auto max-w-5xl px-4">

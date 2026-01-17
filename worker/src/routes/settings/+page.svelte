@@ -1,7 +1,6 @@
 <script lang="ts">
     import * as Card from "$lib/components/ui/card/index.js";
     import Button from "$lib/components/ui/button/button.svelte";
-    import Theme from "$lib/components/theme.svelte";
     import { browser } from "$app/environment";
     import { toast } from "svelte-sonner";
     import SEO from "$lib/components/seo.svelte";
@@ -44,19 +43,6 @@
     </div>
 
     <div class="w-full grid md:grid-cols-2 gap-4">
-        <!-- Theme Settings -->
-        <Card.Root>
-            <Card.Header>
-                <Card.Title class="font-black uppercase">Appearance</Card.Title>
-                <Card.Description>
-                    Customize how zabdoc looks on your device.
-                </Card.Description>
-            </Card.Header>
-            <Card.Content>
-                <Theme />
-            </Card.Content>
-        </Card.Root>
-
         <!-- Storage Settings -->
         <Card.Root>
             <Card.Header>
