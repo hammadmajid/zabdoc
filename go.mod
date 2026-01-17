@@ -6,15 +6,7 @@ require (
 	github.com/chromedp/cdproto v0.0.0-20250724212937-08a3db8b4327
 	github.com/chromedp/chromedp v0.14.1
 	github.com/go-chi/chi/v5 v5.2.3
-	github.com/microcosm-cc/bluemonday v1.0.27
 	github.com/sony/gobreaker v1.0.0
-	github.com/yuin/goldmark v1.7.13
-)
-
-require (
-	github.com/aymerick/douceur v0.2.0 // indirect
-	github.com/gorilla/css v1.0.1 // indirect
-	golang.org/x/net v0.38.0 // indirect
 )
 
 require (
