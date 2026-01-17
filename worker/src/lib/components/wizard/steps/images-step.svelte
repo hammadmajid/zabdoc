@@ -16,6 +16,13 @@
     let draggingId = $state<string | null>(null);
     let dragOverId = $state<string | null>(null);
 
+    // Touch drag state
+    let touchDragging = $state(false);
+    let touchStartY = $state(0);
+    let touchStartX = $state(0);
+    let touchCurrentElement: HTMLElement | null = null;
+    let touchClone: HTMLElement | null = null;
+
     function handleFileSelect(e: Event) {
         const target = e.target as HTMLInputElement;
         if (target.files && target.files.length > 0) {
@@ -84,6 +91,110 @@
         }
         draggingId = null;
         dragOverId = null;
+    }
+
+    // Touch event handlers for mobile drag and drop
+    function handleTouchStart(e: TouchEvent, id: string) {
+        const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
+        touchCurrentElement = e.currentTarget as HTMLElement;
+
+        // Delay to distinguish between tap and drag
+        const timeout = setTimeout(() => {
+            touchDragging = true;
+            draggingId = id;
+
+            // Create a visual clone for dragging feedback
+            if (touchCurrentElement) {
+                touchClone = touchCurrentElement.cloneNode(true) as HTMLElement;
+                touchClone.style.position = 'fixed';
+                touchClone.style.left = `${touch.clientX - 50}px`;
+                touchClone.style.top = `${touch.clientY - 50}px`;
+                touchClone.style.width = '100px';
+                touchClone.style.height = '100px';
+                touchClone.style.opacity = '0.8';
+                touchClone.style.pointerEvents = 'none';
+                touchClone.style.zIndex = '1000';
+                touchClone.style.transform = 'scale(1.1)';
+                document.body.appendChild(touchClone);
+            }
+        }, 150);
+
+        // Store timeout to cancel if touch ends quickly (tap)
+        (e.currentTarget as HTMLElement).dataset.touchTimeout = String(timeout);
+    }
+
+    function handleTouchMove(e: TouchEvent) {
+        if (!touchDragging || !draggingId) return;
+
+        e.preventDefault();
+        const touch = e.touches[0];
+
+        // Update clone position
+        if (touchClone) {
+            touchClone.style.left = `${touch.clientX - 50}px`;
+            touchClone.style.top = `${touch.clientY - 50}px`;
+        }
+
+        // Find element under touch point
+        const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+        const itemBelow = elementBelow?.closest('[data-image-id]') as HTMLElement | null;
+
+        if (itemBelow) {
+            const targetId = itemBelow.dataset.imageId;
+            if (targetId && targetId !== draggingId) {
+                dragOverId = targetId;
+            }
+        } else {
+            dragOverId = null;
+        }
+    }
+
+    function handleTouchEnd(e: TouchEvent, id: string) {
+        // Clear the long-press timeout
+        const timeout = (e.currentTarget as HTMLElement).dataset.touchTimeout;
+        if (timeout) {
+            clearTimeout(Number(timeout));
+        }
+
+        // Remove the clone
+        if (touchClone) {
+            touchClone.remove();
+            touchClone = null;
+        }
+
+        // Perform the reorder if we were dragging
+        if (touchDragging && draggingId && dragOverId && draggingId !== dragOverId) {
+            const fromIndex = formStore.imageItems.findIndex((img) => img.id === draggingId);
+            const toIndex = formStore.imageItems.findIndex((img) => img.id === dragOverId);
+            if (fromIndex !== -1 && toIndex !== -1) {
+                formStore.reorderImages(fromIndex, toIndex);
+            }
+        }
+
+        // Reset state
+        touchDragging = false;
+        draggingId = null;
+        dragOverId = null;
+        touchCurrentElement = null;
+    }
+
+    function handleTouchCancel(e: TouchEvent) {
+        const timeout = (e.currentTarget as HTMLElement).dataset.touchTimeout;
+        if (timeout) {
+            clearTimeout(Number(timeout));
+        }
+
+        if (touchClone) {
+            touchClone.remove();
+            touchClone = null;
+        }
+
+        touchDragging = false;
+        draggingId = null;
+        dragOverId = null;
+        touchCurrentElement = null;
     }
 
     function triggerFileInput() {
@@ -179,7 +290,8 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                     {#each formStore.imageItems as item, index (item.id)}
                         <div
-                            class="relative group"
+                            class="relative group touch-none"
+                            data-image-id={item.id}
                             animate:flip={{ duration: 300, easing: quintOut }}
                             draggable="true"
                             role="listitem"
@@ -188,6 +300,10 @@
                             ondragover={(e) => handleItemDragOver(e, item.id)}
                             ondragleave={handleItemDragLeave}
                             ondrop={(e) => handleItemDrop(e, item.id)}
+                            ontouchstart={(e) => handleTouchStart(e, item.id)}
+                            ontouchmove={handleTouchMove}
+                            ontouchend={(e) => handleTouchEnd(e, item.id)}
+                            ontouchcancel={handleTouchCancel}
                         >
                             <div
                                 class="neo-border-sm overflow-hidden bg-muted aspect-square transition-all duration-200 cursor-grab active:cursor-grabbing"
