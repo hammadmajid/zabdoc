@@ -11,18 +11,17 @@ type Student struct {
 }
 
 type GenerateRequest struct {
-	StudentName  string
-	RegNo        string
-	Students     []Student // For multi-student mode
-	IsMultiMode  bool
-	Class        string
-	Course       string
-	CourseCode   string
-	Instructor   string
-	DocType      string
-	Number       string
-	Date         string
-	Marks        string
-	ProjectTitle string
-	Images       []Image
+	StudentName string
+	RegNo       string
+	Students    []Student // For multi-student mode
+	IsMultiMode bool
+	Class       string
+	Course      string
+	CourseCode  string
+	Instructor  string
+	DocType     string
+	Number      string
+	Date        string
+	Marks       string
+	Images      []Image
 }

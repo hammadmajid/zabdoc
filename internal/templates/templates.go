@@ -51,23 +51,9 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
         {{end}}
         <div class="course-title-section">
             <div class="course-title">{{.Course}}</div>
-            {{if .ProjectTitle}}
-                <div class="assignment-number">{{.DocType}}</div>
-            {{else}}
-                <div class="assignment-number">{{.DocType}} #{{.Number}}</div>
-            {{end}}
+            <div class="assignment-number">{{.DocType}} #{{.Number}}</div>
             <div class="submission-date">Submission date: {{.Date}}</div>
         </div>
-        {{if .ProjectTitle}}
-        {{if .IsMultiMode}}
-        <div class="spacer-adaptive"></div>
-        {{else}}
-        <div class="spacer-small"></div>
-        {{end}}
-        <div class="project-title-section">
-            <div class="project-title">{{.ProjectTitle}}</div>
-        </div>
-        {{end}}
         {{if .IsMultiMode}}
         <div class="spacer-adaptive-large"></div>
         {{else}}

@@ -1,19 +1,16 @@
 <script lang="ts">
     import FileText from "@lucide/svelte/icons/file-text";
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
-    import Microscope from "@lucide/svelte/icons/microscope";
     import { buttonVariants } from "$lib/components/ui/button";
     import SEO from "$lib/components/seo.svelte";
     import CardDescription from "$lib/components/ui/card/card-description.svelte";
-    import Button from "$lib/components/ui/button/button.svelte";
 </script>
 
 <SEO
     title="zabdoc"
-    description="Generate assignment, lab task, and lab project PDFs for SZABIST students."
+    description="Generate assignment and lab task PDFs for SZABIST students."
     canonical="https://zabdoc.xyz/"
-    url="https://zabdoc.xyz/"
-/>
+    url="https://zabdoc.xyz/"/>
 
 <div class="flex flex-col items-center justify-center text-center h-full px-4">
     <h1 class="text-5xl font-bold tracking-tight">zabdoc</h1>
@@ -21,9 +18,9 @@
         web application for
         <span class="border-b border-dotted border-foreground/50">*SZABIST</span
         >
-        students to generate assignment, lab tasks and lab projects in PDF format.
+        students to generate assignment and lab tasks in PDF format.
     </p>
-    <div class="py-12 grid grid-cols-2 gap-4">
+    <div class="py-12 flex gap-4">
         <a
             href="/assignment"
             class={buttonVariants({
@@ -43,16 +40,6 @@
             })}
         >
             <ClipboardList /> Lab Task
-        </a>
-        <a
-            href="/lab-project"
-            class={buttonVariants({
-                variant: "outline",
-                size: "lg",
-                className: "px-12 py-6",
-            })}
-        >
-            <Microscope /> Lab Project
         </a>
     </div>
     <CardDescription

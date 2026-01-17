@@ -434,7 +434,3 @@ const ContentPagesTemplate = `
     </div>
 </div>
 {{end}}`
-
-func IsLabProject(docType string) bool {
-	return docType == "Mid Term Project" || docType == "Final Term Project"
-}
