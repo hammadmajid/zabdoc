@@ -6,7 +6,6 @@
     import Github from "@lucide/svelte/icons/github";
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
-    import { Toaster } from "$lib/components/ui/sonner/index.js";
     import "../app.css";
 
     onNavigate((navigation) => {
@@ -26,8 +25,6 @@
 <svelte:head>
     <link rel="icon" href={favicon} />
 </svelte:head>
-
-<Toaster />
 
 <div class="flex min-h-screen flex-col mx-auto max-w-5xl px-4">
     <header class="py-6">
