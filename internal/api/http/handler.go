@@ -35,37 +35,33 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := dto.GenerateRequest{
-		StudentName: r.FormValue("studentName"),
-		RegNo:       r.FormValue("regNo"),
-		Class:       r.FormValue("class"),
-		Course:      r.FormValue("course"),
-		CourseCode:  r.FormValue("courseCode"),
-		Instructor:  r.FormValue("instructor"),
-		DocType:     r.FormValue("type"),
-		Number:      r.FormValue("number"),
-		Date:        r.FormValue("date"),
-		Marks:       r.FormValue("marks"),
-		IsMultiMode: r.FormValue("isMultiMode") == "true",
+		Class:      r.FormValue("class"),
+		Course:     r.FormValue("course"),
+		CourseCode: r.FormValue("courseCode"),
+		Instructor: r.FormValue("instructor"),
+		DocType:    r.FormValue("type"),
+		Number:     r.FormValue("number"),
+		Date:       r.FormValue("date"),
+		Marks:      r.FormValue("marks"),
 	}
 
-	// Handle multiple students
-	if data.IsMultiMode {
+	// Check if multi-student mode (student-1-name exists)
+	if r.FormValue("student-1-name") != "" {
 		var students []dto.Student
 		for i := 1; i <= 6; i++ { // Max 6 students
-			nameKey := fmt.Sprintf("student-%d-name", i)
-			regNoKey := fmt.Sprintf("student-%d-regNo", i)
-
-			name := r.FormValue(nameKey)
-			regNo := r.FormValue(regNoKey)
-
+			name := r.FormValue(fmt.Sprintf("student-%d-name", i))
+			regNo := r.FormValue(fmt.Sprintf("student-%d-regNo", i))
 			if name != "" && regNo != "" {
-				students = append(students, dto.Student{
-					Name:  name,
-					RegNo: regNo,
-				})
+				students = append(students, dto.Student{Name: name, RegNo: regNo})
 			}
 		}
 		data.Students = students
+	} else {
+		// Single student mode
+		data.Students = []dto.Student{{
+			Name:  r.FormValue("studentName"),
+			RegNo: r.FormValue("regNo"),
+		}}
 	}
 
 	// Validate form data

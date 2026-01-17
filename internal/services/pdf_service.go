@@ -59,7 +59,7 @@ func NewPDFService() *PDFService {
 func (ps *PDFService) GeneratePDF(data dto.GenerateRequest) ([]byte, error) {
 	result, err := ps.cb.Execute(func() (interface{}, error) {
 		var buf bytes.Buffer
-		if err := templates.Tpl.Execute(&buf, data); err != nil {
+		if err := templates.Tpl.Execute(&buf, &data); err != nil {
 			return nil, err
 		}
 

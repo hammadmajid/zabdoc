@@ -11,17 +11,27 @@ type Student struct {
 }
 
 type GenerateRequest struct {
-	StudentName string
-	RegNo       string
-	Students    []Student // For multi-student mode
-	IsMultiMode bool
-	Class       string
-	Course      string
-	CourseCode  string
-	Instructor  string
-	DocType     string
-	Number      string
-	Date        string
-	Marks       string
-	Images      []Image
+	Students   []Student // Always used - single student or multiple
+	Class      string
+	Course     string
+	CourseCode string
+	Instructor string
+	DocType    string
+	Number     string
+	Date       string
+	Marks      string
+	Images     []Image
+}
+
+// IsMultiMode returns true if there are multiple students
+func (r *GenerateRequest) IsMultiMode() bool {
+	return len(r.Students) > 1
+}
+
+// FirstStudent returns the first student (for single mode templates)
+func (r *GenerateRequest) FirstStudent() Student {
+	if len(r.Students) > 0 {
+		return r.Students[0]
+	}
+	return Student{}
 }

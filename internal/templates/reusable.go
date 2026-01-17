@@ -347,11 +347,11 @@ const InfoTableTemplate = `
     </div>
     <div class="info-row">
         <div class="info-label">Student Name:</div>
-        <div class="info-value">{{.StudentName}}</div>
+        <div class="info-value">{{.FirstStudent.Name}}</div>
     </div>
     <div class="info-row">
         <div class="info-label">Reg. Number:</div>
-        <div class="info-value">{{.RegNo}}</div>
+        <div class="info-value">{{.FirstStudent.RegNo}}</div>
     </div>
     <div class="info-row">
         <div class="info-label">Class/Section:</div>

@@ -28,7 +28,7 @@ var Tpl = template.Must(template.New("document").Funcs(template.FuncMap{
 <html lang="en">
 
 <head>
-    <title>{{ .RegNo }}</title>
+    <title>{{ .FirstStudent.RegNo }}</title>
     <style>` + StylesTemplate + `</style>
 </head>
 
