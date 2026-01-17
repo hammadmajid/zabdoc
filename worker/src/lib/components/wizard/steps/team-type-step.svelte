@@ -2,6 +2,7 @@
     import { wizardStore } from "$lib/stores/wizard-store.svelte";
     import User from "@lucide/svelte/icons/user";
     import Users from "@lucide/svelte/icons/users";
+    import FileQuestion from "@lucide/svelte/icons/file-question";
 </script>
 
 <div class="flex flex-col items-center justify-center text-center px-4 py-8">
@@ -43,4 +44,23 @@
             <span>Group</span>
         </button>
     </div>
+
+    <button
+        type="button"
+        onclick={() => {
+            wizardStore.setTeamType("blank");
+            wizardStore.nextStep();
+        }}
+        class="mt-6 neo-border neo-shadow bg-muted px-6 py-4 flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer hover:bg-card"
+    >
+        <div class="neo-border-sm bg-card p-2">
+            <FileQuestion class="size-6" />
+        </div>
+        <div class="text-left">
+            <span class="font-bold uppercase">Leave Blank</span>
+            <p class="text-sm text-muted-foreground font-normal normal-case">
+                Fill in name & reg number by hand after printing
+            </p>
+        </div>
+    </button>
 </div>

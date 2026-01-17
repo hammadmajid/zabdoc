@@ -9,6 +9,7 @@
     import FileText from "@lucide/svelte/icons/file-text";
     import User from "@lucide/svelte/icons/user";
     import Users from "@lucide/svelte/icons/users";
+    import FileQuestion from "@lucide/svelte/icons/file-question";
     import BookOpen from "@lucide/svelte/icons/book-open";
     import CalendarDays from "@lucide/svelte/icons/calendar-days";
     import ImageIcon from "@lucide/svelte/icons/image";
@@ -190,7 +191,9 @@
             >
                 <div class="flex items-center gap-3">
                     <div class="neo-border-sm bg-secondary p-2">
-                        {#if wizardStore.teamType === "individual"}
+                        {#if wizardStore.teamType === "blank"}
+                            <FileQuestion class="size-5" />
+                        {:else if wizardStore.teamType === "individual"}
                             <User class="size-5" />
                         {:else}
                             <Users class="size-5" />
@@ -198,9 +201,18 @@
                     </div>
                     <div>
                         <p class="text-xs font-bold uppercase text-muted-foreground">
-                            {wizardStore.teamType === "individual" ? "Student" : "Group Members"}
+                            {#if wizardStore.teamType === "blank"}
+                                Student Info
+                            {:else if wizardStore.teamType === "individual"}
+                                Student
+                            {:else}
+                                Group Members
+                            {/if}
                         </p>
-                        {#if wizardStore.teamType === "individual"}
+                        {#if wizardStore.teamType === "blank"}
+                            <p class="font-bold">Left blank</p>
+                            <p class="text-sm text-muted-foreground">Fill in after printing</p>
+                        {:else if wizardStore.teamType === "individual"}
                             <p class="font-bold">{formStore.studentName || "Not set"}</p>
                             <p class="text-sm text-muted-foreground">{formStore.regNo || "No reg number"}</p>
                         {:else}

@@ -1,7 +1,7 @@
 import { formStore } from "./form-store.svelte";
 
 export type DocumentType = "Assignment" | "Lab Task" | null;
-export type TeamType = "individual" | "group" | null;
+export type TeamType = "individual" | "group" | "blank" | null;
 
 export type WizardStep =
     | "select-document"
@@ -18,15 +18,19 @@ function createWizardStore() {
     let teamType = $state<TeamType>(null);
     let direction = $state<"forward" | "backward">("forward");
 
-    // Determine the step order based on document type
+    // Determine the step order based on document type and team type
     const stepOrder = $derived.by(() => {
         const baseSteps: WizardStep[] = [
             "select-document",
             "select-team",
-            "student-info",
-            "course-info",
-            "document-info",
         ];
+
+        // Skip student-info step for blank mode
+        if (teamType !== "blank") {
+            baseSteps.push("student-info");
+        }
+
+        baseSteps.push("course-info", "document-info");
 
         // Add images step only for Lab Task
         if (documentType === "Lab Task") {
@@ -61,6 +65,7 @@ function createWizardStore() {
         teamType = type;
         if (type) {
             formStore.isMultiMode = type === "group";
+            formStore.isBlankMode = type === "blank";
         }
     }
 
@@ -108,7 +113,9 @@ function createWizardStore() {
             case "select-team":
                 return teamType !== null;
             case "student-info":
-                if (teamType === "individual") {
+                if (teamType === "blank") {
+                    return true; // Always allow proceeding for blank mode
+                } else if (teamType === "individual") {
                     return formStore.studentName.trim() !== "" && formStore.regNo.trim() !== "";
                 } else {
                     return formStore.students.every(s => s.name.trim() !== "" && s.regNo.trim() !== "");

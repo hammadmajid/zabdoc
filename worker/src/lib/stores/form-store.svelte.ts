@@ -76,6 +76,7 @@ function createFormStore() {
     let studentName = $state("");
     let regNo = $state("");
     let isMultiMode = $state(false);
+    let isBlankMode = $state(false);
     let students = $state<Student[]>([
         { id: 1, name: "", regNo: "" },
         { id: 2, name: "", regNo: "" },
@@ -250,8 +251,13 @@ function createFormStore() {
 
         // Student info
         formData.append("isMultiMode", isMultiMode.toString());
+        formData.append("isBlankMode", isBlankMode.toString());
 
-        if (isMultiMode) {
+        if (isBlankMode) {
+            // For blank mode, send empty strings so the fields are blank on the PDF
+            formData.append("studentName", "");
+            formData.append("regNo", "");
+        } else if (isMultiMode) {
             students.forEach((student, index) => {
                 formData.append(`student-${index + 1}-name`, student.name);
                 formData.append(`student-${index + 1}-regNo`, student.regNo);
@@ -287,6 +293,7 @@ function createFormStore() {
     // Reset form (except persisted values)
     function reset() {
         isMultiMode = false;
+        isBlankMode = false;
         students = [
             { id: 1, name: "", regNo: "" },
             { id: 2, name: "", regNo: "" },
@@ -322,6 +329,12 @@ function createFormStore() {
         },
         set isMultiMode(value: boolean) {
             isMultiMode = value;
+        },
+        get isBlankMode() {
+            return isBlankMode;
+        },
+        set isBlankMode(value: boolean) {
+            isBlankMode = value;
         },
         get students() {
             return students;
