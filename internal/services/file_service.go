@@ -62,8 +62,9 @@ func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader
 			base64Data := base64.StdEncoding.EncodeToString(fileData)
 
 			image := dto.Image{
-				Data:     base64Data,
-				MimeType: mimeType,
+				Data:          base64Data,
+				MimeType:      mimeType,
+				OriginalBytes: len(fileData),
 			}
 			fs.Logger.Printf("Image processed: %s (%d bytes → %d base64 chars)", mimeType, len(fileData), len(base64Data))
 			results <- result{index: idx, img: image} // Send result back to main goroutine

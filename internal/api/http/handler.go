@@ -1,6 +1,7 @@
 package http
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -80,6 +81,12 @@ func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		data.Images = images
+	}
+
+	// Log wide event with all request info (images as metadata only)
+	wideEvent := data.ToWideEvent()
+	if eventJSON, err := json.Marshal(wideEvent); err == nil {
+		h.logger.Printf("[WIDE_EVENT] %s", eventJSON)
 	}
 
 	pdf, err := h.PdfService.GeneratePDF(data)
