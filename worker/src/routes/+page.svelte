@@ -24,7 +24,7 @@
     {#if wizardStore.currentStep === "select-document"}
         <!-- Hero Section - shown only on first step -->
         <div class="text-center mb-4" in:fade={{ duration: 300 }}>
-            <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 inline-block rotate-[-2deg] mb-4">
+            <div class="sr-only neo-border neo-shadow-lg bg-primary px-8 py-4 inline-block rotate-[-2deg] mb-4">
                 <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight">
                     zabdoc
                 </h1>
@@ -44,7 +44,7 @@
 
     <!-- Disclaimer - shown only on first step -->
     {#if wizardStore.currentStep === "select-document"}
-        <div class="text-center mt-8" in:fade={{ duration: 300, delay: 200 }}>
+        <div class="text-center mt-4" in:fade={{ duration: 300, delay: 200 }}>
             <p class="text-sm font-medium bg-muted neo-border-sm px-4 py-2 max-w-md inline-block">
                 *this project is <em>not sponsored, affiliated, endorsed, or approved by</em> SZABIST.
                 <a href="/about#disclaimer" class="underline font-bold hover:text-primary">Learn more.</a>
