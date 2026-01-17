@@ -80,7 +80,14 @@
                 </span>
             </div>
             <div class="text-sm font-medium">
-                <span class="text-muted-foreground">GPL v3</span>
+                <a
+                    href="https://github.com/hammadmajid/zabdoc/blob/main/LICENSE"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                    GPL v3
+                </a>
                 <span class="mx-2 text-muted-foreground">•</span>
                 <span class="bg-muted px-2 py-0.5 neo-border-sm text-xs font-bold">
                     2026
