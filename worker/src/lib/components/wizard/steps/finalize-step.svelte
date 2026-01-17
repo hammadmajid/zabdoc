@@ -2,6 +2,7 @@
     import { wizardStore } from "$lib/stores/wizard-store.svelte";
     import { formStore } from "$lib/stores/form-store.svelte";
     import { smartName } from "$lib/utils";
+    import loadingMessages from "$lib/loading-msgs";
     import Button from "$lib/components/ui/button/button.svelte";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import CheckCircle from "@lucide/svelte/icons/check-circle";
@@ -23,12 +24,33 @@
     let isSuccess = $state(false);
     let isError = $state(false);
     let errorMessage = $state("");
+    let loadingMessage = $state("");
+    let loadingInterval: ReturnType<typeof setInterval> | null = null;
+
+    function getRandomLoadingMessage() {
+        return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+    }
+
+    function startLoadingMessages() {
+        loadingMessage = getRandomLoadingMessage();
+        loadingInterval = setInterval(() => {
+            loadingMessage = getRandomLoadingMessage();
+        }, 2000);
+    }
+
+    function stopLoadingMessages() {
+        if (loadingInterval) {
+            clearInterval(loadingInterval);
+            loadingInterval = null;
+        }
+    }
 
     async function handleSubmit() {
         isLoading = true;
         isSuccess = false;
         isError = false;
         errorMessage = "";
+        startLoadingMessages();
 
         try {
             const formData = formStore.buildFormData();
@@ -63,6 +85,7 @@
             isError = true;
             errorMessage = error instanceof Error ? error.message : String(error);
         }
+        stopLoadingMessages();
         isLoading = false;
     }
 
@@ -324,7 +347,7 @@
             >
                 {#if isLoading}
                     <Loader2 class="size-6 animate-spin" />
-                    Generating...
+                    <span class="text-sm normal-case font-medium tracking-normal">{loadingMessage}</span>
                 {:else}
                     <Download class="size-6" />
                     Generate PDF
