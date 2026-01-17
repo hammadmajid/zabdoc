@@ -26,14 +26,16 @@
 />
 
 <div class="space-y-12">
-    <div class="space-y-1.5">
-        <h3
-            class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-start gap-2"
-        >
-            <FileText />
-            Assignment
-        </h3>
-        <p class="text-sm text-muted-foreground">
+    <div class="space-y-2">
+        <div class="flex items-center gap-3">
+            <div class="neo-border-sm neo-shadow-sm bg-secondary p-2">
+                <FileText class="size-6" />
+            </div>
+            <h3 class="text-3xl font-black uppercase tracking-tight">
+                Assignment
+            </h3>
+        </div>
+        <p class="font-medium">
             Fill out the information below to generate the assignment cover.
         </p>
     </div>
@@ -90,6 +92,5 @@
                 </Card.Content>
             </Card.Root>
         </div>
-        <Separator />
     </Form>
 </div>

@@ -10,8 +10,8 @@
         if (!browser) return;
 
         try {
-            // Clear specific keys used by the auto.svelte
-            const keysToRemove = ["studentName", "regNum", "class"];
+            // Clear specific keys used by the form store
+            const keysToRemove = ["studentName", "regNo"];
 
             keysToRemove.forEach((key) => {
                 localStorage.removeItem(key);
@@ -39,15 +39,15 @@
 
 <div class="space-y-6 max-w-5xl mx-auto">
     <div>
-        <h1 class="text-3xl font-bold tracking-tight">Settings</h1>
-        <p class="text-muted-foreground">Manage your preferences and data.</p>
+        <h1 class="text-3xl font-black uppercase tracking-tight">Settings</h1>
+        <p class="font-medium">Manage your preferences and data.</p>
     </div>
 
     <div class="w-full grid md:grid-cols-2 gap-4">
         <!-- Theme Settings -->
         <Card.Root>
             <Card.Header>
-                <Card.Title>Appearance</Card.Title>
+                <Card.Title class="font-black uppercase">Appearance</Card.Title>
                 <Card.Description>
                     Customize how zabdoc looks on your device.
                 </Card.Description>
@@ -60,17 +60,17 @@
         <!-- Storage Settings -->
         <Card.Root>
             <Card.Header>
-                <Card.Title>Storage</Card.Title>
+                <Card.Title class="font-black uppercase">Storage</Card.Title>
                 <Card.Description>
                     Manage your locally stored data.
                 </Card.Description>
             </Card.Header>
             <Card.Content class="space-y-4">
                 <div class="space-y-2">
-                    <h4 class="text-sm font-medium">Local Data</h4>
-                    <p class="text-sm text-muted-foreground">
-                        Your name, registration number, and class selection are
-                        stored locally in your browser for convenience.
+                    <h4 class="text-sm font-bold">Local Data</h4>
+                    <p class="text-sm">
+                        Your name and registration number are stored locally in
+                        your browser for convenience.
                     </p>
                 </div>
 

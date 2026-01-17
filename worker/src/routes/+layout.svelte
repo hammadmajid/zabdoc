@@ -1,7 +1,9 @@
 <script lang="ts">
     import { onNavigate } from "$app/navigation";
+    import { page } from "$app/stores";
     import favicon from "$lib/assets/favicon.svg";
     import Settings from "@lucide/svelte/icons/settings";
+    import Github from "@lucide/svelte/icons/github";
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
     import { ModeWatcher } from "mode-watcher";
@@ -29,51 +31,64 @@
 <ModeWatcher />
 <Toaster />
 
-<div class="flex min-h-screen flex-col mx-auto max-w-5xl">
-    <header class="border-b">
-        <div class="flex items-center justify-between p-4">
-            <nav class="flex items-center gap-6">
-                <a href="/" class={cn("text-lg font-semibold hover:underline")}>
+<div class="flex min-h-screen flex-col mx-auto max-w-5xl px-4">
+    <header class="py-6">
+        <div class="flex items-center justify-between">
+            <nav class="flex items-center gap-4">
+                <a
+                    href="/"
+                    class="neo-border-sm neo-shadow-sm bg-primary px-4 py-2 text-xl font-black uppercase tracking-tight hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                >
                     zabdoc
                 </a>
+
             </nav>
             <nav class="flex items-center gap-2">
-                <a href="/help" class={buttonVariants({ variant: "ghost" })}>
-                    help
-                </a>
-                <a href="/about" class={buttonVariants({ variant: "ghost" })}>
+                <a
+                    href="/about"
+                    class={cn(
+                        "px-3 py-1 text-sm font-bold uppercase tracking-wide transition-colors hover:text-primary",
+                        $page.url.pathname === "/about" && "underline"
+                    )}
+                >
                     about
                 </a>
                 <a
                     href="/settings"
-                    class={buttonVariants({ variant: "ghost" })}
+                    class={buttonVariants({ variant: "ghost", size: "icon" })}
                 >
-                    <Settings />
+                    <Settings class="size-5" />
                 </a>
             </nav>
         </div>
     </header>
 
-    <main class="flex-1 py-8 px-4">
+    <main class="flex-1 py-6">
         {@render children?.()}
     </main>
 
-    <footer class="border-t">
-        <div
-            class="p-4 flex items-center justify-between text-sm text-muted-foreground"
-        >
-            <a
-                href="https://github.com/hammadmajid/zabdoc"
-                target="_blank"
-                rel="noreferrer"
-            >
-                GitHub
-            </a>
-            <span
-                >Licensed under <a
-                    href="https://www.gnu.org/licenses/gpl-3.0.html">GPL v3</a
-                ></span
-            >
+    <footer class="py-6 mt-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a
+                    href="https://github.com/hammadmajid/zabdoc"
+                    target="_blank"
+                    rel="noreferrer"
+                    class="neo-border-sm bg-card p-2 hover:bg-muted transition-colors"
+                >
+                    <Github class="size-5" />
+                </a>
+                <span class="text-sm font-medium text-muted-foreground">
+                    Open Source
+                </span>
+            </div>
+            <div class="text-sm font-medium">
+                <span class="text-muted-foreground">GPL v3</span>
+                <span class="mx-2 text-muted-foreground">•</span>
+                <span class="bg-muted px-2 py-0.5 neo-border-sm text-xs font-bold">
+                    2026
+                </span>
+            </div>
         </div>
     </footer>
 </div>

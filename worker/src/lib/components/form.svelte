@@ -56,15 +56,6 @@
     {@render children?.()}
 
     <Card.Root class="">
-        <Card.Header>
-            <Card.Description>
-                By clicking the button below you accept the <a
-                    href="/about"
-                    class="text-primary underline hover:no-underline"
-                    >Terms and Privacy Policy</a
-                >.
-            </Card.Description>
-        </Card.Header>
         <Card.CardContent class="space-y-4">
             <Button type="submit" class="w-full" disabled={isLoading}>
                 {#if isLoading}

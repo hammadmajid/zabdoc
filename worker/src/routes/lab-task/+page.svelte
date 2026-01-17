@@ -27,14 +27,16 @@
 />
 
 <div class="space-y-12">
-    <div class="space-y-1.5">
-        <h3
-            class="text-2xl font-semibold leading-none tracking-tight flex items-center justify-start gap-2"
-        >
-            <ClipboardList />
-            Lab Task
-        </h3>
-        <p class="text-sm text-muted-foreground">
+    <div class="space-y-2">
+        <div class="flex items-center gap-3">
+            <div class="neo-border-sm neo-shadow-sm bg-accent p-2">
+                <ClipboardList class="size-6" />
+            </div>
+            <h3 class="text-3xl font-black uppercase tracking-tight">
+                Lab Task
+            </h3>
+        </div>
+        <p class="font-medium">
             Fill out the information below to generate the lab task.
         </p>
     </div>
