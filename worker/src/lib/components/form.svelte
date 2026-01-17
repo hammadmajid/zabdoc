@@ -1,6 +1,7 @@
 <script lang="ts">
     import Button from "$lib/components/ui/button/button.svelte";
     import * as Card from "$lib/components/ui/card/index";
+    import { formStore } from "$lib/stores/form-store.svelte";
     import { smartName } from "$lib/utils";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import { toast } from "svelte-sonner";
@@ -12,7 +13,8 @@
         isLoading = true;
 
         try {
-            const formData = new FormData(event.target as HTMLFormElement);
+            // Build FormData from the store
+            const formData = formStore.buildFormData();
 
             // Shitty hack to check if we are in localhost or prod
             const apiUrl = window.location.host.includes("localhost")

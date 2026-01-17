@@ -2,9 +2,7 @@
     import * as Card from "$lib/components/ui/card/index";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
-
-    let files: FileList | null = $state(null);
-    let hasFiles = $derived(files && files.length > 0);
+    import { formStore } from "$lib/stores/form-store.svelte";
 </script>
 
 <Card.Root>
@@ -26,12 +24,12 @@
                 accept="image/jpeg,image/jpg,image/png,image/webp"
                 onchange={(e) => {
                     const target = e.target as HTMLInputElement | null;
-                    files = target?.files ?? null;
+                    formStore.images = target?.files ?? null;
                 }}
             />
-            {#if hasFiles}
+            {#if formStore.hasImages}
                 <p class="text-sm text-muted-foreground">
-                    {files?.length} image{files && files.length > 1 ? "s" : ""} selected
+                    {formStore.images?.length} image{formStore.images && formStore.images.length > 1 ? "s" : ""} selected
                 </p>
             {:else}
                 <p class="text-sm text-destructive">

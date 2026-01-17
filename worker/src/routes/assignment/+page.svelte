@@ -1,13 +1,21 @@
 <script lang="ts">
     import Form from "$lib/components/form.svelte";
-    import AutoForm from "$lib/components/forms/auto.svelte";
+    import StudentForm from "$lib/components/forms/student.svelte";
+    import CourseForm from "$lib/components/forms/course.svelte";
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
     import SEO from "$lib/components/seo.svelte";
     import * as Card from "$lib/components/ui/card/index";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
     import { Separator } from "$lib/components/ui/separator";
+    import { formStore } from "$lib/stores/form-store.svelte";
     import FileText from "@lucide/svelte/icons/file-text";
+
+    // Set document type on mount
+    $effect(() => {
+        formStore.setDocumentType("Assignment");
+        formStore.setDocumentMarks("4");
+    });
 </script>
 
 <SEO
@@ -32,7 +40,8 @@
 
     <Form>
         <div class="grid md:grid-cols-2 gap-4">
-            <AutoForm />
+                <StudentForm />
+                <CourseForm />
 
             <Card.Root>
                 <Card.Header>
@@ -42,11 +51,6 @@
                     >
                 </Card.Header>
                 <Card.Content class="space-y-4">
-                    <div class="space-y-2 hidden">
-                        <Label for="document-type">Type</Label>
-                        <Input name="type" value="Assignment" />
-                    </div>
-
                     <div class="space-y-2">
                         <Label for="marks">Total Marks</Label>
                         <Input
@@ -55,7 +59,11 @@
                             type="number"
                             step="0.5"
                             placeholder="4"
-                            value="4"
+                            value={formStore.document.marks}
+                            oninput={(e) =>
+                                formStore.setDocumentMarks(
+                                    (e.target as HTMLInputElement).value
+                                )}
                         />
                     </div>
 
@@ -67,6 +75,11 @@
                             type="number"
                             placeholder="1-4"
                             required
+                            value={formStore.document.number}
+                            oninput={(e) =>
+                                formStore.setDocumentNumber(
+                                    (e.target as HTMLInputElement).value
+                                )}
                         />
                     </div>
 

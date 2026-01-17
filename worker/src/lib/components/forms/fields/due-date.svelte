@@ -4,6 +4,7 @@
     import { Button } from "$lib/components/ui/button/index.js";
     import ChevronDownIcon from "@lucide/svelte/icons/chevron-down";
     import CalendarIcon from "@lucide/svelte/icons/calendar";
+    import { formStore } from "$lib/stores/form-store.svelte";
     import {
         getLocalTimeZone,
         today,
@@ -20,7 +21,7 @@
                   month: "short",
                   day: "numeric",
               })
-            : "",
+            : ""
     );
 
     const displayDate = $derived(
@@ -30,12 +31,16 @@
                   month: "short",
                   day: "numeric",
               })
-            : "Select due date",
+            : "Select due date"
     );
+
+    // Sync with store when date changes
+    $effect(() => {
+        formStore.setDocumentDate(formattedDate);
+    });
 </script>
 
 <div class="flex flex-col gap-3">
-    <input type="hidden" name="date" value={formattedDate} />
     <Popover.Root bind:open>
         <Popover.Trigger id="date">
             {#snippet child({ props })}
