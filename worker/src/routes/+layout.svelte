@@ -36,7 +36,9 @@
                 >
                     zabdoc
                 </a>
-
+                <span class="bg-muted px-2 py-0.5 neo-border-sm text-xs font-bold">
+                    v2.0.0
+                </span>
             </nav>
             <nav class="flex items-center gap-2">
                 <a
