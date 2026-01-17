@@ -124,11 +124,15 @@ function createFormStore() {
 
     const hasImages = $derived(images && images.length > 0);
 
-    // Initialize from localStorage (only studentName and regNo)
+    // Initialize from localStorage (studentName, regNo, and selectedClass)
     function initFromLocalStorage() {
         if (browser) {
             studentName = getLocalStorage("studentName") || "";
             regNo = getLocalStorage("regNo") || "";
+            const savedClass = getLocalStorage("selectedClass");
+            if (savedClass && savedClass in data) {
+                selectedClass = savedClass as keyof DataStructure;
+            }
         }
     }
 
@@ -172,6 +176,10 @@ function createFormStore() {
         selectedClass = value;
         // Reset course when class changes
         selectedCourse = "";
+        // Persist class to localStorage
+        if (browser && value) {
+            setLocalStorage("selectedClass", value);
+        }
     }
 
     function setSelectedCourse(value: string) {

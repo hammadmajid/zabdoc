@@ -8,6 +8,11 @@
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
     import { scale } from "svelte/transition";
     import { quintOut } from "svelte/easing";
+
+    // Initialize from localStorage on mount
+    $effect(() => {
+        formStore.initFromLocalStorage();
+    });
 </script>
 
 <div class="flex flex-col items-center px-4 py-8 max-w-2xl mx-auto w-full">
