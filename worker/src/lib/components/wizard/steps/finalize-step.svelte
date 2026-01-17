@@ -5,6 +5,7 @@
     import Button from "$lib/components/ui/button/button.svelte";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import CheckCircle from "@lucide/svelte/icons/check-circle";
+    import XCircle from "@lucide/svelte/icons/x-circle";
     import FileText from "@lucide/svelte/icons/file-text";
     import User from "@lucide/svelte/icons/user";
     import Users from "@lucide/svelte/icons/users";
@@ -13,16 +14,20 @@
     import ImageIcon from "@lucide/svelte/icons/image";
     import Pencil from "@lucide/svelte/icons/pencil";
     import Download from "@lucide/svelte/icons/download";
-    import { toast } from "svelte-sonner";
+    import RefreshCw from "@lucide/svelte/icons/refresh-cw";
     import { scale } from "svelte/transition";
     import { quintOut } from "svelte/easing";
 
     let isLoading = $state(false);
     let isSuccess = $state(false);
+    let isError = $state(false);
+    let errorMessage = $state("");
 
     async function handleSubmit() {
         isLoading = true;
         isSuccess = false;
+        isError = false;
+        errorMessage = "";
 
         try {
             const formData = formStore.buildFormData();
@@ -37,7 +42,8 @@
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorText = await response.text().catch(() => "");
+                throw new Error(errorText || `Server error: ${response.status}`);
             }
 
             const blob = await response.blob();
@@ -52,21 +58,24 @@
             document.body.removeChild(a);
 
             isSuccess = true;
-            toast.success("PDF generated successfully!", {
-                position: "top-center",
-            });
         } catch (error) {
-            toast.error("Failed to generate PDF", {
-                description: `${error}`,
-                position: "top-center",
-            });
+            isError = true;
+            errorMessage = error instanceof Error ? error.message : String(error);
         }
         isLoading = false;
     }
 
     function handleStartOver() {
         isSuccess = false;
+        isError = false;
+        errorMessage = "";
         wizardStore.reset();
+    }
+
+    function handleRetry() {
+        isError = false;
+        errorMessage = "";
+        handleSubmit();
     }
 </script>
 
@@ -103,6 +112,42 @@
                 >
                     <Download class="size-5 mr-2" />
                     Download Again
+                </Button>
+                <Button
+                    variant="outline"
+                    onclick={handleStartOver}
+                    class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                >
+                    Start Over
+                </Button>
+            </div>
+        </div>
+    {:else if isError}
+        <div
+            class="w-full neo-border neo-shadow-lg bg-destructive/10 p-8 text-center space-y-6"
+            in:scale={{ duration: 400, easing: quintOut }}
+        >
+            <div class="neo-border-sm bg-card p-4 inline-block mx-auto border-destructive">
+                <XCircle class="size-16 text-destructive" />
+            </div>
+            <h2 class="text-2xl font-black uppercase text-destructive">Error!</h2>
+            <div class="space-y-2">
+                <p class="text-muted-foreground">
+                    Something went wrong while generating your PDF.
+                </p>
+                <div class="neo-border-sm bg-card p-3 text-left">
+                    <p class="text-sm font-mono text-destructive break-all">
+                        {errorMessage}
+                    </p>
+                </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+                <Button
+                    onclick={handleRetry}
+                    class="neo-border neo-shadow bg-primary hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                >
+                    <RefreshCw class="size-5 mr-2" />
+                    Try Again
                 </Button>
                 <Button
                     variant="outline"
