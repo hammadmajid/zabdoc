@@ -16,6 +16,12 @@ export interface DocumentInfo {
     date: string;
 }
 
+export interface ImageItem {
+    id: string;
+    file: File;
+    previewUrl: string;
+}
+
 export interface FormState {
     // Student info
     studentName: string;
@@ -86,7 +92,8 @@ function createFormStore() {
         date: "",
     });
 
-    let images = $state<FileList | null>(null);
+    let imageItems = $state<ImageItem[]>([]);
+    let imageCounter = $state(0);
 
     // Derived values for course selection
     const classes = $derived(
@@ -122,7 +129,7 @@ function createFormStore() {
         courses.find((c) => c.value === selectedCourse)?.label ?? "Select course"
     );
 
-    const hasImages = $derived(images && images.length > 0);
+    const hasImages = $derived(imageItems.length > 0);
 
     // Initialize from localStorage (studentName, regNo, and selectedClass)
     function initFromLocalStorage() {
@@ -204,8 +211,37 @@ function createFormStore() {
     }
 
     // Image functions
-    function setImages(fileList: FileList | null) {
-        images = fileList;
+    function addImages(files: FileList | File[]) {
+        const fileArray = Array.from(files);
+        const newItems: ImageItem[] = fileArray.map((file) => {
+            imageCounter++;
+            return {
+                id: `img-${imageCounter}-${Date.now()}`,
+                file,
+                previewUrl: URL.createObjectURL(file),
+            };
+        });
+        imageItems = [...imageItems, ...newItems];
+    }
+
+    function removeImage(id: string) {
+        const item = imageItems.find((img) => img.id === id);
+        if (item) {
+            URL.revokeObjectURL(item.previewUrl);
+        }
+        imageItems = imageItems.filter((img) => img.id !== id);
+    }
+
+    function reorderImages(fromIndex: number, toIndex: number) {
+        const newItems = [...imageItems];
+        const [removed] = newItems.splice(fromIndex, 1);
+        newItems.splice(toIndex, 0, removed);
+        imageItems = newItems;
+    }
+
+    function clearImages() {
+        imageItems.forEach((item) => URL.revokeObjectURL(item.previewUrl));
+        imageItems = [];
     }
 
     // Build FormData for submission
@@ -240,12 +276,10 @@ function createFormStore() {
         if (document.number) formData.append("number", document.number);
         if (document.date) formData.append("date", document.date);
 
-        // Images
-        if (images) {
-            for (let i = 0; i < images.length; i++) {
-                formData.append("images", images[i]);
-            }
-        }
+        // Images - appended in order
+        imageItems.forEach((item) => {
+            formData.append("images", item.file);
+        });
 
         return formData;
     }
@@ -266,7 +300,7 @@ function createFormStore() {
             number: "",
             date: "",
         };
-        images = null;
+        clearImages();
     }
 
     return {
@@ -313,11 +347,8 @@ function createFormStore() {
         },
 
         // Images state
-        get images() {
-            return images;
-        },
-        set images(value: FileList | null) {
-            setImages(value);
+        get imageItems() {
+            return imageItems;
         },
 
         // Derived values
@@ -349,6 +380,10 @@ function createFormStore() {
         setDocumentMarks,
         setDocumentNumber,
         setDocumentDate,
+        addImages,
+        removeImage,
+        reorderImages,
+        clearImages,
         buildFormData,
         reset,
         STUDENT_LIMIT,

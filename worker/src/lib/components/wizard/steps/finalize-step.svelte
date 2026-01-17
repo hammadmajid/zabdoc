@@ -287,7 +287,7 @@
                         <div>
                             <p class="text-xs font-bold uppercase text-muted-foreground">Images</p>
                             <p class="font-bold">
-                                {formStore.images?.length || 0} image{(formStore.images?.length || 0) !== 1 ? "s" : ""} attached
+                                {formStore.imageItems.length} image{formStore.imageItems.length !== 1 ? "s" : ""} attached
                             </p>
                         </div>
                     </div>
