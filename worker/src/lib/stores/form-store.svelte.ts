@@ -106,9 +106,10 @@ function createFormStore() {
 
     const courses = $derived(
         selectedClass && selectedClass in data
-            ? Object.keys(data[selectedClass]).map((courseName) => ({
+            ? Object.keys(data[selectedClass as keyof DataStructure]).map((courseName) => ({
                   value: courseName,
                   label: courseName,
+                  icon: data[selectedClass as keyof DataStructure][courseName].icon,
               }))
             : []
     );
