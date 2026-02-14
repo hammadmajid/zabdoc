@@ -6,6 +6,7 @@
     import Github from "@lucide/svelte/icons/github";
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
+    import { wizardStore } from "$lib/stores/wizard-store.svelte";
     import "../app.css";
 
     onNavigate((navigation) => {
@@ -18,6 +19,10 @@
             });
         });
     });
+
+    function handleZabdocClick() {
+        wizardStore.reset();
+    }
 
     let { children } = $props();
 </script>
@@ -32,6 +37,7 @@
             <nav class="flex items-center gap-4">
                 <a
                     href="/"
+                    onclick={handleZabdocClick}
                     class="neo-border-sm neo-shadow-sm bg-primary px-4 py-2 text-xl font-black uppercase tracking-tight hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                     zabdoc
