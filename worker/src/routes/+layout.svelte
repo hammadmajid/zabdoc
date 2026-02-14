@@ -42,9 +42,12 @@
                 >
                     zabdoc
                 </a>
-                <span class="bg-muted px-2 py-0.5 neo-border-sm text-xs font-bold">
+                <a
+                    href="/changelog"
+                    class="bg-muted px-2 py-0.5 neo-border-sm text-xs font-bold hover:bg-primary transition-colors"
+                >
                     v2.1.1
-                </span>
+                </a>
             </nav>
             <nav class="flex items-center gap-2">
                 <a
