@@ -59,34 +59,68 @@
                 ? "http://localhost:8080/generate"
                 : "https://api.zabdoc.xyz/generate";
 
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                body: formData,
-            });
+            // Create AbortController for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-            if (!response.ok) {
-                const errorText = await response.text().catch(() => "");
-                throw new Error(errorText || `Server error: ${response.status}`);
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "POST",
+                    body: formData,
+                    signal: controller.signal,
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    let errorText = "";
+                    try {
+                        errorText = await response.text();
+                    } catch {
+                        // If we can't read the response body, use a default message
+                        errorText = "";
+                    }
+                    
+                    // Provide more specific error messages based on status code
+                    if (response.status === 400) {
+                        throw new Error(errorText || "Invalid request. Please check your form data and try again.");
+                    } else if (response.status === 500) {
+                        throw new Error(errorText || "Server error. Please try again later.");
+                    } else {
+                        throw new Error(errorText || `Server error: ${response.status}`);
+                    }
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = smartName(formData);
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                isSuccess = true;
+            } catch (fetchError) {
+                clearTimeout(timeoutId);
+                
+                // Check if it was a timeout/abort error
+                if (fetchError instanceof Error && fetchError.name === "AbortError") {
+                    throw new Error("Request timed out. The server took too long to respond. Please try again.");
+                }
+                
+                // Re-throw other errors
+                throw fetchError;
             }
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.style.display = "none";
-            a.href = url;
-            a.download = smartName(formData);
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-
-            isSuccess = true;
         } catch (error) {
             isError = true;
             errorMessage = error instanceof Error ? error.message : String(error);
+        } finally {
+            stopLoadingMessages();
+            isLoading = false;
         }
-        stopLoadingMessages();
-        isLoading = false;
     }
 
     function handleStartOver() {
