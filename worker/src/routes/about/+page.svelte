@@ -11,21 +11,21 @@
 />
 
 <div class="mx-auto space-y-12">
-    <div class="prose prose-neutral dark:prose-invert prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-a:text-primary prose-a:font-bold prose-strong:font-black">
+    <div class="prose prose-neutral dark:prose-invert prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-a:text-primary prose-a:font-bold prose-strong:font-black max-w-none">
         <h1>About</h1>
 
         <p>
             <strong>zabdoc</strong> is a web application for
             <span class="bg-secondary px-1 neo-border-sm font-bold">SZABIST</span>
             students to generate assignment cover sheets and lab tasks in PDF format.
-        </p>
-
-        <p>
             Written in{" "}
             <a href="https://go.dev" target="_blank" rel="noreferrer">Go</a> and
-            <a href="https://svelte.dev" target="_blank" rel="noreferrer">Svelte</a>,
-            it provides a simple, responsive web form and produces
-            institution-branded PDFs for assignment cover and lab tasks.
+            <a href="https://svelte.dev" target="_blank" rel="noreferrer">SvelteKit</a>,
+            deployed on
+            <a href="https://www.heroku.com/" target="_blank" rel="noreferrer">Heroku</a>
+            and
+            <a href="https://workers.cloudflare.com/" target="_blank" rel="noreferrer">Cloudflare Workers</a>
+            respectively. Built by <a href="https://hammadmajid.pages.dev" target="_blank">Hammad Majid</a> on Pale Blue Dot.
         </p>
 
         <h2 id="disclaimer">Disclaimer</h2>
