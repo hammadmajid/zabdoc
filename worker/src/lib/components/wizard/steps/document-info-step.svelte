@@ -3,6 +3,7 @@
     import { formStore } from "$lib/stores/form-store.svelte";
     import Input from "$lib/components/ui/input/input.svelte";
     import DueDate from "$lib/components/forms/fields/due-date.svelte";
+    import AssignmentNumberSelector from "./assignment-number-selector.svelte";
     import FileText from "@lucide/svelte/icons/file-text";
     import Hash from "@lucide/svelte/icons/hash";
     import Award from "@lucide/svelte/icons/award";
@@ -44,19 +45,28 @@
                 </span>
             </div>
 
-            <Input
-                id="document-number"
-                name="number"
-                type="number"
-                placeholder={wizardStore.documentType === "Assignment" ? "1-4" : "1-15"}
-                required
-                value={formStore.document.number}
-                oninput={(e) => formStore.setDocumentNumber((e.target as HTMLInputElement).value)}
-                class="neo-border-sm text-lg py-3"
-            />
-            <p class="text-sm text-muted-foreground">
-                Which {wizardStore.documentType?.toLowerCase()} number is this?
-            </p>
+            {#if wizardStore.documentType === "Assignment"}
+                <AssignmentNumberSelector
+                    bind:value={formStore.document.number}
+                />
+                <p class="text-sm text-muted-foreground">
+                    Select an assignment number (1-5)
+                </p>
+            {:else}
+                <Input
+                    id="document-number"
+                    name="number"
+                    type="number"
+                    placeholder="1-15"
+                    required
+                    value={formStore.document.number}
+                    oninput={(e) => formStore.setDocumentNumber((e.target as HTMLInputElement).value)}
+                    class="neo-border-sm text-lg py-3"
+                />
+                <p class="text-sm text-muted-foreground">
+                    Which {wizardStore.documentType?.toLowerCase()} number is this?
+                </p>
+            {/if}
         </div>
 
         <!-- Total Marks -->
