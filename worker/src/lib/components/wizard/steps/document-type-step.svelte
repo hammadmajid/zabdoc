@@ -2,12 +2,25 @@
     import { wizardStore } from "$lib/stores/wizard-store.svelte";
     import FileText from "@lucide/svelte/icons/file-text";
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
+
+    // Check if it's between 12 AM and 3 AM
+    const isLateNight = $derived.by(() => {
+        const now = new Date();
+        const hours = now.getHours();
+
+        // Check if time is between 00:00 and 02:59 (12 AM to 3 AM)
+        return hours >= 0 && hours < 3;
+    });
 </script>
 
 <div class="flex flex-col items-center justify-center text-center px-4 py-8">
     <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 mb-8 rotate-[-2deg]">
         <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tight">
-            What do you need?
+            {#if isLateNight}
+                Your sleep schedule is cooked.
+            {:else}
+                What do you need?
+            {/if}
         </h1>
     </div>
 
