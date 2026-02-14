@@ -3,6 +3,7 @@
     import * as Select from "$lib/components/ui/select/index.js";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
+    import CourseSelector from "./course-selector.svelte";
     import BookOpen from "@lucide/svelte/icons/book-open";
     import GraduationCap from "@lucide/svelte/icons/graduation-cap";
     import ClipboardList from "@lucide/svelte/icons/clipboard-list";
@@ -76,27 +77,11 @@
                 <span class="font-bold uppercase text-sm">Select Course</span>
             </div>
 
-            <Select.Root
-                type="single"
-                name="course"
-                required
+            <CourseSelector
                 bind:value={formStore.selectedCourse}
+                courses={formStore.courses}
                 disabled={!formStore.selectedClass}
-            >
-                <Select.Trigger class="!w-full neo-border-sm whitespace-normal min-h-[3rem] h-auto text-lg">
-                    <span class="text-left leading-tight">{formStore.courseTriggerContent}</span>
-                </Select.Trigger>
-                <Select.Content>
-                    <Select.Group>
-                        <Select.Label>Available Courses</Select.Label>
-                        {#each formStore.courses as course (course.value)}
-                            <Select.Item value={course.value} label={course.label}>
-                                {course.label}
-                            </Select.Item>
-                        {/each}
-                    </Select.Group>
-                </Select.Content>
-            </Select.Root>
+            />
 
             {#if !formStore.selectedClass}
                 <p class="text-sm text-muted-foreground bg-muted neo-border-sm px-3 py-2">
