@@ -31,7 +31,7 @@
             </div>
             <p class="text-lg font-medium max-w-xl mx-auto">
                 web application for
-                <span class="bg-secondary px-2 py-0.5 neo-border-sm font-bold">SZABIST*</span>
+                <span class="bg-secondary px-2 py-0.5 neo-border-sm font-bold">*SZABIST</span>
                 students to generate assignment and lab tasks in PDF format.
             </p>
         </div>
