@@ -50,7 +50,7 @@
                     bind:value={formStore.document.number}
                 />
                 <p class="text-sm text-muted-foreground">
-                    Select an assignment number (1-5)
+                    Select an assignment number (1-4)
                 </p>
             {:else}
                 <Input

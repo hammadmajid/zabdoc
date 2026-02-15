@@ -4,10 +4,10 @@
 
 	let { value = $bindable("") }: { value: string } = $props();
 
-	const numbers = ["1", "2", "3", "4", "5"];
+	const numbers = ["1", "2", "3", "4"];
 </script>
 
-<RadioGroup bind:value class="grid grid-cols-5 gap-3 w-full">
+<RadioGroup bind:value class="grid grid-cols-4 gap-3 w-full">
 	{#each numbers as num}
 		<label
 			class={cn(
