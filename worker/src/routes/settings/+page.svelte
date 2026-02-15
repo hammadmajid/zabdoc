@@ -2,14 +2,25 @@
     import * as Card from "$lib/components/ui/card/index.js";
     import Button from "$lib/components/ui/button/button.svelte";
     import { browser } from "$app/environment";
-    import { toast } from "svelte-sonner";
     import SEO from "$lib/components/seo.svelte";
     import { formStore } from "$lib/stores/form-store.svelte";
     import * as Select from "$lib/components/ui/select/index.js";
+    import { onMount } from "svelte";
+    import CheckCircle2 from "@lucide/svelte/icons/check-circle-2";
 
-    let studentNameInput = $state(formStore.studentName);
-    let regNoInput = $state(formStore.regNo);
-    let selectedClassInput = $state(formStore.selectedClass);
+    let studentNameInput = $state("");
+    let regNoInput = $state("");
+    let selectedClassInput = $state<string>("");
+    let saveButtonState = $state<"idle" | "saved">("idle");
+    let deleteButtonState = $state<"idle" | "deleted">("idle");
+
+    // Initialize from localStorage on mount
+    onMount(() => {
+        formStore.initFromLocalStorage();
+        studentNameInput = formStore.studentName;
+        regNoInput = formStore.regNo;
+        selectedClassInput = formStore.selectedClass;
+    });
 
     function clearLocalStorage() {
         if (!browser) return;
@@ -23,19 +34,24 @@
             });
 
             // Reset the form store
+            formStore.studentName = "";
+            formStore.regNo = "";
+            formStore.selectedClass = "";
+
+            // Reset input values
             studentNameInput = "";
             regNoInput = "";
             selectedClassInput = "";
 
-            toast.success("Local data cleared successfully", {
-                description: "Your saved student information has been removed.",
-                position: "top-center",
-            });
+            // Show deleted state
+            deleteButtonState = "deleted";
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                deleteButtonState = "idle";
+            }, 2000);
         } catch (error) {
-            toast.error("Failed to clear local data", {
-                description: `${error}`,
-                position: "top-center",
-            });
+            console.error("Failed to clear local data:", error);
         }
     }
 
@@ -51,18 +67,18 @@
                 formStore.regNo = regNoInput;
             }
             if (selectedClassInput) {
-                formStore.selectedClass = selectedClassInput;
+                formStore.selectedClass = selectedClassInput as any;
             }
 
-            toast.success("Data updated successfully", {
-                description: "Your student information has been saved.",
-                position: "top-center",
-            });
+            // Show saved state
+            saveButtonState = "saved";
+            
+            // Reset after 2 seconds
+            setTimeout(() => {
+                saveButtonState = "idle";
+            }, 2000);
         } catch (error) {
-            toast.error("Failed to update data", {
-                description: `${error}`,
-                position: "top-center",
-            });
+            console.error("Failed to update data:", error);
         }
     }
 </script>
@@ -114,26 +130,52 @@
 
                 <div class="space-y-2">
                     <label for="class" class="text-sm font-bold">Class</label>
-                    <select
-                        id="class"
+                    <Select.Root
+                        type="single"
                         bind:value={selectedClassInput}
-                        class="w-full px-3 py-2 neo-border-sm bg-background"
                     >
-                        <option value="">Select a class</option>
-                        {#each formStore.classes as classOption}
-                            <option value={classOption.value}>
-                                {classOption.label}
-                            </option>
-                        {/each}
-                    </select>
+                        <Select.Trigger id="class" class="w-full">
+                            <span>
+                                {formStore.classes.find((c) => c.value === selectedClassInput)?.label ||
+                                    "Select a class"}
+                            </span>
+                        </Select.Trigger>
+                        <Select.Content>
+                            <Select.Group>
+                                <Select.Label>Available Classes</Select.Label>
+                                {#each formStore.classes as classOption (classOption.value)}
+                                    <Select.Item value={classOption.value} label={classOption.label}>
+                                        {classOption.label}
+                                    </Select.Item>
+                                {/each}
+                            </Select.Group>
+                        </Select.Content>
+                    </Select.Root>
                 </div>
 
                 <div class="pt-2 flex gap-2">
-                    <Button onclick={updateStoredData}>
-                        Save Changes
+                    <Button 
+                        onclick={() => updateStoredData()}
+                        disabled={saveButtonState === "saved"}
+                    >
+                        {#if saveButtonState === "saved"}
+                            <CheckCircle2 class="size-4 mr-2" />
+                            Saved
+                        {:else}
+                            Save Changes
+                        {/if}
                     </Button>
-                    <Button variant="destructive" onclick={clearLocalStorage}>
-                        Delete Local Data
+                    <Button 
+                        variant="destructive" 
+                        onclick={() => clearLocalStorage()}
+                        disabled={deleteButtonState === "deleted"}
+                    >
+                        {#if deleteButtonState === "deleted"}
+                            <CheckCircle2 class="size-4 mr-2" />
+                            Deleted
+                        {:else}
+                            Delete Local Data
+                        {/if}
                     </Button>
                 </div>
             </Card.Content>
