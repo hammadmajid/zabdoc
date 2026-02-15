@@ -17,10 +17,23 @@
 
     const changelog: ChangelogEntry[] = [
         {
+            version: "2.2.0",
+            date: "2026-02-15",
+            description:
+                "Release with UX improvements, bug fixes, and enhanced course icon rendering.",
+            changes: [
+                "Added changelog page for version history",
+                "Render unique icon for each course",
+                "Fixed settings storage card functionality",
+                "Improved overall UX with bug fixes",
+                "Restricted assignment number selector range to 1-4"
+            ]
+        },
+        {
             version: "2.1.1",
             date: "2026-02-15",
             description:
-                "Latest release with bug fixes and UX improvements including the neobrutalist design language and wizard-style document generation.",
+                "Bug fixes and UX improvements including the neobrutalist design language and wizard-style document generation.",
             changes: [
                 "Fixed about page styling",
                 "Updated version display in navbar",
