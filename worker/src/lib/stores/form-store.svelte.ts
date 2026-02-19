@@ -1,5 +1,6 @@
 import { browser } from "$app/environment";
 import { data, type DataStructure, type CourseInfo } from "$lib/data/data";
+import { wizardStore } from "./wizard-store.svelte";
 import { toast } from "svelte-sonner";
 
 // Types
@@ -106,11 +107,20 @@ function createFormStore() {
 
     const courses = $derived(
         selectedClass && selectedClass in data
-            ? Object.keys(data[selectedClass as keyof DataStructure]).map((courseName) => ({
-                  value: courseName,
-                  label: courseName,
-                  icon: data[selectedClass as keyof DataStructure][courseName].icon,
-              }))
+            ? Object.keys(data[selectedClass as keyof DataStructure])
+                .filter((courseName) => {
+                    if (wizardStore.documentType === "Assignment") {
+                        return !courseName.startsWith("Lab:");
+                    } else if (wizardStore.documentType === "Lab Task") {
+                        return courseName.startsWith("Lab:");
+                    }
+                    return true; // Include all if no type selected
+                })
+                .map((courseName) => ({
+                    value: courseName,
+                    label: courseName,
+                    icon: data[selectedClass as keyof DataStructure][courseName].icon,
+                }))
             : []
     );
 
@@ -132,6 +142,13 @@ function createFormStore() {
     );
 
     const hasImages = $derived(imageItems.length > 0);
+
+    // Reset selectedCourse if it's not in the filtered courses
+    $effect(() => {
+        if (selectedCourse && !courses.some(course => course.value === selectedCourse)) {
+            selectedCourse = "";
+        }
+    });
 
     // Initialize from localStorage (studentName, regNo, and selectedClass)
     function initFromLocalStorage() {
