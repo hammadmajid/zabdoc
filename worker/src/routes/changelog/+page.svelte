@@ -16,6 +16,16 @@
 
     const changelog: ChangelogEntry[] = [
         {
+            version: "2.2.1",
+            date: "2026-02-20",
+            changes: [
+                "Only show relevant courses based on document type",
+                "Added logging info in privacy policy",
+                "Fixed storage card width on mobile devices",
+                "Removed description field from changelog"
+            ]
+        },
+        {
             version: "2.2.0",
             date: "2026-02-15",
             changes: [

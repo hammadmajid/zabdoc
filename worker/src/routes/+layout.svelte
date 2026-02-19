@@ -46,7 +46,7 @@
                     href="/changelog"
                     class="bg-muted px-2 py-0.5 neo-border-sm text-xs font-bold hover:bg-primary transition-colors"
                 >
-                    v2.2.0
+                    v2.2.1
                 </a>
             </nav>
             <nav class="flex items-center gap-2">
