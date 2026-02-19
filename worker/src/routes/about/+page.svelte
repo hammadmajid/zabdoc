@@ -69,6 +69,7 @@
             <li><strong>Data Collection:</strong> We only collect the information you provide to generate PDFs</li>
             <li><strong>Data Sharing:</strong> We do not share your personal information with third parties</li>
             <li><strong>Local Storage:</strong> Your name and registration number are saved locally for convenience</li>
+            <li><strong>Logging:</strong> we may temporarly log <a href="https://baselime.io/glossary/wide-event" target="_blank" rel="noopener noreferrer">wide event</a> that may contains your personal information</li>
         </ul>
     </div>
 
