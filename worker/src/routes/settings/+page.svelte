@@ -96,9 +96,9 @@
         <p class="font-medium">Manage your preferences and data.</p>
     </div>
 
-    <div class="w-full grid md:grid-cols-2 gap-4">
+    <div class="w-full">
         <!-- Storage Settings -->
-        <Card.Root>
+        <Card.Root class="max-w-md">
             <Card.Header>
                 <Card.Title class="font-black uppercase">Storage</Card.Title>
                 <Card.Description>
@@ -153,7 +153,7 @@
                     </Select.Root>
                 </div>
 
-                <div class="pt-2 flex gap-2">
+                <div class="pt-2 flex flex-col sm:flex-row gap-2">
                     <Button 
                         onclick={() => updateStoredData()}
                         disabled={saveButtonState === "saved"}
