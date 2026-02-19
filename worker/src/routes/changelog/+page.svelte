@@ -2,7 +2,6 @@
     interface ChangelogEntry {
         version: string;
         date: string;
-        description: string;
         changes: string[];
     }
 
@@ -19,8 +18,6 @@
         {
             version: "2.2.0",
             date: "2026-02-15",
-            description:
-                "Release with UX improvements, bug fixes, and enhanced course icon rendering.",
             changes: [
                 "Added changelog page for version history",
                 "Render unique icon for each course",
@@ -32,8 +29,6 @@
         {
             version: "2.1.1",
             date: "2026-02-15",
-            description:
-                "Bug fixes and UX improvements including the neobrutalist design language and wizard-style document generation.",
             changes: [
                 "Fixed about page styling",
                 "Updated version display in navbar",
@@ -46,8 +41,6 @@
         {
             version: "2.1.0",
             date: "2026-02-14",
-            description:
-                "Minor release with new features and enhancements to the document generation process.",
             changes: [
                 "Added radio group component for better selection UX",
                 "Implemented fixed number of assignment selector",
@@ -59,8 +52,6 @@
         {
             version: "2.0.0",
             date: "2026-01-17",
-            description:
-                "Major redesign introducing the neobrutalist design language and wizard-style interface for the document generation process.",
             changes: [
                 "Implemented neobrutalist design language UI",
                 "Introduced wizard component for intuitive document generation",
@@ -72,8 +63,6 @@
         {
             version: "1.0.0",
             date: "2025-09-09",
-            description:
-                "Modernized the frontend with SvelteKit and improved mobile experience with enhanced drag and drop functionality.",
             changes: [
                 "Migrated to SvelteKit for better performance",
                 "Implemented touch drag and drop functionality for mobile",
@@ -85,14 +74,10 @@
         {
             version: "0.1.0",
             date: "2025-09-02",
-            description:
-                "Original release with core document generation functionality and initial branding.",
             changes: [
                 "Initial project setup",
                 "Basic document generation functionality",
-                "Initial favicon and branding",
-                "GNU General Public License v3 adoption",
-                "Foundation for wizard-style interface"
+                "GNU General Public License v3 adoption"
             ]
         }
     ];
@@ -122,10 +107,6 @@
                         {formatDate(entry.date)}
                     </span>
                 </div>
-
-                <p class="text-foreground leading-relaxed">
-                    {entry.description}
-                </p>
 
                 <div class="space-y-2">
                     <h3 class="text-sm font-bold uppercase tracking-wide text-muted-foreground">
