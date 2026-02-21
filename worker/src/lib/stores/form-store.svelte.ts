@@ -143,13 +143,6 @@ function createFormStore() {
 
     const hasImages = $derived(imageItems.length > 0);
 
-    // Reset selectedCourse if it's not in the filtered courses
-    $effect(() => {
-        if (selectedCourse && !courses.some(course => course.value === selectedCourse)) {
-            selectedCourse = "";
-        }
-    });
-
     // Initialize from localStorage (studentName, regNo, and selectedClass)
     function initFromLocalStorage() {
         if (browser) {
@@ -210,6 +203,13 @@ function createFormStore() {
 
     function setSelectedCourse(value: string) {
         selectedCourse = value;
+    }
+
+    // Validate and reset course if it's not in the current courses list
+    function validateSelectedCourse() {
+        if (selectedCourse && !courses.some(course => course.value === selectedCourse)) {
+            selectedCourse = "";
+        }
     }
 
     // Document functions
@@ -415,6 +415,7 @@ function createFormStore() {
         removeImage,
         reorderImages,
         clearImages,
+        validateSelectedCourse,
         buildFormData,
         reset,
         STUDENT_LIMIT,

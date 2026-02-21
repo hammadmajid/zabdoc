@@ -1,5 +1,6 @@
 <script lang="ts">
     import { formStore } from "$lib/stores/form-store.svelte";
+    import { wizardStore } from "$lib/stores/wizard-store.svelte";
     import * as Select from "$lib/components/ui/select/index.js";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
@@ -13,6 +14,15 @@
     // Initialize from localStorage on mount
     $effect(() => {
         formStore.initFromLocalStorage();
+    });
+
+    // Reset selectedCourse if it's no longer in the filtered courses
+    // This happens when the document type changes (Assignment vs Lab Task)
+    $effect(() => {
+        // Access both courses and wizardStore.documentType to trigger reactivity
+        formStore.courses;
+        wizardStore.documentType;
+        formStore.validateSelectedCourse();
     });
 </script>
 
