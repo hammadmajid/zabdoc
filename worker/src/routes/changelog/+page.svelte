@@ -16,6 +16,15 @@
 
     const changelog: ChangelogEntry[] = [
         {
+            version: "2.2.2",
+            date: "2026-02-21",
+            changes: [
+                "Fixed $effect error in form store for course filtering",
+                "Improved course validation when document type changes",
+                "Enhanced reactive course list updates"
+            ]
+        },
+        {
             version: "2.2.1",
             date: "2026-02-20",
             changes: [
