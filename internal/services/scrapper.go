@@ -17,7 +17,7 @@ type Scraper struct {
 }
 
 // New creates a new Scraper instance
-func New() *Scraper {
+func NewScraper() *Scraper {
 	jar, _ := cookiejar.New(nil)
 	return &Scraper{
 		client: &http.Client{Jar: jar},

@@ -25,6 +25,7 @@ func NewHandler(logger *log.Logger) Handler {
 		validationService: services.NewValidationService(),
 		fileService:       services.NewFileService(logger),
 		PdfService:        services.NewPDFService(),
+		scraper:           services.NewScraper(),
 	}
 }
 
