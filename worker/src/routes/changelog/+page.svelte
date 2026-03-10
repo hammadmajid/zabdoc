@@ -16,6 +16,18 @@
 
     const changelog: ChangelogEntry[] = [
         {
+            version: "3.0.0",
+            date: "2026-03-11",
+            changes: [
+                "Added attendance scraping feature for ZabDesk integration",
+                "Introduced new /scrap route for fetching attendance data",
+                "Moved document generation wizard to dedicated /document route",
+                "Redesigned home page with choice between Scrap Data and Generate Document",
+                "Implemented attendance display with tabbed interface (Attendance/Marks)",
+                "Added color-coded attendance status badges (Present/Absent/Late)"
+            ]
+        },
+        {
             version: "2.2.2",
             date: "2026-02-21",
             changes: [
