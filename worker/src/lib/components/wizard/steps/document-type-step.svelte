@@ -15,7 +15,7 @@
 
 <div class="flex flex-col items-center justify-center text-center px-4 py-8">
     <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 mb-8 rotate-[-2deg]">
-        <h1 class="text-4xl md:text-5xl font-black uppercase tracking-tight">
+        <h1 class="text-lg md:text-2xl font-black uppercase tracking-tight">
             {#if isLateNight}
                 Your sleep schedule is cooked.
             {:else}
