@@ -16,6 +16,19 @@
 
     const changelog: ChangelogEntry[] = [
         {
+            version: "3.0.1",
+            date: "2026-03-11",
+            changes: [
+                "Redesigned tabs UI with neobrualist style and purple accent color",
+                "Redesigned table component with bold borders and uppercase headers",
+                "Implemented proper Table components in scrap page",
+                "Fixed table row borders for consistent styling",
+                "Fixed back to home button visibility on document generation page",
+                "Reduced heading sizes across pages",
+                "Removed reset button from scrap page"
+            ]
+        },
+        {
             version: "3.0.0",
             date: "2026-03-11",
             changes: [
