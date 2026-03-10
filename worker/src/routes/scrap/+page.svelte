@@ -96,15 +96,6 @@
         }
     }
 
-    function handleReset() {
-        username = "";
-        password = "";
-        isError = false;
-        errorMessage = "";
-        courseData = [];
-        hasResults = false;
-    }
-
     function getStatusColor(status: string): string {
         const normalizedStatus = status.toLowerCase().trim();
         if (normalizedStatus === "present" || normalizedStatus === "p") {
@@ -211,16 +202,9 @@
             <div class="flex items-center justify-between mb-8">
                 <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 rotate-[-1deg]">
                     <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
-                        Attendance Data
+                        Scrapped Data
                     </h1>
                 </div>
-                <Button
-                    onclick={handleReset}
-                    variant="outline"
-                    class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
-                >
-                    Scrap Again
-                </Button>
             </div>
 
             {#if courseData.length === 0}
