@@ -84,3 +84,24 @@ func (r *GenerateRequest) ToWideEvent() WideEvent {
 		Images:     imageMetas,
 	}
 }
+
+// JSONResponse represents the API response structure
+type JSONResponse struct {
+	Success bool        `json:"success"`
+	Data    interface{} `json:"data,omitempty"`
+	Error   string      `json:"error,omitempty"`
+}
+
+// AttendanceRecord represents a single attendance entry for a lecture
+type AttendanceRecord struct {
+	Lecture string `json:"lecture"`
+	Date    string `json:"date"`
+	Status  string `json:"status"`
+}
+
+// CourseAttendance represents attendance data for a course
+type CourseAttendance struct {
+	CourseName string             `json:"courseName"`
+	Instructor string             `json:"instructor"`
+	Records    []AttendanceRecord `json:"records"`
+}

@@ -17,6 +17,7 @@ func SetupRoutes(application *app.App) *chi.Mux {
 	router.Get("/health", application.APIHandler.Health)
 
 	router.Post("/generate", application.APIHandler.Generate)
+	router.Post("/scrap", application.APIHandler.Scrap)
 
 	return router
 }
