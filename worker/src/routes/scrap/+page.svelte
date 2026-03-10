@@ -8,6 +8,7 @@
     import Construction from "@lucide/svelte/icons/construction";
     import * as Card from "$lib/components/ui/card";
     import * as Tabs from "$lib/components/ui/tabs";
+    import * as Table from "$lib/components/ui/table";
     import Button from "$lib/components/ui/button/button.svelte";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
@@ -244,42 +245,34 @@
                                                     No attendance records available.
                                                 </p>
                                             {:else}
-                                                <div class="neo-border-sm overflow-hidden">
-                                                    <table class="w-full text-sm">
-                                                        <thead class="bg-muted">
-                                                            <tr>
-                                                                <th class="px-3 py-2 text-left font-black uppercase text-xs">
-                                                                    Lecture
-                                                                </th>
-                                                                <th class="px-3 py-2 text-left font-black uppercase text-xs">
-                                                                    Date
-                                                                </th>
-                                                                <th class="px-3 py-2 text-left font-black uppercase text-xs">
-                                                                    Status
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {#each course.records as record}
-                                                                <tr class="border-t border-border">
-                                                                    <td class="px-3 py-2 font-medium">
-                                                                        {record.lecture}
-                                                                    </td>
-                                                                    <td class="px-3 py-2 text-muted-foreground">
-                                                                        {record.date}
-                                                                    </td>
-                                                                    <td class="px-3 py-2">
-                                                                        <span
-                                                                            class="inline-block px-2 py-1 rounded text-xs font-bold uppercase {getStatusColor(record.status)}"
-                                                                        >
-                                                                            {record.status}
-                                                                        </span>
-                                                                    </td>
-                                                                </tr>
-                                                            {/each}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+                                                <Table.Root>
+                                                    <Table.Header>
+                                                        <Table.Row>
+                                                            <Table.Head>Lecture</Table.Head>
+                                                            <Table.Head>Date</Table.Head>
+                                                            <Table.Head>Status</Table.Head>
+                                                        </Table.Row>
+                                                    </Table.Header>
+                                                    <Table.Body>
+                                                        {#each course.records as record}
+                                                            <Table.Row>
+                                                                <Table.Cell class="font-medium">
+                                                                    {record.lecture}
+                                                                </Table.Cell>
+                                                                <Table.Cell class="text-muted-foreground">
+                                                                    {record.date}
+                                                                </Table.Cell>
+                                                                <Table.Cell>
+                                                                    <span
+                                                                        class="inline-block px-2 py-1 rounded text-xs font-bold uppercase {getStatusColor(record.status)}"
+                                                                    >
+                                                                        {record.status}
+                                                                    </span>
+                                                                </Table.Cell>
+                                                            </Table.Row>
+                                                        {/each}
+                                                    </Table.Body>
+                                                </Table.Root>
                                             {/if}
                                         </Tabs.Content>
                                         <Tabs.Content value="marks" class="mt-4">
