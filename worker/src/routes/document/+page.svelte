@@ -12,18 +12,18 @@
 </script>
 
 <div class="min-h-[70vh] flex flex-col">
-    {#if wizardStore.currentStep === "select-document"}
-        <!-- Back to Home Button -->
-        <div class="mb-4" in:fade={{ duration: 300 }}>
-            <a
-                href="/"
-                class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all inline-flex w-fit"
-            >
-                <ArrowLeft class="size-4" />
-                Back to Home
-            </a>
-        </div>
+    <!-- Back to Home Button - Always visible -->
+    <div class="mb-4" in:fade={{ duration: 300 }}>
+        <a
+            href="/"
+            class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all inline-flex w-fit"
+        >
+            <ArrowLeft class="size-4" />
+            Back to Home
+        </a>
+    </div>
 
+    {#if wizardStore.currentStep === "select-document"}
         <!-- Hero Section - shown only on first step -->
         <div class="text-center mb-4" in:fade={{ duration: 300 }}>
             <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 inline-block rotate-[-2deg] mb-4">
