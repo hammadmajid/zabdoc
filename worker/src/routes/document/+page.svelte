@@ -1,15 +1,13 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import Wizard from "$lib/components/wizard/wizard.svelte";
     import { wizardStore } from "$lib/stores/wizard-store.svelte";
     import { fade } from "svelte/transition";
     import ArrowLeft from "@lucide/svelte/icons/arrow-left";
 
     // Reset wizard when landing on document page
-    $effect(() => {
+    onMount(() => {
         wizardStore.reset();
-        return () => {
-            // Cleanup if needed when leaving page
-        };
     });
 </script>
 
