@@ -15,15 +15,15 @@
 <div class="min-h-[70vh] flex flex-col">
     <!-- Hero Section -->
     <div class="text-center mb-4" in:fade={{ duration: 300 }}>
-        <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 inline-block rotate-[-2deg] mb-4">
+        <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 inline-block rotate-[-2deg] mb-6">
             <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight">
                 zabdoc
             </h1>
         </div>
         <p class="text-lg font-medium max-w-xl mx-auto">
-            web application for
+            utility tools for
             <span class="bg-secondary px-2 py-0.5 neo-border-sm font-bold">*SZABIST</span>
-            students to generate assignment and lab tasks in PDF format.
+            students.
         </p>
     </div>
 
@@ -42,14 +42,14 @@
         <div class="flex flex-col sm:flex-row gap-6">
             <a
                 href="/scrap"
-                class="neo-border neo-shadow bg-secondary text-secondary-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer"
+                class="neo-border neo-shadow bg-accent text-secondary-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer"
             >
                 <Database class="size-8" />
                 Scrap Data
             </a>
             <a
                 href="/document"
-                class="neo-border neo-shadow bg-accent text-accent-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer"
+                class="neo-border neo-shadow bg-secondary text-accent-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer"
             >
                 <FileText class="size-8" />
                 Generate Document

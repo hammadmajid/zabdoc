@@ -135,7 +135,7 @@
             </div>
 
             <p class="text-base font-medium max-w-md mb-8 text-center">
-                Enter your ZabDesk credentials to fetch attendance data.
+                Enter your ZabDesk credentials to fetch attendance and marks data.
             </p>
 
             {#if isError}
