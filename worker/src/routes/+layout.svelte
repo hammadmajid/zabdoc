@@ -7,7 +7,9 @@
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
     import { wizardStore } from "$lib/stores/wizard-store.svelte";
+    import { changelog } from "$lib/changelog";
     import "../app.css";
+
 
     onNavigate((navigation) => {
         if (!document.startViewTransition) return;
@@ -46,7 +48,7 @@
                     href="/changelog"
                     class="bg-muted px-2 py-0.5 neo-border-sm text-xs font-bold hover:bg-primary transition-colors"
                 >
-                    v3.0.1
+                    {changelog[0].version}
                 </a>
             </nav>
             <nav class="flex items-center gap-2">
