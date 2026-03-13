@@ -17,7 +17,8 @@
         <p>
             <strong>zabdoc</strong> is a web application for
             <span class="bg-secondary px-1 neo-border-sm font-bold">SZABIST</span>
-            students to generate assignment cover sheets and lab tasks in PDF format.
+            students to generate assignment cover sheets and lab tasks in PDF format,
+            and to fetch data from ZabDesk using their own credentials.
             Written in{" "}
             <a href="https://go.dev" target="_blank" rel="noreferrer">Go</a> and
             <a href="https://svelte.dev" target="_blank" rel="noreferrer">SvelteKit</a>,
@@ -27,6 +28,14 @@
             <a href="https://workers.cloudflare.com/" target="_blank" rel="noreferrer">Cloudflare Workers</a>
             respectively. Built by <a href="https://hammadmajid.pages.dev" target="_blank">Hammad Majid</a> on Pale Blue Dot.
         </p>
+
+        <h2>Features</h2>
+
+        <ul>
+            <li>Generate assignment cover sheets and lab submissions in PDF format</li>
+            <li>Scrape attendance and marks data from official ZabDesk using user-provided credentials</li>
+            <li>Store basic student details locally for faster repeat form filling</li>
+        </ul>
 
         <h2 id="disclaimer">Disclaimer</h2>
 
@@ -59,7 +68,9 @@
         <ul>
             <li>This tool is provided for educational and convenience purposes only</li>
             <li>Users are responsible for ensuring the accuracy of information entered</li>
+            <li>You must only use your own ZabDesk credentials or credentials you are authorized to use</li>
             <li>The generated PDFs should comply with your institution's submission requirements</li>
+            <li>Availability of scraping features depends on ZabDesk availability and compatibility</li>
             <li>Use of this service is at your own risk and discretion</li>
         </ul>
 
@@ -67,9 +78,11 @@
 
         <ul>
             <li><strong>Data Collection:</strong> We only collect the information you provide to generate PDFs</li>
+            <li><strong>ZabDesk Credentials:</strong> Credentials submitted on the scrap page are used to authenticate and fetch your data for that request</li>
             <li><strong>Data Sharing:</strong> We do not share your personal information with third parties</li>
             <li><strong>Local Storage:</strong> Your name and registration number are saved locally for convenience</li>
-            <li><strong>Logging:</strong> we may temporarly log <a href="https://baselime.io/glossary/wide-event" target="_blank" rel="noopener noreferrer">wide event</a> that may contains your personal information</li>
+            <li><strong>Scraped Data:</strong> Attendance and marks data is returned to you for viewing in the app and may be processed temporarily to complete your request</li>
+            <li><strong>Logging:</strong> We may temporarily log <a href="https://baselime.io/glossary/wide-event" target="_blank" rel="noopener noreferrer">wide events</a> and operational errors that may contain user-provided fields</li>
         </ul>
     </div>
 
@@ -93,7 +106,17 @@
                 <Accordion.Content>
                     <p class="text-sm">
                         Yes! Your student name and registration number are automatically saved
-                        locally in your browser for convenience. This data never leaves your device.
+                        locally in your browser for convenience. ZabDesk credentials are not stored in local storage.
+                    </p>
+                </Accordion.Content>
+            </Accordion.Item>
+
+            <Accordion.Item value="item-2b">
+                <Accordion.Trigger>Does zabdoc store my ZabDesk username and password?</Accordion.Trigger>
+                <Accordion.Content>
+                    <p class="text-sm">
+                        Credentials are used to log in and fetch your attendance data for your request.
+                        They are not saved to local storage by zabdoc.
                     </p>
                 </Accordion.Content>
             </Accordion.Item>
