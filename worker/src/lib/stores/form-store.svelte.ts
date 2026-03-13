@@ -119,7 +119,6 @@ function createFormStore() {
                 .map((courseName) => ({
                     value: courseName,
                     label: courseName,
-                    icon: data[selectedClass as keyof DataStructure][courseName].icon,
                 }))
             : []
     );
