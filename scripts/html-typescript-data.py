@@ -40,6 +40,10 @@ def parse_html_to_ts(input_file, output_file):
             cols = rows[i].find_all('td')
             if len(cols) >= 3:
                 raw_course = cols[1].get_text(strip=True)
+                
+                if "final year project" in raw_course.lower():
+                    continue
+
                 raw_faculty = cols[2].get_text(strip=True)
 
                 raw_faculty = raw_faculty.replace('\xa0', '')

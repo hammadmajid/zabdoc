@@ -793,10 +793,6 @@ export const data: DataStructure = {
             "instructor": "Tooba Abdul Qudoos Khan",
             "code": "CSC 4102"
         },
-        "Final Year Project-I": {
-            "instructor": "",
-            "code": "CSC 4105"
-        },
         "Parallel and Distributed Computing": {
             "instructor": "Muhammad Ibne Amin",
             "code": "CSC 4106"
@@ -814,10 +810,6 @@ export const data: DataStructure = {
         "Professional Practices": {
             "instructor": "Hasnain Tahir",
             "code": "CSC 4102"
-        },
-        "Final Year Project-I": {
-            "instructor": "",
-            "code": "CSC 4105"
         },
         "Parallel and Distributed Computing": {
             "instructor": "Rana Faisal Hayat",
@@ -837,10 +829,6 @@ export const data: DataStructure = {
             "instructor": "Muhammad Islam",
             "code": "CSC 4102"
         },
-        "Final Year Project-I": {
-            "instructor": "",
-            "code": "CSC 4105"
-        },
         "Parallel and Distributed Computing": {
             "instructor": "Asma Niaz Awan",
             "code": "CSC 4106"
@@ -858,10 +846,6 @@ export const data: DataStructure = {
         "Professional Practices": {
             "instructor": "Awais - Nawaz",
             "code": "CSC 4102"
-        },
-        "Final Year Project-I": {
-            "instructor": "",
-            "code": "CSC 4105"
         },
         "Parallel and Distributed Computing": {
             "instructor": "Dr. Danish Mahmood",
@@ -881,10 +865,6 @@ export const data: DataStructure = {
             "instructor": "Awais Mahmood",
             "code": "CSC 4201"
         },
-        "Final Year Project-II": {
-            "instructor": "",
-            "code": "CSC 4205"
-        },
         "Business and Technology Ethics": {
             "instructor": "Muhammad Islam",
             "code": "CSC 4501"
@@ -903,10 +883,6 @@ export const data: DataStructure = {
             "instructor": "Dr. Danish Mahmood",
             "code": "CSC 4201"
         },
-        "Final Year Project-II": {
-            "instructor": "",
-            "code": "CSC 4205"
-        },
         "Business and Technology Ethics": {
             "instructor": "Saira Shaheen",
             "code": "CSC 4501"
@@ -924,10 +900,6 @@ export const data: DataStructure = {
         "Information Security": {
             "instructor": "Muhammad Taseer ul Islam",
             "code": "CSC 4201"
-        },
-        "Final Year Project-II": {
-            "instructor": "",
-            "code": "CSC 4205"
         },
         "Business and Technology Ethics": {
             "instructor": "Saira Shaheen",
