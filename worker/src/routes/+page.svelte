@@ -41,7 +41,7 @@
 
         <div class="flex flex-col sm:flex-row gap-6">
             <a
-                href="/scrap"
+                href="/scrape"
                 class="neo-border neo-shadow bg-accent text-secondary-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer"
             >
                 <Database class="size-8" />

@@ -115,7 +115,7 @@
     <div class="mb-4" in:fade={{ duration: 300 }}>
         <a
             href="/"
-            class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all inline-flex w-fit"
+            class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all inline-flex w-fit"
         >
             <ArrowLeft class="size-4" />
             Back to Home
