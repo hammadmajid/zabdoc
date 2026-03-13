@@ -69,9 +69,9 @@
             }
 
             const result: any = await response.json();
-            
+
             console.log("API Response:", result);
-            
+
             if (!result.success) {
                 throw new Error(result.error || "Failed to fetch attendance data");
             }
@@ -86,7 +86,7 @@
             } else {
                 courseData = [];
             }
-            
+
             console.log("Processed courseData:", courseData);
             hasResults = true;
         } catch (error) {
@@ -129,7 +129,7 @@
                 <div class="flex items-center gap-3">
                     <Database class="size-6" />
                     <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
-                        Scrap Data
+                        Scrape Data
                     </h1>
                 </div>
             </div>
@@ -192,7 +192,7 @@
                         Scraping Data...
                     {:else}
                         <Database class="size-5 mr-2" />
-                        Scrap Data
+                        Scrape Data
                     {/if}
                 </Button>
             </div>
