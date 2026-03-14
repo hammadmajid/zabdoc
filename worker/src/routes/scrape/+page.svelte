@@ -30,6 +30,16 @@
         obtained: string;
     }
 
+    type MarkCategory = "quiz" | "assignment" | "lab" | "project" | "exam" | "other";
+
+    interface MarkGroup {
+        category: MarkCategory;
+        label: string;
+        entries: MarkEntry[];
+        totalMax: number;
+        totalObtained: number | null;
+    }
+
     interface CourseData {
         courseName: string;
         instructor: string;
@@ -132,6 +142,102 @@
             return "text-muted-foreground italic";
         }
         return "";
+    }
+
+    function parseMarkValue(value: string): number | null {
+        const normalized = value.trim().toLowerCase();
+        if (!normalized || normalized === "not entered") {
+            return null;
+        }
+
+        const parsed = Number.parseFloat(value);
+        return Number.isFinite(parsed) ? parsed : null;
+    }
+
+    function formatMarkValue(value: number): string {
+        if (Number.isInteger(value)) {
+            return `${value}`;
+        }
+
+        return value.toFixed(2).replace(/\.00$/, "").replace(/(\.\d)0$/, "$1");
+    }
+
+    function getMarkCategory(head: string): MarkCategory {
+        const normalized = head.trim().toLowerCase();
+        if (normalized.includes("quiz")) return "quiz";
+        if (normalized.includes("assignment")) return "assignment";
+        if (normalized.includes("lab") || normalized.includes("practical")) return "lab";
+        if (normalized.includes("project")) return "project";
+        if (
+            normalized.includes("mid") ||
+            normalized.includes("final") ||
+            normalized.includes("paper") ||
+            normalized.includes("exam")
+        ) {
+            return "exam";
+        }
+        return "other";
+    }
+
+    function groupMarks(marks: MarkEntry[]): { groups: MarkGroup[]; overallMax: number; overallObtained: number | null } {
+        const categoryOrder: MarkCategory[] = ["quiz", "assignment", "lab", "project", "exam", "other"];
+        const categoryLabels: Record<MarkCategory, string> = {
+            quiz: "Quizzes",
+            assignment: "Assignments",
+            lab: "Lab Work",
+            project: "Projects",
+            exam: "Exams",
+            other: "Other",
+        };
+
+        const groupMap = new Map<MarkCategory, { entries: MarkEntry[]; totalMax: number; totalObtained: number; hasObtained: boolean }>();
+
+        let overallMax = 0;
+        let overallObtained = 0;
+        let hasOverallObtained = false;
+
+        for (const mark of marks) {
+            const category = getMarkCategory(mark.head);
+            if (!groupMap.has(category)) {
+                groupMap.set(category, { entries: [], totalMax: 0, totalObtained: 0, hasObtained: false });
+            }
+            const group = groupMap.get(category)!;
+
+            const max = parseMarkValue(mark.max) ?? 0;
+            const obtained = parseMarkValue(mark.obtained);
+
+            group.entries.push(mark);
+            group.totalMax += max;
+            if (obtained !== null) {
+                group.totalObtained += obtained;
+                group.hasObtained = true;
+            }
+
+            overallMax += max;
+            if (obtained !== null) {
+                overallObtained += obtained;
+                hasOverallObtained = true;
+            }
+        }
+
+        const groups: MarkGroup[] = [];
+        for (const category of categoryOrder) {
+            const data = groupMap.get(category);
+            if (!data) continue;
+            groups.push({
+                category,
+                label: categoryLabels[category],
+                entries: data.entries,
+                totalMax: data.totalMax,
+                totalObtained: data.hasObtained ? data.totalObtained : null,
+            });
+        }
+
+        return {
+            groups,
+            overallMax,
+            overallObtained: hasOverallObtained ? overallObtained : null,
+        };
     }
 </script>
 
@@ -306,6 +412,7 @@
                                                     No marks records available.
                                                 </p>
                                             {:else}
+                                                {@const { groups, overallMax, overallObtained } = groupMarks(course.marks)}
                                                 <Table.Root>
                                                     <Table.Header>
                                                         <Table.Row>
@@ -315,19 +422,52 @@
                                                         </Table.Row>
                                                     </Table.Header>
                                                     <Table.Body>
-                                                        {#each course.marks as mark}
-                                                            <Table.Row>
-                                                                <Table.Cell class="font-medium">
-                                                                    {mark.head}
+                                                        {#each groups as group}
+                                                            <!-- Category section header -->
+                                                            <Table.Row class="bg-primary/10 hover:bg-primary/10">
+                                                                <Table.Cell colspan={3} class="font-black uppercase text-xs tracking-widest py-2 text-primary">
+                                                                    {group.label}
                                                                 </Table.Cell>
-                                                                <Table.Cell class="text-muted-foreground">
-                                                                    {mark.max}
+                                                            </Table.Row>
+                                                            <!-- Individual entries -->
+                                                            {#each group.entries as mark}
+                                                                <Table.Row>
+                                                                    <Table.Cell class="font-medium pl-6">
+                                                                        {mark.head}
+                                                                    </Table.Cell>
+                                                                    <Table.Cell class="text-muted-foreground">
+                                                                        {mark.max}
+                                                                    </Table.Cell>
+                                                                    <Table.Cell class={getMarkCellClass(mark.obtained)}>
+                                                                        {mark.obtained}
+                                                                    </Table.Cell>
+                                                                </Table.Row>
+                                                            {/each}
+                                                            <!-- Category total -->
+                                                            <Table.Row class="bg-muted/60 border-t">
+                                                                <Table.Cell class="font-bold text-xs uppercase tracking-wide pl-6 text-muted-foreground">
+                                                                    {group.label} Total
                                                                 </Table.Cell>
-                                                                <Table.Cell class={getMarkCellClass(mark.obtained)}>
-                                                                    {mark.obtained}
+                                                                <Table.Cell class="font-bold">
+                                                                    {formatMarkValue(group.totalMax)}
+                                                                </Table.Cell>
+                                                                <Table.Cell class={group.totalObtained === null ? "text-muted-foreground italic font-bold" : "font-bold"}>
+                                                                    {group.totalObtained === null ? "Not Entered" : formatMarkValue(group.totalObtained)}
                                                                 </Table.Cell>
                                                             </Table.Row>
                                                         {/each}
+                                                        <!-- Overall total -->
+                                                        <Table.Row class="bg-primary/15 border-t-2 hover:bg-primary/15">
+                                                            <Table.Cell class="font-black uppercase text-xs tracking-widest text-primary">
+                                                                Overall Total
+                                                            </Table.Cell>
+                                                            <Table.Cell class="font-black text-primary">
+                                                                {formatMarkValue(overallMax)}
+                                                            </Table.Cell>
+                                                            <Table.Cell class={overallObtained === null ? "text-muted-foreground italic font-black" : "font-black text-primary"}>
+                                                                {overallObtained === null ? "Not Entered" : formatMarkValue(overallObtained)}
+                                                            </Table.Cell>
+                                                        </Table.Row>
                                                     </Table.Body>
                                                 </Table.Root>
                                             {/if}
