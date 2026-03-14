@@ -47,13 +47,35 @@
         marks: MarkEntry[];
     }
 
+    import loadingMessages from "$lib/loading-msgs";
+
     let username = $state("");
     let password = $state("");
     let isLoading = $state(false);
     let isError = $state(false);
     let errorMessage = $state("");
+    let loadingMessage = $state("");
+    let loadingInterval: ReturnType<typeof setInterval> | null = null;
     let courseData = $state<CourseData[]>([]);
     let hasResults = $state(false);
+
+    function getRandomLoadingMessage() {
+        return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
+    }
+
+    function startLoadingMessages() {
+        loadingMessage = getRandomLoadingMessage();
+        loadingInterval = setInterval(() => {
+            loadingMessage = getRandomLoadingMessage();
+        }, 2000);
+    }
+
+    function stopLoadingMessages() {
+        if (loadingInterval) {
+            clearInterval(loadingInterval);
+            loadingInterval = null;
+        }
+    }
 
     async function handleScrap() {
         if (!username.trim() || !password.trim()) {
@@ -65,6 +87,7 @@
         isLoading = true;
         isError = false;
         errorMessage = "";
+        startLoadingMessages();
 
         try {
             const apiUrl = window.location.host.includes("localhost")
@@ -121,6 +144,8 @@
             isError = true;
             errorMessage = error instanceof Error ? error.message : String(error);
         } finally {
+            stopLoadingMessages();
+            loadingMessage = "";
             isLoading = false;
         }
     }
@@ -318,9 +343,11 @@
                     disabled={isLoading}
                     class="w-full neo-border neo-shadow bg-primary text-primary-foreground px-6 py-6 text-lg font-black uppercase hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all mt-6"
                 >
-                    {#if isLoading}
+                        {#if isLoading}
                         <Loader2 class="size-5 mr-2 animate-spin" />
-                        Scraping Data...
+                        <span class="text-sm normal-case font-medium tracking-normal">
+                            {loadingMessage || "Scraping Data..."}
+                        </span>
                     {:else}
                         <Database class="size-5 mr-2" />
                         Scrape Data
