@@ -2,21 +2,32 @@ package services
 
 import (
 	"fmt"
+	htmlstd "html"
 	"io"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"regexp"
 	"strings"
+
 	"zabdoc/internal/api/dto"
 )
 
-// Scraper handles attendance data retrieval from ZabDesk
+// Scraper handles attendance and marks data retrieval from ZabDesk
 type Scraper struct {
 	client *http.Client
 }
 
-// New creates a new Scraper instance
+var (
+	reCourseLinks    = regexp.MustCompile(`chkSubmit\('([^']+)','([^']+)','([^']+)','([^']+)'\)`)
+	reAttendanceRows = regexp.MustCompile(`(?s)<tr>\s*<td[^>]*>(\d+)</td>\s*<td[^>]*>([\d/]+)</td>\s*<td[^>]*>\s*([a-zA-Z]+)\s*</td>\s*</tr>`)
+	reMarksTable     = regexp.MustCompile(`(?is)<table[^>]*class="textColor"[^>]*>.*?<th[^>]*>\s*Marks\s*Head\s*</th>.*?<th[^>]*>\s*Marks\s*Obtained\s*</th>.*?</table>`)
+	reRows           = regexp.MustCompile(`(?is)<tr[^>]*>.*?</tr>`)
+	reTD             = regexp.MustCompile(`(?is)<td[^>]*>(.*?)</td>`)
+	reTags           = regexp.MustCompile(`<[^>]*>`)
+)
+
+// NewScraper creates a new Scraper instance
 func NewScraper() *Scraper {
 	jar, _ := cookiejar.New(nil)
 	return &Scraper{
@@ -24,8 +35,8 @@ func NewScraper() *Scraper {
 	}
 }
 
-// ScrapeAttendance fetches and parses attendance data from ZabDesk
-func (s *Scraper) ScrapeAttendance(username, password string) ([]dto.CourseAttendance, error) {
+// ScrapeCourseData fetches and merges attendance and marks by course name.
+func (s *Scraper) ScrapeCourseData(username, password string) (map[string]dto.CourseScrapeData, error) {
 	loginURL := "https://springzabdesk.szabist-isb.edu.pk/VerifyLogin.asp"
 	resp, err := s.client.PostForm(loginURL, url.Values{
 		"txtLoginName": {username},
@@ -35,80 +46,228 @@ func (s *Scraper) ScrapeAttendance(username, password string) ([]dto.CourseAtten
 	if err != nil {
 		return nil, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			return
-		}
-	}(resp.Body)
-
-	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseAttendance.asp?OptionName=View%20Attendance"
-	listResp, err := s.client.Get(listURL)
-	if err != nil {
+	if err := resp.Body.Close(); err != nil {
 		return nil, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			return
-		}
-	}(listResp.Body)
 
-	b, err := io.ReadAll(listResp.Body)
+	attendanceByCourse, err := s.scrapeAttendanceByCourse()
 	if err != nil {
 		return nil, err
 	}
 
-	reLinks := regexp.MustCompile(`chkSubmit\('([^']+)','([^']+)','([^']+)','([^']+)'\)`)
-	matches := reLinks.FindAllStringSubmatch(string(b), -1)
-
-	var results []dto.CourseAttendance
-	for _, m := range matches {
-		dResp, err := s.client.PostForm(listURL, url.Values{
-			"txtFac": {m[1]}, "txtSem": {m[2]}, "txtSec": {m[3]}, "txtCou": {m[4]},
-		})
-		if err != nil {
-			return nil, err
-		}
-
-		db, err := io.ReadAll(dResp.Body)
-		if err != nil {
-			err := dResp.Body.Close()
-			if err != nil {
-				return nil, err
-			}
-			return nil, err
-		}
-
-		if err := dResp.Body.Close(); err != nil {
-			return nil, err
-		}
-
-		dHTML := string(db)
-
-		course := dto.CourseAttendance{
-			CourseName: s.parseTag(dHTML, "Course:"),
-			Instructor: s.parseTag(dHTML, "Instructor:"),
-		}
-
-		reRow := regexp.MustCompile(`(?s)<tr>\s*<td[^>]*>(\d+)</td>\s*<td[^>]*>([\d/]+)</td>\s*<td[^>]*>\s*([a-zA-Z]+)\s*</td>\s*</tr>`)
-		rows := reRow.FindAllStringSubmatch(dHTML, -1)
-		for _, r := range rows {
-			course.Records = append(course.Records, dto.AttendanceRecord{
-				Lecture: r[1], Date: r[2], Status: strings.TrimSpace(r[3]),
-			})
-		}
-		results = append(results, course)
+	marksByCourse, err := s.scrapeMarksByCourse()
+	if err != nil {
+		return nil, err
 	}
+
+	results := make(map[string]dto.CourseScrapeData)
+
+	for courseName, attendance := range attendanceByCourse {
+		entry := results[courseName]
+		entry.Attendence = attendance
+		entry.Marks = marksByCourse[courseName]
+		results[courseName] = entry
+	}
+
+	for courseName, marks := range marksByCourse {
+		if _, exists := results[courseName]; exists {
+			continue
+		}
+		results[courseName] = dto.CourseScrapeData{
+			Attendence: dto.CourseAttendance{CourseName: courseName},
+			Marks:      marks,
+		}
+	}
+
 	return results, nil
 }
 
-// parseTag extracts a value from an HTML table row by label
+func (s *Scraper) scrapeAttendanceByCourse() (map[string]dto.CourseAttendance, error) {
+	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseAttendance.asp?OptionName=View%20Attendance"
+	listPage, err := s.getPage(listURL)
+	if err != nil {
+		return nil, err
+	}
+
+	matches := reCourseLinks.FindAllStringSubmatch(listPage, -1)
+	results := make(map[string]dto.CourseAttendance, len(matches))
+
+	for _, m := range matches {
+		dHTML, err := s.getCourseDetailPage(listURL, m)
+		if err != nil {
+			return nil, err
+		}
+
+		courseName := s.parseTag(dHTML, "Course:")
+		course := dto.CourseAttendance{
+			CourseName: courseName,
+			Instructor: s.parseTag(dHTML, "Instructor:"),
+			Records:    s.parseAttendanceRows(dHTML),
+		}
+		results[courseName] = course
+	}
+
+	return results, nil
+}
+
+func (s *Scraper) scrapeMarksByCourse() (map[string]dto.CourseMarks, error) {
+	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseRecapSheet.asp?OptionName=Current%20Semester%20Results"
+	listPage, err := s.getPage(listURL)
+	if err != nil {
+		return nil, err
+	}
+
+	matches := reCourseLinks.FindAllStringSubmatch(listPage, -1)
+	results := make(map[string]dto.CourseMarks, len(matches))
+
+	for _, m := range matches {
+		dHTML, err := s.getCourseDetailPage(listURL, m)
+		if err != nil {
+			return nil, err
+		}
+
+		courseName := s.parseTag(dHTML, "Course:")
+		marksTable := s.extractMarksTable(dHTML)
+		results[courseName] = dto.CourseMarks{
+			Entries: s.parseMarksRows(marksTable),
+		}
+	}
+
+	return results, nil
+}
+
+func (s *Scraper) getPage(pageURL string) (string, error) {
+	resp, err := s.client.Get(pageURL)
+	if err != nil {
+		return "", err
+	}
+	defer func(body io.ReadCloser) {
+		_ = body.Close()
+	}(resp.Body)
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
+}
+
+func (s *Scraper) getCourseDetailPage(listURL string, match []string) (string, error) {
+	if len(match) < 5 {
+		return "", fmt.Errorf("invalid course link data")
+	}
+
+	resp, err := s.client.PostForm(listURL, url.Values{
+		"txtFac": {match[1]},
+		"txtSem": {match[2]},
+		"txtSec": {match[3]},
+		"txtCou": {match[4]},
+	})
+	if err != nil {
+		return "", err
+	}
+	defer func(body io.ReadCloser) {
+		_ = body.Close()
+	}(resp.Body)
+
+	b, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
+}
+
+func (s *Scraper) parseAttendanceRows(html string) []dto.AttendanceRecord {
+	rows := reAttendanceRows.FindAllStringSubmatch(html, -1)
+	records := make([]dto.AttendanceRecord, 0, len(rows))
+
+	for _, r := range rows {
+		records = append(records, dto.AttendanceRecord{
+			Lecture: r[1],
+			Date:    r[2],
+			Status:  strings.TrimSpace(r[3]),
+		})
+	}
+
+	return records
+}
+
+func (s *Scraper) extractMarksTable(pageHTML string) string {
+	tableMatch := reMarksTable.FindString(pageHTML)
+	if tableMatch != "" {
+		return tableMatch
+	}
+
+	return pageHTML
+}
+
+func (s *Scraper) parseMarksRows(tableHTML string) []dto.MarkEntry {
+	if tableHTML == "" {
+		return nil
+	}
+
+	rawRows := reRows.FindAllString(tableHTML, -1)
+	marks := make([]dto.MarkEntry, 0, len(rawRows))
+
+	for _, rowHTML := range rawRows {
+		if strings.Contains(strings.ToLower(rowHTML), "colspan") {
+			continue
+		}
+
+		tds := reTD.FindAllStringSubmatch(rowHTML, -1)
+		if len(tds) < 3 {
+			continue
+		}
+
+		head := cleanText(tds[0][1])
+		if head == "" || strings.EqualFold(head, "Marks Head") {
+			continue
+		}
+		if !isAllowedMarksHead(head) {
+			continue
+		}
+
+		marks = append(marks, dto.MarkEntry{
+			Head:     head,
+			Max:      cleanText(tds[1][1]),
+			Obtained: cleanText(tds[2][1]),
+		})
+	}
+
+	return marks
+}
+
+func cleanText(value string) string {
+	withoutTags := reTags.ReplaceAllString(value, " ")
+	unescaped := htmlstd.UnescapeString(withoutTags)
+	compact := strings.Join(strings.Fields(unescaped), " ")
+	return strings.TrimSpace(compact)
+}
+
+func isAllowedMarksHead(head string) bool {
+	value := strings.ToLower(strings.TrimSpace(head))
+	allowed := []string{
+		"assignment", "quiz", "mid term", "midterm", "final term", "final",
+		"lab", "project", "viva", "report", "presentation", "practical", "cp", "objective",
+	}
+
+	for _, prefix := range allowed {
+		if strings.HasPrefix(value, prefix) {
+			return true
+		}
+	}
+
+	return false
+}
+
+// parseTag extracts a value from an HTML table row by label.
 func (s *Scraper) parseTag(html, label string) string {
 	re := regexp.MustCompile(fmt.Sprintf(`(?i)<th[^>]*>%s</th>\s*<td[^>]*>(.*?)</td>`, regexp.QuoteMeta(label)))
 	m := re.FindStringSubmatch(html)
 	if len(m) > 1 {
-		return strings.TrimSpace(regexp.MustCompile("<[^>]*>").ReplaceAllString(m[1], ""))
+		return strings.TrimSpace(reTags.ReplaceAllString(m[1], ""))
 	}
 	return "N/A"
 }

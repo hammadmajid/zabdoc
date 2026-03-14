@@ -146,10 +146,10 @@ func (h *Handler) Scrap(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := h.scraper.ScrapeAttendance(reqBody.Username, reqBody.Password)
+	data, err := h.scraper.ScrapeCourseData(reqBody.Username, reqBody.Password)
 	if err != nil {
 		h.logger.Printf("Scraping error: %v", err)
-		h.sendError(w, http.StatusInternalServerError, "Failed to fetch attendance data")
+		h.sendError(w, http.StatusInternalServerError, "Failed to fetch attendance and marks data")
 		return
 	}
 

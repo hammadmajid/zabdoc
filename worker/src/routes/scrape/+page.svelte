@@ -5,7 +5,6 @@
     import Database from "@lucide/svelte/icons/database";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import XCircle from "@lucide/svelte/icons/x-circle";
-    import Construction from "@lucide/svelte/icons/construction";
     import * as Card from "$lib/components/ui/card";
     import * as Tabs from "$lib/components/ui/tabs";
     import * as Table from "$lib/components/ui/table";
@@ -25,12 +24,25 @@
         records: AttendanceRecord[];
     }
 
+    interface MarkEntry {
+        head: string;
+        max: string;
+        obtained: string;
+    }
+
+    interface CourseData {
+        courseName: string;
+        instructor: string;
+        records: AttendanceRecord[];
+        marks: MarkEntry[];
+    }
+
     let username = $state("");
     let password = $state("");
     let isLoading = $state(false);
     let isError = $state(false);
     let errorMessage = $state("");
-    let courseData = $state<CourseAttendance[]>([]);
+    let courseData = $state<CourseData[]>([]);
     let hasResults = $state(false);
 
     async function handleScrap() {
@@ -73,16 +85,22 @@
             console.log("API Response:", result);
 
             if (!result.success) {
-                throw new Error(result.error || "Failed to fetch attendance data");
+                throw new Error(result.error || "Failed to fetch attendance and marks data");
             }
 
-            // Ensure data is an array with proper structure
-            if (Array.isArray(result.data)) {
-                courseData = result.data.map((course: any) => ({
-                    courseName: course.courseName || "Unknown Course",
-                    instructor: course.instructor || "Unknown Instructor",
-                    records: Array.isArray(course.records) ? course.records : []
-                }));
+            // Ensure data is an object: { course_name: { attendence: {}, marks: {} } }
+            if (result.data && typeof result.data === "object" && !Array.isArray(result.data)) {
+                courseData = Object.entries(result.data as Record<string, any>).map(([courseName, courseValue]) => {
+                    const attendence = courseValue?.attendence ?? {};
+                    const marks = courseValue?.marks ?? {};
+
+                    return {
+                        courseName,
+                        instructor: attendence?.instructor || "Unknown Instructor",
+                        records: Array.isArray(attendence?.records) ? attendence.records : [],
+                        marks: Array.isArray(marks?.entries) ? marks.entries : []
+                    };
+                });
             } else {
                 courseData = [];
             }
@@ -107,6 +125,13 @@
             return "text-yellow-600 bg-yellow-100 dark:bg-yellow-950";
         }
         return "text-muted-foreground bg-muted";
+    }
+
+    function getMarkCellClass(obtained: string): string {
+        if (obtained.toLowerCase() === "not entered") {
+            return "text-muted-foreground italic";
+        }
+        return "";
     }
 </script>
 
@@ -276,17 +301,36 @@
                                             {/if}
                                         </Tabs.Content>
                                         <Tabs.Content value="marks" class="mt-4">
-                                            <div class="flex flex-col items-center justify-center py-8 text-center space-y-4">
-                                                <div class="neo-border-sm bg-muted p-4 inline-block">
-                                                    <Construction class="size-12 text-muted-foreground" />
-                                                </div>
-                                                <p class="text-lg font-black uppercase text-muted-foreground">
-                                                    Work in Progress
+                                            {#if !course.marks || course.marks.length === 0}
+                                                <p class="text-sm text-muted-foreground text-center py-4">
+                                                    No marks records available.
                                                 </p>
-                                                <p class="text-sm text-muted-foreground">
-                                                    Marks feature is not yet implemented.
-                                                </p>
-                                            </div>
+                                            {:else}
+                                                <Table.Root>
+                                                    <Table.Header>
+                                                        <Table.Row>
+                                                            <Table.Head>Marks Head</Table.Head>
+                                                            <Table.Head>Max</Table.Head>
+                                                            <Table.Head>Obtained</Table.Head>
+                                                        </Table.Row>
+                                                    </Table.Header>
+                                                    <Table.Body>
+                                                        {#each course.marks as mark}
+                                                            <Table.Row>
+                                                                <Table.Cell class="font-medium">
+                                                                    {mark.head}
+                                                                </Table.Cell>
+                                                                <Table.Cell class="text-muted-foreground">
+                                                                    {mark.max}
+                                                                </Table.Cell>
+                                                                <Table.Cell class={getMarkCellClass(mark.obtained)}>
+                                                                    {mark.obtained}
+                                                                </Table.Cell>
+                                                            </Table.Row>
+                                                        {/each}
+                                                    </Table.Body>
+                                                </Table.Root>
+                                            {/if}
                                         </Tabs.Content>
                                     </Tabs.Root>
                                 </Card.Content>

@@ -105,3 +105,22 @@ type CourseAttendance struct {
 	Instructor string             `json:"instructor"`
 	Records    []AttendanceRecord `json:"records"`
 }
+
+// MarkEntry represents a single mark row for a course
+type MarkEntry struct {
+	Head     string `json:"head"`
+	Max      string `json:"max"`
+	Obtained string `json:"obtained"`
+}
+
+// CourseMarks represents marks data for a course
+type CourseMarks struct {
+	Entries []MarkEntry `json:"entries"`
+}
+
+// CourseScrapeData combines attendance and marks for a course.
+// "Attendence" keeps the current API spelling expected by clients.
+type CourseScrapeData struct {
+	Attendence CourseAttendance `json:"attendence"`
+	Marks      CourseMarks      `json:"marks"`
+}
