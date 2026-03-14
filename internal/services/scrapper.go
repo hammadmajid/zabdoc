@@ -9,14 +9,20 @@ import (
 	"net/url"
 	"regexp"
 	"strings"
+	"sync"
+	"time"
 
 	"zabdoc/internal/api/dto"
+
+	"golang.org/x/sync/errgroup"
 )
 
 // Scraper handles attendance and marks data retrieval from ZabDesk
 type Scraper struct {
 	client *http.Client
 }
+
+const maxConcurrentRequests = 5
 
 var (
 	reCourseLinks    = regexp.MustCompile(`chkSubmit\('([^']+)','([^']+)','([^']+)','([^']+)'\)`)
@@ -30,8 +36,18 @@ var (
 // NewScraper creates a new Scraper instance
 func NewScraper() *Scraper {
 	jar, _ := cookiejar.New(nil)
+	transport := &http.Transport{
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 20,
+		IdleConnTimeout:     90 * time.Second,
+	}
+
 	return &Scraper{
-		client: &http.Client{Jar: jar},
+		client: &http.Client{
+			Jar:       jar,
+			Transport: transport,
+			Timeout:   20 * time.Second,
+		},
 	}
 }
 
@@ -50,13 +66,24 @@ func (s *Scraper) ScrapeCourseData(username, password string) (map[string]dto.Co
 		return nil, err
 	}
 
-	attendanceByCourse, err := s.scrapeAttendanceByCourse()
-	if err != nil {
-		return nil, err
-	}
+	var (
+		attendanceByCourse map[string]dto.CourseAttendance
+		marksByCourse      map[string]dto.CourseMarks
+	)
 
-	marksByCourse, err := s.scrapeMarksByCourse()
-	if err != nil {
+	g := new(errgroup.Group)
+	g.Go(func() error {
+		var scrapeErr error
+		attendanceByCourse, scrapeErr = s.scrapeAttendanceByCourse()
+		return scrapeErr
+	})
+	g.Go(func() error {
+		var scrapeErr error
+		marksByCourse, scrapeErr = s.scrapeMarksByCourse()
+		return scrapeErr
+	})
+
+	if err := g.Wait(); err != nil {
 		return nil, err
 	}
 
@@ -92,19 +119,39 @@ func (s *Scraper) scrapeAttendanceByCourse() (map[string]dto.CourseAttendance, e
 	matches := reCourseLinks.FindAllStringSubmatch(listPage, -1)
 	results := make(map[string]dto.CourseAttendance, len(matches))
 
-	for _, m := range matches {
-		dHTML, err := s.getCourseDetailPage(listURL, m)
-		if err != nil {
-			return nil, err
-		}
+	var (
+		mu sync.Mutex
+		g  errgroup.Group
+	)
+	limit := make(chan struct{}, maxConcurrentRequests)
 
-		courseName := s.parseTag(dHTML, "Course:")
-		course := dto.CourseAttendance{
-			CourseName: courseName,
-			Instructor: s.parseTag(dHTML, "Instructor:"),
-			Records:    s.parseAttendanceRows(dHTML),
-		}
-		results[courseName] = course
+	for _, match := range matches {
+		m := match
+		g.Go(func() error {
+			limit <- struct{}{}
+			defer func() { <-limit }()
+
+			dHTML, err := s.getCourseDetailPage(listURL, m)
+			if err != nil {
+				return err
+			}
+
+			courseName := s.parseTag(dHTML, "Course:")
+			course := dto.CourseAttendance{
+				CourseName: courseName,
+				Instructor: s.parseTag(dHTML, "Instructor:"),
+				Records:    s.parseAttendanceRows(dHTML),
+			}
+
+			mu.Lock()
+			results[courseName] = course
+			mu.Unlock()
+			return nil
+		})
+	}
+
+	if err := g.Wait(); err != nil {
+		return nil, err
 	}
 
 	return results, nil
@@ -120,17 +167,38 @@ func (s *Scraper) scrapeMarksByCourse() (map[string]dto.CourseMarks, error) {
 	matches := reCourseLinks.FindAllStringSubmatch(listPage, -1)
 	results := make(map[string]dto.CourseMarks, len(matches))
 
-	for _, m := range matches {
-		dHTML, err := s.getCourseDetailPage(listURL, m)
-		if err != nil {
-			return nil, err
-		}
+	var (
+		mu sync.Mutex
+		g  errgroup.Group
+	)
+	limit := make(chan struct{}, maxConcurrentRequests)
 
-		courseName := s.parseTag(dHTML, "Course:")
-		marksTable := s.extractMarksTable(dHTML)
-		results[courseName] = dto.CourseMarks{
-			Entries: s.parseMarksRows(marksTable),
-		}
+	for _, match := range matches {
+		m := match
+		g.Go(func() error {
+			limit <- struct{}{}
+			defer func() { <-limit }()
+
+			dHTML, err := s.getCourseDetailPage(listURL, m)
+			if err != nil {
+				return err
+			}
+
+			courseName := s.parseTag(dHTML, "Course:")
+			marksTable := s.extractMarksTable(dHTML)
+			courseMarks := dto.CourseMarks{
+				Entries: s.parseMarksRows(marksTable),
+			}
+
+			mu.Lock()
+			results[courseName] = courseMarks
+			mu.Unlock()
+			return nil
+		})
+	}
+
+	if err := g.Wait(); err != nil {
+		return nil, err
 	}
 
 	return results, nil
