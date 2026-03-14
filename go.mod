@@ -1,6 +1,6 @@
 module zabdoc
 
-go 1.24.6
+go 1.25.0
 
 require (
 	github.com/chromedp/cdproto v0.0.0-20250724212937-08a3db8b4327
@@ -16,5 +16,6 @@ require (
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.4.0 // indirect
+	golang.org/x/sync v0.20.0
 	golang.org/x/sys v0.34.0 // indirect
 )
