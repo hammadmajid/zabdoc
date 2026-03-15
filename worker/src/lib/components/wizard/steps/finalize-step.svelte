@@ -4,6 +4,7 @@
     import { smartName } from "$lib/utils";
     import loadingMessages from "$lib/loading-msgs";
     import Button from "$lib/components/ui/button/button.svelte";
+    import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import CheckCircle from "@lucide/svelte/icons/check-circle";
     import XCircle from "@lucide/svelte/icons/x-circle";
@@ -26,6 +27,17 @@
     let errorMessage = $state("");
     let loadingMessage = $state("");
     let loadingInterval: ReturnType<typeof setInterval> | null = null;
+    let agreedToTerms = $state(false);
+
+    $effect(() => {
+        // Initialize from localStorage on mount
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem("zabdoc_terms_agreed");
+            if (stored === "true") {
+                agreedToTerms = true;
+            }
+        }
+    });
 
     function getRandomLoadingMessage() {
         return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
@@ -45,7 +57,21 @@
         }
     }
 
+    function handleTermsChange() {
+        if (agreedToTerms) {
+            localStorage.setItem("zabdoc_terms_agreed", "true");
+        } else {
+            localStorage.removeItem("zabdoc_terms_agreed");
+        }
+    }
+
     async function handleSubmit() {
+        if (!agreedToTerms) {
+            isError = true;
+            errorMessage = "You must agree to the Terms of Use and Privacy Policy to continue.";
+            return;
+        }
+
         isLoading = true;
         isSuccess = false;
         isError = false;
@@ -136,6 +162,7 @@
         handleSubmit();
     }
 </script>
+
 
 <div class="flex flex-col items-center px-4 py-8 max-w-3xl mx-auto w-full">
     <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 mb-8 rotate-[-1deg]">
@@ -373,10 +400,24 @@
 
         <!-- Generate Button -->
         <div class="w-full mt-8" in:scale={{ duration: 300, delay: 300, easing: quintOut }}>
+            <!-- Terms & Privacy Agreement -->
+            <div class="neo-border neo-shadow-sm bg-card p-4 mb-6 flex items-start gap-3">
+                <Checkbox 
+                    id="finalize-terms-agree"
+                    bind:checked={agreedToTerms}
+                    onchange={handleTermsChange}
+                    disabled={isLoading}
+                    class="mt-1"
+                />
+                <label for="finalize-terms-agree" class="text-sm font-medium cursor-pointer flex-1">
+                    I agree to the <a href="/terms" target="_blank" rel="noreferrer" class="text-primary font-bold hover:underline">Terms of Use</a> and <a href="/privacy" target="_blank" rel="noreferrer" class="text-primary font-bold hover:underline">Privacy Policy</a>
+                </label>
+            </div>
+
             <button
                 type="button"
                 onclick={handleSubmit}
-                disabled={isLoading}
+                disabled={isLoading || !agreedToTerms}
                 class="w-full neo-border neo-shadow-lg bg-primary text-primary-foreground px-8 py-6 text-xl font-black uppercase tracking-wide flex items-center justify-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[var(--neo-shadow-lg)]"
             >
                 {#if isLoading}

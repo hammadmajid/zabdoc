@@ -9,6 +9,7 @@
     import * as Tabs from "$lib/components/ui/tabs";
     import * as Table from "$lib/components/ui/table";
     import Button from "$lib/components/ui/button/button.svelte";
+    import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
 
@@ -58,6 +59,17 @@
     let loadingInterval: ReturnType<typeof setInterval> | null = null;
     let courseData = $state<CourseData[]>([]);
     let hasResults = $state(false);
+    let agreedToTerms = $state(false);
+
+    $effect(() => {
+        // Initialize from localStorage on mount
+        if (typeof window !== "undefined") {
+            const stored = localStorage.getItem("zabdoc_terms_agreed");
+            if (stored === "true") {
+                agreedToTerms = true;
+            }
+        }
+    });
 
     function getRandomLoadingMessage() {
         return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
@@ -77,10 +89,24 @@
         }
     }
 
+    function handleTermsChange() {
+        if (agreedToTerms) {
+            localStorage.setItem("zabdoc_terms_agreed", "true");
+        } else {
+            localStorage.removeItem("zabdoc_terms_agreed");
+        }
+    }
+
     async function handleScrap() {
         if (!username.trim() || !password.trim()) {
             isError = true;
             errorMessage = "Username and password are required";
+            return;
+        }
+
+        if (!agreedToTerms) {
+            isError = true;
+            errorMessage = "You must agree to the Terms of Use and Privacy Policy to continue.";
             return;
         }
 
@@ -338,9 +364,23 @@
                     />
                 </div>
 
+                <!-- Terms & Privacy Agreement -->
+                <div class="neo-border neo-shadow-sm bg-card p-4 my-6 flex items-start gap-3">
+                    <Checkbox 
+                        id="scrape-terms-agree"
+                        bind:checked={agreedToTerms}
+                        onchange={handleTermsChange}
+                        disabled={isLoading}
+                        class="mt-1"
+                    />
+                    <label for="scrape-terms-agree" class="text-sm font-medium cursor-pointer flex-1">
+                        I agree to the <a href="/terms" target="_blank" rel="noreferrer" class="text-primary font-bold hover:underline">Terms of Use</a> and <a href="/privacy" target="_blank" rel="noreferrer" class="text-primary font-bold hover:underline">Privacy Policy</a>
+                    </label>
+                </div>
+
                 <Button
                     onclick={handleScrap}
-                    disabled={isLoading}
+                    disabled={isLoading || !agreedToTerms}
                     class="w-full neo-border neo-shadow bg-primary text-primary-foreground px-6 py-6 text-lg font-black uppercase hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all mt-6"
                 >
                         {#if isLoading}
