@@ -8,6 +8,7 @@
     import * as Card from "$lib/components/ui/card";
     import * as Tabs from "$lib/components/ui/tabs";
     import * as Table from "$lib/components/ui/table";
+    import * as Select from "$lib/components/ui/select";
     import Button from "$lib/components/ui/button/button.svelte";
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Input from "$lib/components/ui/input/input.svelte";
@@ -50,8 +51,21 @@
 
     import loadingMessages from "$lib/loading-msgs";
 
+    function getDefaultSemester(): "Fall" | "Spring" | "Summer" {
+        const month = new Date().getMonth() + 1; // 1-12
+        if (month >= 9 || month <= 1) {
+            return "Fall"; // Sep-Jan: 9, 10, 11, 12, 1
+        } else if (month >= 2 && month <= 6) {
+            return "Spring"; // Feb-June: 2, 3, 4, 5, 6
+        } else {
+            return "Summer"; // July-Aug: 7, 8
+        }
+    }
+
     let username = $state("");
     let password = $state("");
+    let campus = $state("Islamabad");
+    let semester = $state<"Fall" | "Spring" | "Summer">(getDefaultSemester());
     let isLoading = $state(false);
     let isError = $state(false);
     let errorMessage = $state("");
@@ -125,7 +139,7 @@
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ username, password, campus, semester }),
             });
 
             if (!response.ok) {
@@ -362,6 +376,34 @@
                             }
                         }}
                     />
+                </div>
+
+                <div class="flex gap-2">
+                    <div class="space-y-2 w-full">
+                        <Label for="campus" class="font-bold uppercase text-sm">Campus</Label>
+                        <Select.Root  type="single" bind:value={campus} disabled={isLoading}>
+                            <Select.Trigger class="neo-border-sm w-full">
+                                {campus}
+                            </Select.Trigger>
+                            <Select.Content>
+                                <Select.Item value="Islamabad">Islamabad</Select.Item>
+                            </Select.Content>
+                        </Select.Root>
+                    </div>
+
+                    <div class="space-y-2 w-full">
+                        <Label for="semester" class="font-bold uppercase text-sm">Semester</Label>
+                        <Select.Root  type="single" bind:value={semester} disabled={isLoading}>
+                            <Select.Trigger class="neo-border-sm w-full">
+                                {semester}
+                            </Select.Trigger>
+                            <Select.Content>
+                                <Select.Item value="Fall">Fall</Select.Item>
+                                <Select.Item value="Spring">Spring</Select.Item>
+                                <Select.Item value="Summer">Summer</Select.Item>
+                            </Select.Content>
+                        </Select.Root>
+                    </div>
                 </div>
 
                 <!-- Terms & Privacy Agreement -->
