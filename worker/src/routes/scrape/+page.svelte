@@ -366,7 +366,7 @@
 
                 <!-- Terms & Privacy Agreement -->
                 <div class="neo-border neo-shadow-sm bg-card p-4 my-6 flex items-start gap-3">
-                    <Checkbox 
+                    <Checkbox
                         id="scrape-terms-agree"
                         bind:checked={agreedToTerms}
                         onchange={handleTermsChange}
@@ -380,7 +380,7 @@
 
                 <Button
                     onclick={handleScrap}
-                    disabled={isLoading || !agreedToTerms}
+                    disabled={isLoading}
                     class="w-full neo-border neo-shadow bg-primary text-primary-foreground px-6 py-6 text-lg font-black uppercase hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all mt-6"
                 >
                         {#if isLoading}

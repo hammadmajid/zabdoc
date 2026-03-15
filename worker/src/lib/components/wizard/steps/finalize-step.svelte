@@ -106,7 +106,7 @@
                         // If we can't read the response body, use a default message
                         errorText = "";
                     }
-                    
+
                     // Provide more specific error messages based on status code
                     if (response.status === 400) {
                         throw new Error(errorText || "Invalid request. Please check your form data and try again.");
@@ -131,12 +131,12 @@
                 isSuccess = true;
             } catch (fetchError) {
                 clearTimeout(timeoutId);
-                
+
                 // Check if it was a timeout/abort error
                 if (fetchError instanceof Error && fetchError.name === "AbortError") {
                     throw new Error("Request timed out. The server took too long to respond. Please try again.");
                 }
-                
+
                 // Re-throw other errors
                 throw fetchError;
             }
@@ -402,7 +402,7 @@
         <div class="w-full mt-8" in:scale={{ duration: 300, delay: 300, easing: quintOut }}>
             <!-- Terms & Privacy Agreement -->
             <div class="neo-border neo-shadow-sm bg-card p-4 mb-6 flex items-start gap-3">
-                <Checkbox 
+                <Checkbox
                     id="finalize-terms-agree"
                     bind:checked={agreedToTerms}
                     onchange={handleTermsChange}
@@ -417,7 +417,7 @@
             <button
                 type="button"
                 onclick={handleSubmit}
-                disabled={isLoading || !agreedToTerms}
+                disabled={isLoading}
                 class="w-full neo-border neo-shadow-lg bg-primary text-primary-foreground px-8 py-6 text-xl font-black uppercase tracking-wide flex items-center justify-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[var(--neo-shadow-lg)]"
             >
                 {#if isLoading}
