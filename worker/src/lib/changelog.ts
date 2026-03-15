@@ -15,6 +15,20 @@ export function formatDate(dateString: string): string {
 
 export const changelog: ChangelogEntry[] = [
     {
+        version: "3.1.0",
+        date: "2026-03-15",
+        changes: [
+            "Add terms and privacy agreement checkbox to finalize and scrape steps",
+            "Improve disclosure of terms and privacy",
+            "Add random loading messages during scraping process",
+            "Add campus and semester selection to scraping form",
+            "Enhance scraper concurrency and improve HTTP client configuration",
+            "Enhance scraping functionality to include marks data",
+            "Upgrade dependencies to fix security vulnerabilities",
+            "Merge dependabot updates for wrangler"
+        ]
+    },
+    {
         version: "3.0.2",
         date: "2026-03-14",
         changes: [
