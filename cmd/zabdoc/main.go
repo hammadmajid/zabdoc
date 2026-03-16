@@ -10,8 +10,8 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+	http2 "zabdoc/internal/api"
 
-	http2 "zabdoc/internal/api/http"
 	"zabdoc/internal/app"
 	"zabdoc/internal/router"
 )

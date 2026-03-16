@@ -5,7 +5,7 @@ import (
 	"context"
 	"os"
 	"time"
-	"zabdoc/internal/api/dto"
+	"zabdoc/internal/dto"
 	"zabdoc/internal/templates"
 
 	"github.com/chromedp/cdproto/emulation"

@@ -1,6 +1,8 @@
 package services
 
-import "zabdoc/internal/api/dto"
+import (
+	"zabdoc/internal/dto"
+)
 
 // ValidationService handles validation of form data.
 type ValidationService struct{}

@@ -11,8 +11,7 @@ import (
 	"strings"
 	"sync"
 	"time"
-
-	"zabdoc/internal/api/dto"
+	"zabdoc/internal/dto"
 
 	"golang.org/x/sync/errgroup"
 )

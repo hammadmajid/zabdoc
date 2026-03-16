@@ -1,4 +1,4 @@
-package http
+package api
 
 import (
 	"encoding/json"
@@ -6,8 +6,7 @@ import (
 	"log"
 	"net/http"
 	"time"
-
-	"zabdoc/internal/api/dto"
+	"zabdoc/internal/dto"
 	"zabdoc/internal/services"
 )
 
@@ -19,8 +18,8 @@ type Handler struct {
 	scraper           *services.Scraper
 }
 
-func NewHandler(logger *log.Logger) Handler {
-	return Handler{
+func NewHandler(logger *log.Logger) *Handler {
+	return &Handler{
 		logger:            logger,
 		validationService: services.NewValidationService(),
 		fileService:       services.NewFileService(logger),
@@ -31,7 +30,7 @@ func NewHandler(logger *log.Logger) Handler {
 
 const maxMultipartMemory int64 = 100 << 20 // 100 MBs
 
-func (h Handler) Generate(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseMultipartForm(maxMultipartMemory); err != nil {
 		http.Error(w, "invalid form", http.StatusBadRequest)
 		h.logger.Printf("parse multipart form: %v", err)

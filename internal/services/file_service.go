@@ -7,7 +7,7 @@ import (
 	"mime"
 	"mime/multipart"
 	"path/filepath"
-	"zabdoc/internal/api/dto"
+	"zabdoc/internal/dto"
 )
 
 // FileService handles file/image processing.
