@@ -8,7 +8,7 @@ zabdoc is a full-stack application for SZABIST students to generate assignment c
 zabdoc/
 ├── cmd/                          # CLI entry points
 ├── internal/
-│   ├── app/                      # Application initialization & DI container
+│   ├── application/                      # Application initialization & DI container
 │   ├── api/
 │   │   ├── http/                 # HTTP handlers for all endpoints
 │   │   └── dto/                  # Request/response DTOs

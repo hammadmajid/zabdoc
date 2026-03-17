@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 	"time"
-	"zabdoc/internal/dto"
 	"zabdoc/internal/services"
+	"zabdoc/internal/types"
 )
 
 type Handler struct {
@@ -37,7 +37,7 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := dto.GenerateRequest{
+	data := types.GenerateRequest{
 		Class:      r.FormValue("class"),
 		Course:     r.FormValue("course"),
 		CourseCode: r.FormValue("courseCode"),
@@ -50,18 +50,18 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 
 	// Check if multi-student mode (student-1-name exists)
 	if r.FormValue("student-1-name") != "" {
-		var students []dto.Student
+		var students []types.Student
 		for i := 1; i <= 6; i++ { // Max 6 students
 			name := r.FormValue(fmt.Sprintf("student-%d-name", i))
 			regNo := r.FormValue(fmt.Sprintf("student-%d-regNo", i))
 			if name != "" && regNo != "" {
-				students = append(students, dto.Student{Name: name, RegNo: regNo})
+				students = append(students, types.Student{Name: name, RegNo: regNo})
 			}
 		}
 		data.Students = students
 	} else {
 		// Single student mode
-		data.Students = []dto.Student{{
+		data.Students = []types.Student{{
 			Name:  r.FormValue("studentName"),
 			RegNo: r.FormValue("regNo"),
 		}}
@@ -86,7 +86,7 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Log wide event with all request info (images as metadata only)
-	wideEvent := data.ToWideEvent()
+	wideEvent := data.ToGenerateRequestWideEvent()
 	if eventJSON, err := json.Marshal(wideEvent); err == nil {
 		h.logger.Printf("[WIDE_EVENT] %s", eventJSON)
 	}
@@ -106,7 +106,7 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 }
 
 // sendJSON sends a JSON response
-func (h *Handler) sendJSON(w http.ResponseWriter, statusCode int, response dto.JSONResponse) {
+func (h *Handler) sendJSON(w http.ResponseWriter, statusCode int, response types.JSONResponse) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	if err := json.NewEncoder(w).Encode(response); err != nil {
@@ -116,7 +116,7 @@ func (h *Handler) sendJSON(w http.ResponseWriter, statusCode int, response dto.J
 
 // sendError sends an error JSON response
 func (h *Handler) sendError(w http.ResponseWriter, statusCode int, message string) {
-	h.sendJSON(w, statusCode, dto.JSONResponse{
+	h.sendJSON(w, statusCode, types.JSONResponse{
 		Success: false,
 		Error:   message,
 	})
@@ -152,7 +152,7 @@ func (h *Handler) Scrap(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.sendJSON(w, http.StatusOK, dto.JSONResponse{
+	h.sendJSON(w, http.StatusOK, types.JSONResponse{
 		Success: true,
 		Data:    data,
 	})
@@ -176,7 +176,7 @@ func (h *Handler) BuildInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.logger.Printf("Failed to fetch GitHub commit info: %v", err)
 		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, dto.JSONResponse{
+		h.sendJSON(w, http.StatusOK, types.JSONResponse{
 			Success: true,
 			Data:    buildInfo,
 		})
@@ -187,7 +187,7 @@ func (h *Handler) BuildInfo(w http.ResponseWriter, r *http.Request) {
 	if resp.StatusCode != http.StatusOK {
 		h.logger.Printf("GitHub API returned status: %d", resp.StatusCode)
 		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, dto.JSONResponse{
+		h.sendJSON(w, http.StatusOK, types.JSONResponse{
 			Success: true,
 			Data:    buildInfo,
 		})
@@ -207,7 +207,7 @@ func (h *Handler) BuildInfo(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(resp.Body).Decode(&githubResponse); err != nil {
 		h.logger.Printf("Failed to decode GitHub response: %v", err)
 		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, dto.JSONResponse{
+		h.sendJSON(w, http.StatusOK, types.JSONResponse{
 			Success: true,
 			Data:    buildInfo,
 		})
@@ -225,7 +225,7 @@ func (h *Handler) BuildInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		h.logger.Printf("Failed to parse commit time: %v", err)
 		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, dto.JSONResponse{
+		h.sendJSON(w, http.StatusOK, types.JSONResponse{
 			Success: true,
 			Data:    buildInfo,
 		})
@@ -264,7 +264,7 @@ func (h *Handler) BuildInfo(w http.ResponseWriter, r *http.Request) {
 	buildInfo.TimeAgo = timeAgo
 	buildInfo.Available = true
 
-	h.sendJSON(w, http.StatusOK, dto.JSONResponse{
+	h.sendJSON(w, http.StatusOK, types.JSONResponse{
 		Success: true,
 		Data:    buildInfo,
 	})

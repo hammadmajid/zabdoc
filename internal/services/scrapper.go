@@ -11,7 +11,7 @@ import (
 	"strings"
 	"sync"
 	"time"
-	"zabdoc/internal/dto"
+	"zabdoc/internal/types"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -51,7 +51,7 @@ func NewScraper() *Scraper {
 }
 
 // ScrapeCourseData fetches and merges attendance and marks by course name.
-func (s *Scraper) ScrapeCourseData(username, password string) (map[string]dto.CourseScrapeData, error) {
+func (s *Scraper) ScrapeCourseData(username, password string) (map[string]types.CourseScrapeData, error) {
 	loginURL := "https://springzabdesk.szabist-isb.edu.pk/VerifyLogin.asp"
 	resp, err := s.client.PostForm(loginURL, url.Values{
 		"txtLoginName": {username},
@@ -66,8 +66,8 @@ func (s *Scraper) ScrapeCourseData(username, password string) (map[string]dto.Co
 	}
 
 	var (
-		attendanceByCourse map[string]dto.CourseAttendance
-		marksByCourse      map[string]dto.CourseMarks
+		attendanceByCourse map[string]types.CourseAttendance
+		marksByCourse      map[string]types.CourseMarks
 	)
 
 	g := new(errgroup.Group)
@@ -86,7 +86,7 @@ func (s *Scraper) ScrapeCourseData(username, password string) (map[string]dto.Co
 		return nil, err
 	}
 
-	results := make(map[string]dto.CourseScrapeData)
+	results := make(map[string]types.CourseScrapeData)
 
 	for courseName, attendance := range attendanceByCourse {
 		entry := results[courseName]
@@ -99,8 +99,8 @@ func (s *Scraper) ScrapeCourseData(username, password string) (map[string]dto.Co
 		if _, exists := results[courseName]; exists {
 			continue
 		}
-		results[courseName] = dto.CourseScrapeData{
-			Attendence: dto.CourseAttendance{CourseName: courseName},
+		results[courseName] = types.CourseScrapeData{
+			Attendence: types.CourseAttendance{CourseName: courseName},
 			Marks:      marks,
 		}
 	}
@@ -108,7 +108,7 @@ func (s *Scraper) ScrapeCourseData(username, password string) (map[string]dto.Co
 	return results, nil
 }
 
-func (s *Scraper) scrapeAttendanceByCourse() (map[string]dto.CourseAttendance, error) {
+func (s *Scraper) scrapeAttendanceByCourse() (map[string]types.CourseAttendance, error) {
 	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseAttendance.asp?OptionName=View%20Attendance"
 	listPage, err := s.getPage(listURL)
 	if err != nil {
@@ -116,7 +116,7 @@ func (s *Scraper) scrapeAttendanceByCourse() (map[string]dto.CourseAttendance, e
 	}
 
 	matches := reCourseLinks.FindAllStringSubmatch(listPage, -1)
-	results := make(map[string]dto.CourseAttendance, len(matches))
+	results := make(map[string]types.CourseAttendance, len(matches))
 
 	var (
 		mu sync.Mutex
@@ -136,7 +136,7 @@ func (s *Scraper) scrapeAttendanceByCourse() (map[string]dto.CourseAttendance, e
 			}
 
 			courseName := s.parseTag(dHTML, "Course:")
-			course := dto.CourseAttendance{
+			course := types.CourseAttendance{
 				CourseName: courseName,
 				Instructor: s.parseTag(dHTML, "Instructor:"),
 				Records:    s.parseAttendanceRows(dHTML),
@@ -156,7 +156,7 @@ func (s *Scraper) scrapeAttendanceByCourse() (map[string]dto.CourseAttendance, e
 	return results, nil
 }
 
-func (s *Scraper) scrapeMarksByCourse() (map[string]dto.CourseMarks, error) {
+func (s *Scraper) scrapeMarksByCourse() (map[string]types.CourseMarks, error) {
 	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseRecapSheet.asp?OptionName=Current%20Semester%20Results"
 	listPage, err := s.getPage(listURL)
 	if err != nil {
@@ -164,7 +164,7 @@ func (s *Scraper) scrapeMarksByCourse() (map[string]dto.CourseMarks, error) {
 	}
 
 	matches := reCourseLinks.FindAllStringSubmatch(listPage, -1)
-	results := make(map[string]dto.CourseMarks, len(matches))
+	results := make(map[string]types.CourseMarks, len(matches))
 
 	var (
 		mu sync.Mutex
@@ -185,7 +185,7 @@ func (s *Scraper) scrapeMarksByCourse() (map[string]dto.CourseMarks, error) {
 
 			courseName := s.parseTag(dHTML, "Course:")
 			marksTable := s.extractMarksTable(dHTML)
-			courseMarks := dto.CourseMarks{
+			courseMarks := types.CourseMarks{
 				Entries: s.parseMarksRows(marksTable),
 			}
 
@@ -246,12 +246,12 @@ func (s *Scraper) getCourseDetailPage(listURL string, match []string) (string, e
 	return string(b), nil
 }
 
-func (s *Scraper) parseAttendanceRows(html string) []dto.AttendanceRecord {
+func (s *Scraper) parseAttendanceRows(html string) []types.AttendanceRecord {
 	rows := reAttendanceRows.FindAllStringSubmatch(html, -1)
-	records := make([]dto.AttendanceRecord, 0, len(rows))
+	records := make([]types.AttendanceRecord, 0, len(rows))
 
 	for _, r := range rows {
-		records = append(records, dto.AttendanceRecord{
+		records = append(records, types.AttendanceRecord{
 			Lecture: r[1],
 			Date:    r[2],
 			Status:  strings.TrimSpace(r[3]),
@@ -270,13 +270,13 @@ func (s *Scraper) extractMarksTable(pageHTML string) string {
 	return pageHTML
 }
 
-func (s *Scraper) parseMarksRows(tableHTML string) []dto.MarkEntry {
+func (s *Scraper) parseMarksRows(tableHTML string) []types.MarkEntry {
 	if tableHTML == "" {
 		return nil
 	}
 
 	rawRows := reRows.FindAllString(tableHTML, -1)
-	marks := make([]dto.MarkEntry, 0, len(rawRows))
+	marks := make([]types.MarkEntry, 0, len(rawRows))
 
 	for _, rowHTML := range rawRows {
 		if strings.Contains(strings.ToLower(rowHTML), "colspan") {
@@ -296,7 +296,7 @@ func (s *Scraper) parseMarksRows(tableHTML string) []dto.MarkEntry {
 			continue
 		}
 
-		marks = append(marks, dto.MarkEntry{
+		marks = append(marks, types.MarkEntry{
 			Head:     head,
 			Max:      cleanText(tds[1][1]),
 			Obtained: cleanText(tds[2][1]),

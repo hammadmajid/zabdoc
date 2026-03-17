@@ -10,9 +10,9 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	http2 "zabdoc/internal/api"
+	"zabdoc/internal/api"
 
-	"zabdoc/internal/app"
+	"zabdoc/internal/application"
 	"zabdoc/internal/router"
 )
 
@@ -23,15 +23,13 @@ func main() {
 	}
 
 	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
-	handler := http2.NewHandler(logger)
-
-	app := app.NewApp(logger, handler)
-
-	r := router.SetupRoutes(app)
+	handler := api.NewHandler(logger)
+	app := application.NewApplication(logger, handler)
+	routes := router.SetupRoutes(app)
 
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%s", port),
-		Handler:      r,
+		Handler:      routes,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: time.Minute,
@@ -51,7 +49,7 @@ func main() {
 
 	app.Logger.Println("Shutting down server...")
 
-	app.APIHandler.PdfService.Shutdown()
+	app.Handler.PdfService.Shutdown()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()

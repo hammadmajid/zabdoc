@@ -1,7 +1,7 @@
 package services
 
 import (
-	"zabdoc/internal/dto"
+	"zabdoc/internal/types"
 )
 
 // ValidationService handles validation of form data.
@@ -11,7 +11,7 @@ func NewValidationService() *ValidationService {
 	return &ValidationService{}
 }
 
-func (v *ValidationService) ValidateGenerateRequest(data *dto.GenerateRequest) error {
+func (v *ValidationService) ValidateGenerateRequest(data *types.GenerateRequest) error {
 	// TODO: Add validation logic here (e.g., required fields)
 	return nil
 }

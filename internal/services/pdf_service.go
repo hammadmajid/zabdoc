@@ -5,8 +5,8 @@ import (
 	"context"
 	"os"
 	"time"
-	"zabdoc/internal/dto"
 	"zabdoc/internal/templates"
+	"zabdoc/internal/types"
 
 	"github.com/chromedp/cdproto/emulation"
 	"github.com/chromedp/cdproto/page"
@@ -56,7 +56,7 @@ func NewPDFService() *PDFService {
 	}
 }
 
-func (ps *PDFService) GeneratePDF(data dto.GenerateRequest) ([]byte, error) {
+func (ps *PDFService) GeneratePDF(data types.GenerateRequest) ([]byte, error) {
 	result, err := ps.cb.Execute(func() (interface{}, error) {
 		var buf bytes.Buffer
 		if err := templates.Tpl.Execute(&buf, &data); err != nil {

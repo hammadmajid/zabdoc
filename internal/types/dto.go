@@ -1,4 +1,4 @@
-package dto
+package types
 
 type Image struct {
 	Data          string // Base64 encoded image data
@@ -13,8 +13,8 @@ type ImageMeta struct {
 	Base64Length  int    `json:"base64Length"`
 }
 
-// WideEvent represents a structured log entry for a request
-type WideEvent struct {
+// GenerateRequestWideEvent represents a structured log entry for a request
+type GenerateRequestWideEvent struct {
 	Students   []Student   `json:"students"`
 	Class      string      `json:"class"`
 	Course     string      `json:"course"`
@@ -59,8 +59,8 @@ func (r *GenerateRequest) FirstStudent() Student {
 	return Student{}
 }
 
-// ToWideEvent converts the request to a loggable WideEvent (excludes image data)
-func (r *GenerateRequest) ToWideEvent() WideEvent {
+// ToGenerateRequestWideEvent converts the request to a loggable GenerateRequestWideEvent (excludes image data)
+func (r *GenerateRequest) ToGenerateRequestWideEvent() GenerateRequestWideEvent {
 	imageMetas := make([]ImageMeta, len(r.Images))
 	for i, img := range r.Images {
 		imageMetas[i] = ImageMeta{
@@ -70,7 +70,7 @@ func (r *GenerateRequest) ToWideEvent() WideEvent {
 		}
 	}
 
-	return WideEvent{
+	return GenerateRequestWideEvent{
 		Students:   r.Students,
 		Class:      r.Class,
 		Course:     r.Course,
