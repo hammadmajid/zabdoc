@@ -7,7 +7,7 @@ import (
 	"mime"
 	"mime/multipart"
 	"path/filepath"
-	"zabdoc/internal/types"
+	"zabdoc/internal/types/requests"
 )
 
 // FileService handles file/image processing.
@@ -21,10 +21,10 @@ func NewFileService(logger *log.Logger) *FileService {
 
 // ProcessUploadedImages processes uploaded image files and returns Image slices.
 // Order is preserved to match the original upload order.
-func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader) ([]types.Image, error) {
+func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader) ([]requests.Image, error) {
 	type result struct {
 		index int
-		img   types.Image
+		img   requests.Image
 		err   error
 	}
 	results := make(chan result, len(fileHeaders)) // Buffered channel to collect results from goroutines
@@ -61,7 +61,7 @@ func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader
 
 			base64Data := base64.StdEncoding.EncodeToString(fileData)
 
-			image := types.Image{
+			image := requests.Image{
 				Data:          base64Data,
 				MimeType:      mimeType,
 				OriginalBytes: len(fileData),
@@ -72,7 +72,7 @@ func (fs *FileService) ProcessUploadedImages(fileHeaders []*multipart.FileHeader
 	}
 
 	// Pre-allocate slice to maintain order
-	images := make([]types.Image, len(fileHeaders))
+	images := make([]requests.Image, len(fileHeaders))
 
 	// Collect results from all goroutines
 	for range fileHeaders {

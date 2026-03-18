@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 	"zabdoc/internal/services"
-	"zabdoc/internal/types"
+	"zabdoc/internal/types/helpers"
+	"zabdoc/internal/types/requests"
+	"zabdoc/internal/types/responses"
 )
 
 type Handler struct {
@@ -37,7 +38,7 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := types.GenerateRequest{
+	data := requests.Generate{
 		Class:      r.FormValue("class"),
 		Course:     r.FormValue("course"),
 		CourseCode: r.FormValue("courseCode"),
@@ -50,18 +51,18 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 
 	// Check if multi-student mode (student-1-name exists)
 	if r.FormValue("student-1-name") != "" {
-		var students []types.Student
+		var students []requests.Student
 		for i := 1; i <= 6; i++ { // Max 6 students
 			name := r.FormValue(fmt.Sprintf("student-%d-name", i))
 			regNo := r.FormValue(fmt.Sprintf("student-%d-regNo", i))
 			if name != "" && regNo != "" {
-				students = append(students, types.Student{Name: name, RegNo: regNo})
+				students = append(students, requests.Student{Name: name, RegNo: regNo})
 			}
 		}
 		data.Students = students
 	} else {
 		// Single student mode
-		data.Students = []types.Student{{
+		data.Students = []requests.Student{{
 			Name:  r.FormValue("studentName"),
 			RegNo: r.FormValue("regNo"),
 		}}
@@ -86,7 +87,7 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Log wide event with all request info (images as metadata only)
-	wideEvent := data.ToGenerateRequestWideEvent()
+	wideEvent := helpers.ToGenerateRequestWideEvent(&data)
 	if eventJSON, err := json.Marshal(wideEvent); err == nil {
 		h.logger.Printf("[WIDE_EVENT] %s", eventJSON)
 	}
@@ -106,7 +107,7 @@ func (h *Handler) Generate(w http.ResponseWriter, r *http.Request) {
 }
 
 // sendJSON sends a JSON response
-func (h *Handler) sendJSON(w http.ResponseWriter, statusCode int, response types.JSONResponse) {
+func (h *Handler) sendJSON(w http.ResponseWriter, statusCode int, response responses.JSONResponse) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	if err := json.NewEncoder(w).Encode(response); err != nil {
@@ -116,7 +117,7 @@ func (h *Handler) sendJSON(w http.ResponseWriter, statusCode int, response types
 
 // sendError sends an error JSON response
 func (h *Handler) sendError(w http.ResponseWriter, statusCode int, message string) {
-	h.sendJSON(w, statusCode, types.JSONResponse{
+	h.sendJSON(w, statusCode, responses.JSONResponse{
 		Success: false,
 		Error:   message,
 	})
@@ -130,10 +131,7 @@ func (h *Handler) Scrap(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Parse JSON request body
-	var reqBody struct {
-		Username string `json:"username"`
-		Password string `json:"password"`
-	}
+	var reqBody requests.Scrape
 
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		h.sendError(w, http.StatusBadRequest, "Invalid request body")
@@ -145,128 +143,16 @@ func (h *Handler) Scrap(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := h.scraper.ScrapeCourseData(reqBody.Username, reqBody.Password)
+	data, err := h.scraper.ScrapeCourseData(&reqBody)
 	if err != nil {
 		h.logger.Printf("Scraping error: %v", err)
 		h.sendError(w, http.StatusInternalServerError, "Failed to fetch attendance and marks data")
 		return
 	}
 
-	h.sendJSON(w, http.StatusOK, types.JSONResponse{
+	h.sendJSON(w, http.StatusOK, responses.JSONResponse{
 		Success: true,
 		Data:    data,
-	})
-}
-
-// BuildInfo returns git commit information from GitHub API
-//
-//goland:noinspection GoUnusedParameter
-func (h *Handler) BuildInfo(w http.ResponseWriter, r *http.Request) {
-	const githubAPI = "https://api.github.com/repos/hammadmajid/zabscrap/commits/main"
-
-	var buildInfo struct {
-		Hash      string `json:"hash"`
-		Message   string `json:"message"`
-		TimeAgo   string `json:"timeAgo"`
-		Available bool   `json:"available"`
-	}
-
-	// Fetch latest commit from GitHub
-	resp, err := http.Get(githubAPI)
-	if err != nil {
-		h.logger.Printf("Failed to fetch GitHub commit info: %v", err)
-		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, types.JSONResponse{
-			Success: true,
-			Data:    buildInfo,
-		})
-		return
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		h.logger.Printf("GitHub API returned status: %d", resp.StatusCode)
-		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, types.JSONResponse{
-			Success: true,
-			Data:    buildInfo,
-		})
-		return
-	}
-
-	var githubResponse struct {
-		SHA    string `json:"sha"`
-		Commit struct {
-			Message string `json:"message"`
-			Author  struct {
-				Date string `json:"date"`
-			} `json:"author"`
-		} `json:"commit"`
-	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&githubResponse); err != nil {
-		h.logger.Printf("Failed to decode GitHub response: %v", err)
-		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, types.JSONResponse{
-			Success: true,
-			Data:    buildInfo,
-		})
-		return
-	}
-
-	// Extract short hash (first 7 characters)
-	hash := githubResponse.SHA
-	if len(hash) > 7 {
-		hash = hash[:7]
-	}
-
-	// Parse commit time
-	commitTime, err := time.Parse(time.RFC3339, githubResponse.Commit.Author.Date)
-	if err != nil {
-		h.logger.Printf("Failed to parse commit time: %v", err)
-		buildInfo.Available = false
-		h.sendJSON(w, http.StatusOK, types.JSONResponse{
-			Success: true,
-			Data:    buildInfo,
-		})
-		return
-	}
-
-	// Calculate time ago
-	duration := time.Since(commitTime)
-	var timeAgo string
-
-	if duration.Hours() < 1 {
-		minutes := int(duration.Minutes())
-		if minutes == 1 {
-			timeAgo = "1 minute ago"
-		} else {
-			timeAgo = fmt.Sprintf("%d minutes ago", minutes)
-		}
-	} else if duration.Hours() < 24 {
-		hours := int(duration.Hours())
-		if hours == 1 {
-			timeAgo = "1 hour ago"
-		} else {
-			timeAgo = fmt.Sprintf("%d hours ago", hours)
-		}
-	} else {
-		days := int(duration.Hours() / 24)
-		if days == 1 {
-			timeAgo = "1 day ago"
-		} else {
-			timeAgo = fmt.Sprintf("%d days ago", days)
-		}
-	}
-
-	buildInfo.Hash = hash
-	buildInfo.Message = githubResponse.Commit.Message
-	buildInfo.TimeAgo = timeAgo
-	buildInfo.Available = true
-
-	h.sendJSON(w, http.StatusOK, types.JSONResponse{
-		Success: true,
-		Data:    buildInfo,
 	})
 }
 
