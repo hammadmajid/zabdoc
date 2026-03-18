@@ -4,6 +4,7 @@
     <working_directory value="$PROJECT_DIR$" />
     <envs>
       <env name="PORT" value="8080" />
+      <env name="ALLOWED_ORIGIN" value="http://localhost:5173" />
     </envs>
     <kind value="PACKAGE" />
     <package value="zabdoc/cmd/zabdoc" />
