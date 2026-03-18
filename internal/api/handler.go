@@ -123,8 +123,8 @@ func (h *Handler) sendError(w http.ResponseWriter, statusCode int, message strin
 	})
 }
 
-// Scrap handles the JSON API request for fetching attendance and marks(TODO)
-func (h *Handler) Scrap(w http.ResponseWriter, r *http.Request) {
+// Scrape handles the JSON API request for fetching attendance and marks(TODO)
+func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		h.sendError(w, http.StatusMethodNotAllowed, "Method not allowed")
 		return
