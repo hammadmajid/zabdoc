@@ -13,6 +13,8 @@
     import RotateCcw from "@lucide/svelte/icons/rotate-ccw";
     import { fly, fade } from "svelte/transition";
     import { cubicOut } from "svelte/easing";
+
+    let {baseURL} : {baseURL: string} = $props();
 </script>
 
 <div class="flex flex-col min-h-[60vh]">
@@ -90,7 +92,7 @@
                 {:else if wizardStore.currentStep === "images"}
                     <ImagesStep />
                 {:else if wizardStore.currentStep === "finalize"}
-                    <FinalizeStep />
+                    <FinalizeStep {baseURL} />
                 {/if}
             </div>
         {/key}

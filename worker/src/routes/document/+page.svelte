@@ -4,6 +4,8 @@
     import { wizardStore } from "$lib/stores/wizard-store.svelte";
     import { fade } from "svelte/transition";
     import ArrowLeft from "@lucide/svelte/icons/arrow-left";
+    import type {PageProps} from "./$types";
+    let { data }: PageProps = $props();
 
     // Reset wizard when landing on document page
     onMount(() => {
@@ -39,6 +41,6 @@
 
     <!-- Wizard Component -->
     <div class="flex-1">
-        <Wizard />
+        <Wizard baseURL={data.baseURL} />
     </div>
 </div>

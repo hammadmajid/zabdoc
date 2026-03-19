@@ -1,26 +1,16 @@
 <script lang="ts">
-    import { wizardStore } from "$lib/stores/wizard-store.svelte";
-    import { formStore } from "$lib/stores/form-store.svelte";
-    import { smartName } from "$lib/utils";
+    import {wizardStore} from "$lib/stores/wizard-store.svelte";
+    import {formStore} from "$lib/stores/form-store.svelte";
+    import {smartName} from "$lib/utils";
     import loadingMessages from "$lib/loading-msgs";
     import Button from "$lib/components/ui/button/button.svelte";
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Loader2 from "@lucide/svelte/icons/loader-2";
     import CheckCircle from "@lucide/svelte/icons/check-circle";
     import XCircle from "@lucide/svelte/icons/x-circle";
-    import FileText from "@lucide/svelte/icons/file-text";
-    import User from "@lucide/svelte/icons/user";
-    import Users from "@lucide/svelte/icons/users";
     import FileQuestion from "@lucide/svelte/icons/file-question";
-    import BookOpen from "@lucide/svelte/icons/book-open";
-    import CalendarDays from "@lucide/svelte/icons/calendar-days";
-    import ImageIcon from "@lucide/svelte/icons/image";
-    import Pencil from "@lucide/svelte/icons/pencil";
-    import Download from "@lucide/svelte/icons/download";
-    import RefreshCw from "@lucide/svelte/icons/refresh-cw";
-    import { scale } from "svelte/transition";
-    import { quintOut } from "svelte/easing";
-    import {env} from "$env/dynamic/private";
+    import {scale} from "svelte/transition";
+    import {quintOut} from "svelte/easing";
 
     let isLoading = $state(false);
     let isSuccess = $state(false);
@@ -29,6 +19,7 @@
     let loadingMessage = $state("");
     let loadingInterval: ReturnType<typeof setInterval> | null = null;
     let agreedToTerms = $state(false);
+    let { baseURL }: { baseURL: string } = $props();
 
     $effect(() => {
         // Initialize from localStorage on mount
@@ -82,7 +73,7 @@
         try {
             const formData = formStore.buildFormData();
 
-            const apiUrl = `${env.BASE_API_URL}/generate"`;
+            const apiUrl = `${baseURL}/generate"`;
 
             // Create AbortController for timeout
             const controller = new AbortController();
@@ -166,7 +157,7 @@
 <div class="flex flex-col items-center px-4 py-8 max-w-3xl mx-auto w-full">
     <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 mb-8 rotate-[-1deg]">
         <div class="flex items-center gap-3">
-            <CheckCircle class="size-6" />
+            <CheckCircle class="size-6"/>
             <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
                 Review & Generate
             </h1>
@@ -179,11 +170,11 @@
 
     {#if isSuccess}
         <div
-            class="w-full neo-border neo-shadow-lg bg-secondary p-8 text-center space-y-6"
-            in:scale={{ duration: 400, easing: quintOut }}
+                class="w-full neo-border neo-shadow-lg bg-secondary p-8 text-center space-y-6"
+                in:scale={{ duration: 400, easing: quintOut }}
         >
             <div class="neo-border-sm bg-card p-4 inline-block mx-auto">
-                <CheckCircle class="size-16 text-green-600" />
+                <CheckCircle class="size-16 text-green-600"/>
             </div>
             <h2 class="text-2xl font-black uppercase">Success!</h2>
             <p class="text-muted-foreground">
@@ -191,16 +182,16 @@
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button
-                    onclick={handleSubmit}
-                    class="neo-border neo-shadow bg-primary hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        onclick={handleSubmit}
+                        class="neo-border neo-shadow bg-primary hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
-                    <Download class="size-5 mr-2" />
+                    <Download class="size-5 mr-2"/>
                     Download Again
                 </Button>
                 <Button
-                    variant="outline"
-                    onclick={handleStartOver}
-                    class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        variant="outline"
+                        onclick={handleStartOver}
+                        class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                     Start Over
                 </Button>
@@ -208,11 +199,11 @@
         </div>
     {:else if isError}
         <div
-            class="w-full neo-border neo-shadow-lg bg-destructive/10 p-8 text-center space-y-6"
-            in:scale={{ duration: 400, easing: quintOut }}
+                class="w-full neo-border neo-shadow-lg bg-destructive/10 p-8 text-center space-y-6"
+                in:scale={{ duration: 400, easing: quintOut }}
         >
             <div class="neo-border-sm bg-card p-4 inline-block mx-auto border-destructive">
-                <XCircle class="size-16 text-destructive" />
+                <XCircle class="size-16 text-destructive"/>
             </div>
             <h2 class="text-2xl font-black uppercase text-destructive">Error!</h2>
             <div class="space-y-2">
@@ -227,16 +218,16 @@
             </div>
             <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button
-                    onclick={handleRetry}
-                    class="neo-border neo-shadow bg-primary hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        onclick={handleRetry}
+                        class="neo-border neo-shadow bg-primary hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
-                    <RefreshCw class="size-5 mr-2" />
+                    <RefreshCw class="size-5 mr-2"/>
                     Try Again
                 </Button>
                 <Button
-                    variant="outline"
-                    onclick={handleStartOver}
-                    class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        variant="outline"
+                        onclick={handleStartOver}
+                        class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
                 >
                     Start Over
                 </Button>
@@ -246,12 +237,12 @@
         <div class="w-full space-y-4">
             <!-- Document Type -->
             <div
-                class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
-                in:scale={{ duration: 300, delay: 50, easing: quintOut }}
+                    class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
+                    in:scale={{ duration: 300, delay: 50, easing: quintOut }}
             >
                 <div class="flex items-center gap-3">
                     <div class="neo-border-sm bg-primary p-2">
-                        <FileText class="size-5" />
+                        <FileText class="size-5"/>
                     </div>
                     <div>
                         <p class="text-xs font-bold uppercase text-muted-foreground">Document Type</p>
@@ -259,27 +250,27 @@
                     </div>
                 </div>
                 <button
-                    type="button"
-                    onclick={() => wizardStore.goToStep("select-document")}
-                    class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
+                        type="button"
+                        onclick={() => wizardStore.goToStep("select-document")}
+                        class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
                 >
-                    <Pencil class="size-4" />
+                    <Pencil class="size-4"/>
                 </button>
             </div>
 
             <!-- Student Info -->
             <div
-                class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
-                in:scale={{ duration: 300, delay: 100, easing: quintOut }}
+                    class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
+                    in:scale={{ duration: 300, delay: 100, easing: quintOut }}
             >
                 <div class="flex items-center gap-3">
                     <div class="neo-border-sm bg-secondary p-2">
                         {#if wizardStore.teamType === "blank"}
-                            <FileQuestion class="size-5" />
+                            <FileQuestion class="size-5"/>
                         {:else if wizardStore.teamType === "individual"}
-                            <User class="size-5" />
+                            <User class="size-5"/>
                         {:else}
-                            <Users class="size-5" />
+                            <Users class="size-5"/>
                         {/if}
                     </div>
                     <div>
@@ -307,53 +298,55 @@
                     </div>
                 </div>
                 <button
-                    type="button"
-                    onclick={() => wizardStore.goToStep("student-info")}
-                    class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
+                        type="button"
+                        onclick={() => wizardStore.goToStep("student-info")}
+                        class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
                 >
-                    <Pencil class="size-4" />
+                    <Pencil class="size-4"/>
                 </button>
             </div>
 
             <!-- Course Info -->
             <div
-                class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
-                in:scale={{ duration: 300, delay: 150, easing: quintOut }}
+                    class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
+                    in:scale={{ duration: 300, delay: 150, easing: quintOut }}
             >
                 <div class="flex items-center gap-3">
                     <div class="neo-border-sm bg-accent p-2">
-                        <BookOpen class="size-5" />
+                        <BookOpen class="size-5"/>
                     </div>
                     <div>
                         <p class="text-xs font-bold uppercase text-muted-foreground">Course</p>
                         <p class="font-bold">{formStore.selectedCourse || "Not selected"}</p>
                         <p class="text-sm text-muted-foreground">
-                            {formStore.selectedClass || "No class"} • {formStore.courseDetails?.instructor || "No instructor"}
+                            {formStore.selectedClass || "No class"}
+                            • {formStore.courseDetails?.instructor || "No instructor"}
                         </p>
                     </div>
                 </div>
                 <button
-                    type="button"
-                    onclick={() => wizardStore.goToStep("course-info")}
-                    class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
+                        type="button"
+                        onclick={() => wizardStore.goToStep("course-info")}
+                        class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
                 >
-                    <Pencil class="size-4" />
+                    <Pencil class="size-4"/>
                 </button>
             </div>
 
             <!-- Document Details -->
             <div
-                class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
-                in:scale={{ duration: 300, delay: 200, easing: quintOut }}
+                    class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
+                    in:scale={{ duration: 300, delay: 200, easing: quintOut }}
             >
                 <div class="flex items-center gap-3">
                     <div class="neo-border-sm bg-primary p-2">
-                        <CalendarDays class="size-5" />
+                        <CalendarDays class="size-5"/>
                     </div>
                     <div>
                         <p class="text-xs font-bold uppercase text-muted-foreground">Details</p>
                         <p class="font-bold">
-                            {wizardStore.documentType} #{formStore.document.number || "?"} • {formStore.document.marks || "?"} marks
+                            {wizardStore.documentType} #{formStore.document.number || "?"}
+                            • {formStore.document.marks || "?"} marks
                         </p>
                         <p class="text-sm text-muted-foreground">
                             Due: {formStore.document.date || "Not set"}
@@ -361,37 +354,38 @@
                     </div>
                 </div>
                 <button
-                    type="button"
-                    onclick={() => wizardStore.goToStep("document-info")}
-                    class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
+                        type="button"
+                        onclick={() => wizardStore.goToStep("document-info")}
+                        class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
                 >
-                    <Pencil class="size-4" />
+                    <Pencil class="size-4"/>
                 </button>
             </div>
 
             <!-- Images (Lab Task only) -->
             {#if wizardStore.documentType === "Lab Task"}
                 <div
-                    class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
-                    in:scale={{ duration: 300, delay: 250, easing: quintOut }}
+                        class="neo-border neo-shadow bg-card p-4 flex items-center justify-between"
+                        in:scale={{ duration: 300, delay: 250, easing: quintOut }}
                 >
                     <div class="flex items-center gap-3">
                         <div class="neo-border-sm bg-secondary p-2">
-                            <ImageIcon class="size-5" />
+                            <ImageIcon class="size-5"/>
                         </div>
                         <div>
                             <p class="text-xs font-bold uppercase text-muted-foreground">Images</p>
                             <p class="font-bold">
-                                {formStore.imageItems.length} image{formStore.imageItems.length !== 1 ? "s" : ""} attached
+                                {formStore.imageItems.length} image{formStore.imageItems.length !== 1 ? "s" : ""}
+                                attached
                             </p>
                         </div>
                     </div>
                     <button
-                        type="button"
-                        onclick={() => wizardStore.goToStep("images")}
-                        class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
+                            type="button"
+                            onclick={() => wizardStore.goToStep("images")}
+                            class="neo-border-sm bg-muted p-2 hover:bg-secondary transition-colors cursor-pointer"
                     >
-                        <Pencil class="size-4" />
+                        <Pencil class="size-4"/>
                     </button>
                 </div>
             {/if}
@@ -402,28 +396,31 @@
             <!-- Terms & Privacy Agreement -->
             <div class="neo-border neo-shadow-sm bg-card p-4 mb-6 flex items-start gap-3">
                 <Checkbox
-                    id="finalize-terms-agree"
-                    bind:checked={agreedToTerms}
-                    onchange={handleTermsChange}
-                    disabled={isLoading}
-                    class="mt-1"
+                        id="finalize-terms-agree"
+                        bind:checked={agreedToTerms}
+                        onchange={handleTermsChange}
+                        disabled={isLoading}
+                        class="mt-1"
                 />
                 <label for="finalize-terms-agree" class="text-sm font-medium cursor-pointer flex-1">
-                    I agree to the <a href="/terms" target="_blank" rel="noreferrer" class="text-primary font-bold hover:underline">Terms of Use</a> and <a href="/privacy" target="_blank" rel="noreferrer" class="text-primary font-bold hover:underline">Privacy Policy</a>
+                    I agree to the <a href="/terms" target="_blank" rel="noreferrer"
+                                      class="text-primary font-bold hover:underline">Terms of Use</a> and <a
+                        href="/privacy" target="_blank" rel="noreferrer" class="text-primary font-bold hover:underline">Privacy
+                    Policy</a>
                 </label>
             </div>
 
             <button
-                type="button"
-                onclick={handleSubmit}
-                disabled={isLoading}
-                class="w-full neo-border neo-shadow-lg bg-primary text-primary-foreground px-8 py-6 text-xl font-black uppercase tracking-wide flex items-center justify-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[var(--neo-shadow-lg)]"
+                    type="button"
+                    onclick={handleSubmit}
+                    disabled={isLoading}
+                    class="w-full neo-border neo-shadow-lg bg-primary text-primary-foreground px-8 py-6 text-xl font-black uppercase tracking-wide flex items-center justify-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[var(--neo-shadow-lg)]"
             >
                 {#if isLoading}
-                    <Loader2 class="size-6 animate-spin" />
+                    <Loader2 class="size-6 animate-spin"/>
                     <span class="text-sm normal-case font-medium tracking-normal">{loadingMessage}</span>
                 {:else}
-                    <Download class="size-6" />
+                    <Download class="size-6"/>
                     Generate PDF
                 {/if}
             </button>

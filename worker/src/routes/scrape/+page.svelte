@@ -13,6 +13,8 @@
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
+    import loadingMessages from "$lib/loading-msgs";
+    import type { PageProps } from "./$types";
 
     interface AttendanceRecord {
         lecture: string;
@@ -49,8 +51,6 @@
         marks: MarkEntry[];
     }
 
-    import loadingMessages from "$lib/loading-msgs";
-    import {env} from "$env/dynamic/private";
 
     function getDefaultSemester(): "Fall" | "Spring" | "Summer" {
         const month = new Date().getMonth() + 1; // 1-12
@@ -75,6 +75,7 @@
     let courseData = $state<CourseData[]>([]);
     let hasResults = $state(false);
     let agreedToTerms = $state(false);
+    let { data }: PageProps = $props();
 
     $effect(() => {
         // Initialize from localStorage on mount
@@ -131,7 +132,7 @@
         startLoadingMessages();
 
         try {
-            const apiUrl = `${env.BASE_API_URL}/scrap"`;
+            const apiUrl = `${data.baseURL}/scrap"`;
 
             const response = await fetch(apiUrl, {
                 method: "POST",
