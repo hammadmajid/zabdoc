@@ -1,0 +1,14 @@
+{
+  "name": "worker",
+  "root": "worker",
+  "sourceRoot": "worker/src",
+  "targets": {
+    "dev": {
+      "command": "cd worker && pnpm run dev"
+    },
+    "build": {
+      "command": "cd worker && pnpm run build",
+      "outputs": ["{workspaceRoot}/worker/.svelte-kit"]
+    }
+  }
+}

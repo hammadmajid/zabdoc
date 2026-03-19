@@ -1,0 +1,11 @@
+{
+  "installation": {
+    "version": "22.6.0"
+  },
+  "extends": "nx/presets/npm.json",
+  "workspaceLayout": {
+    "appsDir": ".",
+    "libsDir": "internal"
+  },
+  "analytics": false
+}

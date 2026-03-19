@@ -1,0 +1,17 @@
+{
+  "name": "api",
+  "root": "cmd/zabdoc",
+  "sourceRoot": "cmd/zabdoc",
+  "targets": {
+    "build": {
+      "command": "go build -o tmp/zabdoc ./cmd/zabdoc",
+      "outputs": ["{workspaceRoot}/bin/zabdoc"]
+    },
+    "run": {
+      "command": "ALLOWED_ORIGIN=http://localhost:5173 PORT=8080 go run ./cmd/zabdoc"
+    },
+    "test": {
+      "command": "go test ./..."
+    }
+  }
+}
