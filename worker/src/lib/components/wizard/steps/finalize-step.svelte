@@ -20,6 +20,7 @@
     import RefreshCw from "@lucide/svelte/icons/refresh-cw";
     import { scale } from "svelte/transition";
     import { quintOut } from "svelte/easing";
+    import {env} from "$env/dynamic/private";
 
     let isLoading = $state(false);
     let isSuccess = $state(false);
@@ -81,9 +82,7 @@
         try {
             const formData = formStore.buildFormData();
 
-            const apiUrl = window.location.host.includes("localhost")
-                ? "http://localhost:8080/generate"
-                : "https://api.zabdoc.xyz/generate";
+            const apiUrl = `${env.BASE_API_URL}/generate"`;
 
             // Create AbortController for timeout
             const controller = new AbortController();

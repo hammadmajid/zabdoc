@@ -50,6 +50,7 @@
     }
 
     import loadingMessages from "$lib/loading-msgs";
+    import {env} from "$env/dynamic/private";
 
     function getDefaultSemester(): "Fall" | "Spring" | "Summer" {
         const month = new Date().getMonth() + 1; // 1-12
@@ -130,9 +131,7 @@
         startLoadingMessages();
 
         try {
-            const apiUrl = window.location.host.includes("localhost")
-                ? "http://localhost:8080/scrap"
-                : "https://api.zabdoc.xyz/scrap";
+            const apiUrl = `${env.BASE_API_URL}/scrap"`;
 
             const response = await fetch(apiUrl, {
                 method: "POST",
