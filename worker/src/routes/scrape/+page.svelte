@@ -132,7 +132,7 @@
         startLoadingMessages();
 
         try {
-            const apiUrl = `${data.baseURL}/scrap"`;
+            const apiUrl = `${data.baseURL}/scrape`;
 
             const response = await fetch(apiUrl, {
                 method: "POST",
