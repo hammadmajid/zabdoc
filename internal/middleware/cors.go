@@ -18,28 +18,23 @@ func getAllowedOrigin() string {
 }
 
 var CORSOptions = cors.Options{
-	// Allow requests from localhost:5173 and zabdoc.xyz (including subdomains)
+	// Allow requests from configured origin only
 	AllowedOrigins: []string{getAllowedOrigin()},
 
-	// Allow all HTTP methods
+	// Only allow methods actually used by frontend (/generate and /scrap endpoints)
 	AllowedMethods: []string{
-		http.MethodGet,
-		http.MethodPost,
-		http.MethodPut,
-		http.MethodPatch,
-		http.MethodDelete,
-		http.MethodOptions,
-		http.MethodHead,
+		http.MethodPost,    // Used for API requests
+		http.MethodOptions, // Required for CORS preflight
 	},
 
-	// Allow all headers
-	AllowedHeaders: []string{"*"},
+	// Only allow Content-Type header (needed for JSON requests)
+	AllowedHeaders: []string{"Content-Type"},
 
 	// Allow credentials (cookies, authorization headers, etc.)
 	AllowCredentials: true,
 
-	// Expose all headers to the client
-	ExposedHeaders: []string{"*"},
+	// No custom headers exposed to the client
+	ExposedHeaders: []string{},
 
 	// Cache preflight requests for 12 hours
 	MaxAge: int(12 * time.Hour / time.Second),
