@@ -139,6 +139,7 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+//goland:noinspection GoUnusedParameter
 func (h *Handler) Health(w http.ResponseWriter, r *http.Request) {
 	if h.validationService == nil {
 		http.Error(w, "ValidationService unavailable", http.StatusServiceUnavailable)
@@ -155,7 +156,12 @@ func (h *Handler) Health(w http.ResponseWriter, r *http.Request) {
 		h.logger.Println("Health check failed: PDFService unavailable")
 		return
 	}
+	if h.scraper == nil {
+		http.Error(w, "Scraper unavailable", http.StatusServiceUnavailable)
+		h.logger.Println("Health check failed: Scraper unavailable")
+		return
+	}
 
 	// All dependencies healthy
-	fmt.Fprintf(w, "Status is available")
+	_, _ = fmt.Fprintf(w, "Status is available")
 }
