@@ -14,37 +14,8 @@
     import Input from "$lib/components/ui/input/input.svelte";
     import Label from "$lib/components/ui/label/label.svelte";
     import loadingMessages from "$lib/loading-msgs";
-    import type { PageProps } from "./$types";
-
-    interface AttendanceRecord {
-        lecture: string;
-        date: string;
-        status: string;
-    }
-
-    interface MarkEntry {
-        head: string;
-        max: string;
-        obtained: string;
-    }
-
-    type MarkCategory = "quiz" | "assignment" | "lab" | "project" | "exam" | "other";
-
-    interface MarkGroup {
-        category: MarkCategory;
-        label: string;
-        entries: MarkEntry[];
-        totalMax: number;
-        totalObtained: number | null;
-    }
-
-    interface CourseData {
-        courseName: string;
-        instructor: string;
-        records: AttendanceRecord[];
-        marks: MarkEntry[];
-    }
-
+    import type {PageProps} from "./$types";
+    import type {CourseData, MarkCategory, MarkEntry, MarkGroup} from "$lib/types";
 
     function getDefaultSemester(): "Fall" | "Spring" | "Summer" {
         const month = new Date().getMonth() + 1; // 1-12
