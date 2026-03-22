@@ -91,7 +91,7 @@ func (s *Scraper) ScrapeCourseData(req *requests.Scrape) (map[string]models.Cour
 
 	for courseName, attendance := range attendanceByCourse {
 		entry := results[courseName]
-		entry.Attendence = attendance
+		entry.Attendance = attendance
 		entry.Marks = marksByCourse[courseName]
 		results[courseName] = entry
 	}
@@ -101,7 +101,7 @@ func (s *Scraper) ScrapeCourseData(req *requests.Scrape) (map[string]models.Cour
 			continue
 		}
 		results[courseName] = models.CourseScrapeData{
-			Attendence: models.CourseAttendance{CourseName: courseName},
+			Attendance: models.CourseAttendance{CourseName: courseName},
 			Marks:      marks,
 		}
 	}
