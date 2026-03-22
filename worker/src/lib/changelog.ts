@@ -43,7 +43,7 @@ export const changelog: ChangelogEntry[] = [
         version: "3.0.1",
         date: "2026-03-11",
         changes: [
-            "Redesigned tabs UI with neobrualist style and purple accent color",
+            "Redesigned tabs UI with neobrutalist style and purple accent color",
             "Redesigned table component with bold borders and uppercase headers",
             "Implemented proper Table components in scrap page",
             "Fixed table row borders for consistent styling",
