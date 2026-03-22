@@ -11,6 +11,15 @@
     import FileQuestion from "@lucide/svelte/icons/file-question";
     import {scale} from "svelte/transition";
     import {quintOut} from "svelte/easing";
+    import FileText from "@lucide/svelte/icons/file-text";
+    import Download from "@lucide/svelte/icons/download";
+    import Pencil from "@lucide/svelte/icons/pencil";
+    import Users from "@lucide/svelte/icons/users";
+    import User from "@lucide/svelte/icons/user";
+    import BookOpen from "@lucide/svelte/icons/book-open";
+    import CalendarDays from "@lucide/svelte/icons/calendar-days";
+    import RefreshCw from "@lucide/svelte/icons/refresh-cw";
+    import ImageIcon from "@lucide/svelte/icons/image"
 
     let isLoading = $state(false);
     let isSuccess = $state(false);
