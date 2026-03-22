@@ -365,7 +365,6 @@
                     <Checkbox
                         id="scrape-terms-agree"
                         bind:checked={agreedToTerms}
-                        onchange={handleTermsChange}
                         disabled={isLoading}
                         class="mt-1"
                     />
