@@ -22,12 +22,6 @@
         status: string;
     }
 
-    interface CourseAttendance {
-        courseName: string;
-        instructor: string;
-        records: AttendanceRecord[];
-    }
-
     interface MarkEntry {
         head: string;
         max: string;
@@ -143,13 +137,18 @@
             });
 
             if (!response.ok) {
-                const errorData: any = await response.json().catch(() => null);
                 if (response.status === 400) {
-                    throw new Error(errorData?.error || "Invalid username or password");
+                    isError = true;
+                    errorMessage = "Invalid username or password";
+                    return;
                 } else if (response.status === 500) {
-                    throw new Error(errorData?.error || "Server error. Please try again later.");
+                    isError = true;
+                    errorMessage = "Server error. Please try again later.";
+                    return;
                 } else {
-                    throw new Error(errorData?.error || `Error: ${response.status}`);
+                    isError = true;
+                    errorMessage = `Error: ${response.status}`;
+                    return;
                 }
             }
 
@@ -158,19 +157,21 @@
             console.log("API Response:", result);
 
             if (!result.success) {
-                throw new Error(result.error || "Failed to fetch attendance and marks data");
+                isError = true;
+                errorMessage = "Failed to fetch attendance and marks data";
+                return;
             }
 
-            // Ensure data is an object: { course_name: { attendence: {}, marks: {} } }
+            // Ensure data is an object: { course_name: { attendance: {}, marks: {} } }
             if (result.data && typeof result.data === "object" && !Array.isArray(result.data)) {
                 courseData = Object.entries(result.data as Record<string, any>).map(([courseName, courseValue]) => {
-                    const attendence = courseValue?.attendence ?? {};
+                    const attendance = courseValue?.attendence ?? {};
                     const marks = courseValue?.marks ?? {};
 
                     return {
                         courseName,
-                        instructor: attendence?.instructor || "Unknown Instructor",
-                        records: Array.isArray(attendence?.records) ? attendence.records : [],
+                        instructor: attendance?.instructor || "Unknown Instructor",
+                        records: Array.isArray(attendance?.records) ? attendance.records : [],
                         marks: Array.isArray(marks?.entries) ? marks.entries : []
                     };
                 });
