@@ -1,3 +1,5 @@
+// noinspection SpellCheckingInspection
+
 /**
  * Funny loading messages
  *
