@@ -1,7 +1,7 @@
 <script lang="ts">
     import {wizardStore} from "$lib/stores/wizard-store.svelte";
     import {formStore} from "$lib/stores/form-store.svelte";
-    import {smartName} from "$lib/utils";
+    import {smartName} from "$lib/smart-name";
     import loadingMessages from "$lib/loading-msgs";
     import Button from "$lib/components/ui/button/button.svelte";
     import Checkbox from "$lib/components/ui/checkbox/checkbox.svelte";
