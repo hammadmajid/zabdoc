@@ -139,7 +139,7 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (h Handler) Health(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) Health(w http.ResponseWriter, r *http.Request) {
 	if h.validationService == nil {
 		http.Error(w, "ValidationService unavailable", http.StatusServiceUnavailable)
 		h.logger.Println("Health check failed: ValidationService unavailable")
