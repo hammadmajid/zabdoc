@@ -6,7 +6,7 @@
 </script>
 
 <div class="flex flex-col items-center justify-center text-center px-4 py-8">
-    <div class="neo-border neo-shadow-lg bg-accent px-8 py-4 mb-8 rotate-[1deg]">
+    <div class="neo-border neo-shadow-lg bg-accent px-8 py-4 mb-8 rotate-1">
         <h1 class="text-3xl md:text-4xl font-black uppercase tracking-tight">
             Working alone or in a group?
         </h1>
@@ -23,7 +23,7 @@
                 wizardStore.setTeamType("individual");
                 wizardStore.nextStep();
             }}
-            class="neo-border neo-shadow bg-card px-10 py-8 text-xl font-black uppercase tracking-wide flex flex-col items-center gap-4 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer hover:bg-secondary"
+            class="neo-border neo-shadow bg-card px-10 py-8 text-xl font-black uppercase tracking-wide flex flex-col items-center gap-4 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer hover:bg-secondary"
         >
             <div class="neo-border-sm bg-primary p-4">
                 <User class="size-10" />
@@ -36,7 +36,7 @@
                 wizardStore.setTeamType("group");
                 wizardStore.nextStep();
             }}
-            class="neo-border neo-shadow bg-card px-10 py-8 text-xl font-black uppercase tracking-wide flex flex-col items-center gap-4 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer hover:bg-accent"
+            class="neo-border neo-shadow bg-card px-10 py-8 text-xl font-black uppercase tracking-wide flex flex-col items-center gap-4 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer hover:bg-accent"
         >
             <div class="neo-border-sm bg-secondary p-4">
                 <Users class="size-10" />
@@ -51,7 +51,7 @@
             wizardStore.setTeamType("blank");
             wizardStore.nextStep();
         }}
-        class="mt-6 neo-border neo-shadow bg-muted px-6 py-4 flex items-center gap-4 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer hover:bg-card"
+        class="mt-6 neo-border neo-shadow bg-muted px-6 py-4 flex items-center gap-4 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer hover:bg-card"
     >
         <div class="neo-border-sm bg-card p-2">
             <FileQuestion class="size-6" />

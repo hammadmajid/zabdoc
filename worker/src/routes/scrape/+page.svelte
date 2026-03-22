@@ -311,7 +311,7 @@
     <div class="mb-4" in:fade={{ duration: 300 }}>
         <a
             href="/"
-            class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all inline-flex w-fit"
+            class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm items-center gap-2 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all inline-flex w-fit"
         >
             <ArrowLeft class="size-4" />
             Back to Home
@@ -321,7 +321,7 @@
     {#if !hasResults}
         <!-- Login Form -->
         <div class="flex flex-col items-center justify-center px-4 py-8 flex-1 max-w-md mx-auto w-full">
-            <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 mb-8 rotate-[-2deg]">
+            <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 mb-8 -rotate-2">
                 <div class="flex items-center gap-3">
                     <Database class="size-6" />
                     <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
@@ -340,7 +340,7 @@
                     in:scale={{ duration: 400, easing: quintOut }}
                 >
                     <div class="flex items-center gap-3">
-                        <XCircle class="size-5 text-destructive flex-shrink-0" />
+                        <XCircle class="size-5 text-destructive shrink-0" />
                         <p class="text-sm font-medium text-destructive">
                             {errorMessage}
                         </p>
@@ -423,7 +423,7 @@
                 <Button
                     onclick={handleScrap}
                     disabled={isLoading}
-                    class="w-full neo-border neo-shadow bg-primary text-primary-foreground px-6 py-6 text-lg font-black uppercase hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all mt-6"
+                    class="w-full neo-border neo-shadow bg-primary text-primary-foreground px-6 py-6 text-lg font-black uppercase hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all mt-6"
                 >
                         {#if isLoading}
                         <Loader2 class="size-5 mr-2 animate-spin" />
@@ -441,7 +441,7 @@
         <!-- Results Display -->
         <div class="flex flex-col px-4 py-8 max-w-6xl mx-auto w-full">
             <div class="flex items-center justify-between mb-8">
-                <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 rotate-[-1deg]">
+                <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 -rotate-1">
                     <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
                         Scrapped Data
                     </h1>

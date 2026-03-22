@@ -203,7 +203,7 @@
 </script>
 
 <div class="flex flex-col items-center px-4 py-8 max-w-3xl mx-auto w-full">
-    <div class="neo-border neo-shadow-lg bg-accent px-6 py-3 mb-8 rotate-[-1deg]">
+    <div class="neo-border neo-shadow-lg bg-accent px-6 py-3 mb-8 -rotate-1">
         <div class="flex items-center gap-3">
             <ImageIcon class="size-6" />
             <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">

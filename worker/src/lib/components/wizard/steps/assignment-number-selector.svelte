@@ -12,9 +12,9 @@
 		<label
 			class={cn(
 				"neo-border neo-shadow px-4 py-6 flex items-center justify-center font-black text-lg uppercase cursor-pointer transition-all",
-				value === num 
-					? "bg-primary text-primary-foreground" 
-					: "bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+				value === num
+					? "bg-primary text-primary-foreground"
+					: "bg-card hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
 			)}
 		>
 			<RadioGroupItem value={num} class="sr-only" />

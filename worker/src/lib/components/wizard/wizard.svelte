@@ -108,7 +108,7 @@
                 type="button"
                 onclick={() => wizardStore.prevStep()}
                 disabled={wizardStore.isFirstStep}
-                class="neo-border neo-shadow bg-card px-6 py-3 font-bold uppercase flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0"
+                class="neo-border neo-shadow bg-card px-6 py-3 font-bold uppercase flex items-center gap-2 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0"
             >
                 <ArrowLeft class="size-5" />
                 Back
@@ -118,7 +118,7 @@
                 type="button"
                 onclick={() => wizardStore.nextStep()}
                 disabled={!wizardStore.canProceed()}
-                class="neo-border neo-shadow bg-primary text-primary-foreground px-6 py-3 font-bold uppercase flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0"
+                class="neo-border neo-shadow bg-primary text-primary-foreground px-6 py-3 font-bold uppercase flex items-center gap-2 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0"
             >
                 Next
                 <ArrowRight class="size-5" />
@@ -135,7 +135,7 @@
             <button
                 type="button"
                 onclick={() => wizardStore.prevStep()}
-                class="neo-border neo-shadow bg-card px-6 py-3 font-bold uppercase flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all cursor-pointer"
+                class="neo-border neo-shadow bg-card px-6 py-3 font-bold uppercase flex items-center gap-2 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all cursor-pointer"
             >
                 <ArrowLeft class="size-5" />
                 Back

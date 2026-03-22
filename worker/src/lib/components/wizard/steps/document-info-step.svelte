@@ -14,7 +14,7 @@
 
 <div class="flex flex-col items-center px-4 py-8 max-w-2xl mx-auto w-full">
     <div
-        class="neo-border neo-shadow-lg px-6 py-3 mb-8 rotate-[1deg]"
+        class="neo-border neo-shadow-lg px-6 py-3 mb-8 rotate-1"
         class:bg-secondary={wizardStore.documentType === "Assignment"}
         class:bg-accent={wizardStore.documentType === "Lab Task"}
     >

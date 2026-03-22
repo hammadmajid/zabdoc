@@ -20,6 +20,7 @@
     import CalendarDays from "@lucide/svelte/icons/calendar-days";
     import RefreshCw from "@lucide/svelte/icons/refresh-cw";
     import ImageIcon from "@lucide/svelte/icons/image"
+    import { onMount } from "svelte";
 
     let isLoading = $state(false);
     let isSuccess = $state(false);
@@ -30,13 +31,11 @@
     let agreedToTerms = $state(false);
     let { baseURL }: { baseURL: string } = $props();
 
-    $effect(() => {
+    onMount(() => {
         // Initialize from localStorage on mount
-        if (typeof window !== "undefined") {
-            const stored = localStorage.getItem("zabdoc_terms_agreed");
-            if (stored === "true") {
-                agreedToTerms = true;
-            }
+        const stored = localStorage.getItem("zabdoc_terms_agreed");
+        if (stored === "true") {
+            agreedToTerms = true;
         }
     });
 
@@ -82,7 +81,7 @@
         try {
             const formData = formStore.buildFormData();
 
-            const apiUrl = `${baseURL}/generate"`;
+            const apiUrl = `${baseURL}/generate`;
 
             // Create AbortController for timeout
             const controller = new AbortController();
@@ -164,7 +163,7 @@
 
 
 <div class="flex flex-col items-center px-4 py-8 max-w-3xl mx-auto w-full">
-    <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 mb-8 rotate-[-1deg]">
+    <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 mb-8 -rotate-1">
         <div class="flex items-center gap-3">
             <CheckCircle class="size-6"/>
             <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
@@ -192,7 +191,7 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button
                         onclick={handleSubmit}
-                        class="neo-border neo-shadow bg-primary hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        class="neo-border neo-shadow bg-primary hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                 >
                     <Download class="size-5 mr-2"/>
                     Download Again
@@ -200,7 +199,7 @@
                 <Button
                         variant="outline"
                         onclick={handleStartOver}
-                        class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        class="neo-border neo-shadow hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                 >
                     Start Over
                 </Button>
@@ -228,7 +227,7 @@
             <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Button
                         onclick={handleRetry}
-                        class="neo-border neo-shadow bg-primary hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        class="neo-border neo-shadow bg-primary hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                 >
                     <RefreshCw class="size-5 mr-2"/>
                     Try Again
@@ -236,7 +235,7 @@
                 <Button
                         variant="outline"
                         onclick={handleStartOver}
-                        class="neo-border neo-shadow hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                        class="neo-border neo-shadow hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                 >
                     Start Over
                 </Button>
@@ -423,7 +422,7 @@
                     type="button"
                     onclick={handleSubmit}
                     disabled={isLoading}
-                    class="w-full neo-border neo-shadow-lg bg-primary text-primary-foreground px-8 py-6 text-xl font-black uppercase tracking-wide flex items-center justify-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[var(--neo-shadow-lg)]"
+                    class="w-full neo-border neo-shadow-lg bg-primary text-primary-foreground px-8 py-6 text-xl font-black uppercase tracking-wide flex items-center justify-center gap-3 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-(--neo-shadow-lg)"
             >
                 {#if isLoading}
                     <Loader2 class="size-6 animate-spin"/>

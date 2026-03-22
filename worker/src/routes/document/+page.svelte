@@ -18,7 +18,7 @@
     <div class="mb-4" in:fade={{ duration: 300 }}>
         <a
             href="/"
-            class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm flex items-center gap-2 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all inline-flex w-fit"
+            class="neo-border neo-shadow bg-card px-4 py-2 font-bold uppercase text-sm flex items-center gap-2 hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all w-fit"
         >
             <ArrowLeft class="size-4" />
             Back to Home
@@ -28,7 +28,7 @@
     {#if wizardStore.currentStep === "select-document"}
         <!-- Hero Section - shown only on first step -->
         <div class="text-center mb-4" in:fade={{ duration: 300 }}>
-            <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 inline-block rotate-[-2deg] mb-4">
+            <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 inline-block -rotate-2 mb-4">
                 <h1 class="text-4xl md:text-6xl font-black uppercase tracking-tight">
                     Generate Document
                 </h1>

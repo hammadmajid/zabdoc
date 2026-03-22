@@ -40,7 +40,7 @@
                 <a
                     href="/"
                     onclick={handleZabdocClick}
-                    class="neo-border-sm neo-shadow-sm bg-primary px-4 py-2 text-xl font-black uppercase tracking-tight hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+                    class="neo-border-sm neo-shadow-sm bg-primary px-4 py-2 text-xl font-black uppercase tracking-tight hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
                 >
                     zabdoc
                 </a>

@@ -14,7 +14,7 @@
 </script>
 
 <div class="flex flex-col items-center justify-center text-center px-4 py-8">
-    <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 mb-8 rotate-[-2deg]">
+    <div class="neo-border neo-shadow-lg bg-primary px-8 py-4 mb-8 -rotate-2">
         <h1 class="text-lg md:text-2xl font-black uppercase tracking-tight">
             {#if isLateNight}
                 Your sleep schedule is cooked.
@@ -35,7 +35,7 @@
                 wizardStore.setDocumentType("Assignment");
                 wizardStore.nextStep();
             }}
-            class="neo-border neo-shadow bg-secondary text-secondary-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer"
+            class="neo-border neo-shadow bg-secondary text-secondary-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
         >
             <FileText class="size-8" />
             Assignment
@@ -46,7 +46,7 @@
                 wizardStore.setDocumentType("Lab Task");
                 wizardStore.nextStep();
             }}
-            class="neo-border neo-shadow bg-accent text-accent-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-none transition-all cursor-pointer"
+            class="neo-border neo-shadow bg-accent text-accent-foreground px-10 py-6 text-xl font-black uppercase tracking-wide flex items-center gap-3 hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all cursor-pointer"
         >
             <ClipboardList class="size-8" />
             Lab Task

@@ -18,7 +18,7 @@
 				disabled && "opacity-50 cursor-not-allowed",
 				value === course.value
 					? "bg-accent text-accent-foreground"
-					: "bg-card hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none"
+					: "bg-card hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
 			)}
 		>
 			<RadioGroupItem value={course.value} class="sr-only" {disabled} />

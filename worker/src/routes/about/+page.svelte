@@ -270,13 +270,13 @@
         href="https://github.com/hammadmajid/zabdoc/issues"
         target="_blank"
         rel="noopener noreferrer"
-        class="neo-border-sm neo-shadow-sm bg-card px-4 py-2 font-bold uppercase text-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+        class="neo-border-sm neo-shadow-sm bg-card px-4 py-2 font-bold uppercase text-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
       >
         Report a Bug
       </a>
       <a
         href="mailto:hammadmajid@pm.me"
-        class="neo-border-sm neo-shadow-sm bg-primary px-4 py-2 font-bold uppercase text-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all"
+        class="neo-border-sm neo-shadow-sm bg-primary px-4 py-2 font-bold uppercase text-sm hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none transition-all"
       >
         Contact
       </a>

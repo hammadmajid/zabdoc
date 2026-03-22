@@ -19,7 +19,7 @@
 
 <div class="flex flex-col items-center px-4 py-8 max-w-2xl mx-auto w-full">
     {#if wizardStore.teamType === "individual"}
-        <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 mb-8 rotate-[-1deg]">
+        <div class="neo-border neo-shadow-lg bg-primary px-6 py-3 mb-8 -rotate-1">
             <div class="flex items-center gap-3">
                 <User class="size-6" />
                 <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
@@ -63,7 +63,7 @@
             </div>
         </div>
     {:else}
-        <div class="neo-border neo-shadow-lg bg-secondary px-6 py-3 mb-8 rotate-[1deg]">
+        <div class="neo-border neo-shadow-lg bg-secondary px-6 py-3 mb-8 rotate-1">
             <div class="flex items-center gap-3">
                 <Users class="size-6" />
                 <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">

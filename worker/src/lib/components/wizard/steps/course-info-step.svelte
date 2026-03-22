@@ -27,7 +27,7 @@
 </script>
 
 <div class="flex flex-col items-center px-4 py-8 max-w-2xl mx-auto w-full">
-    <div class="neo-border neo-shadow-lg bg-secondary px-6 py-3 mb-8 rotate-[-1deg]">
+    <div class="neo-border neo-shadow-lg bg-secondary px-6 py-3 mb-8 -rotate-1">
         <div class="flex items-center gap-3">
             <BookOpen class="size-6" />
             <h1 class="text-2xl md:text-3xl font-black uppercase tracking-tight">
@@ -59,7 +59,7 @@
                 required
                 bind:value={formStore.selectedClass}
             >
-                <Select.Trigger class="!w-full neo-border-sm whitespace-normal min-h-[3rem] h-auto text-lg">
+                <Select.Trigger class="w-full! neo-border-sm whitespace-normal min-h-12 h-auto text-lg">
                     <span class="text-left leading-tight">{formStore.classTriggerContent}</span>
                 </Select.Trigger>
                 <Select.Content>
