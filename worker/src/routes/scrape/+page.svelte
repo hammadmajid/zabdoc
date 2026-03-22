@@ -42,16 +42,6 @@
     let agreedToTerms = $state(false);
     let { data }: PageProps = $props();
 
-    $effect(() => {
-        // Initialize from localStorage on mount
-        if (typeof window !== "undefined") {
-            const stored = localStorage.getItem("zabdoc_terms_agreed");
-            if (stored === "true") {
-                agreedToTerms = true;
-            }
-        }
-    });
-
     function getRandomLoadingMessage() {
         return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
     }
@@ -67,14 +57,6 @@
         if (loadingInterval) {
             clearInterval(loadingInterval);
             loadingInterval = null;
-        }
-    }
-
-    function handleTermsChange() {
-        if (agreedToTerms) {
-            localStorage.setItem("zabdoc_terms_agreed", "true");
-        } else {
-            localStorage.removeItem("zabdoc_terms_agreed");
         }
     }
 

@@ -20,7 +20,6 @@
     import CalendarDays from "@lucide/svelte/icons/calendar-days";
     import RefreshCw from "@lucide/svelte/icons/refresh-cw";
     import ImageIcon from "@lucide/svelte/icons/image"
-    import { onMount } from "svelte";
 
     let isLoading = $state(false);
     let isSuccess = $state(false);
@@ -30,14 +29,6 @@
     let loadingInterval: ReturnType<typeof setInterval> | null = null;
     let agreedToTerms = $state(false);
     let { baseURL }: { baseURL: string } = $props();
-
-    onMount(() => {
-        // Initialize from localStorage on mount
-        const stored = localStorage.getItem("zabdoc_terms_agreed");
-        if (stored === "true") {
-            agreedToTerms = true;
-        }
-    });
 
     function getRandomLoadingMessage() {
         return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
@@ -54,14 +45,6 @@
         if (loadingInterval) {
             clearInterval(loadingInterval);
             loadingInterval = null;
-        }
-    }
-
-    function handleTermsChange() {
-        if (agreedToTerms) {
-            localStorage.setItem("zabdoc_terms_agreed", "true");
-        } else {
-            localStorage.removeItem("zabdoc_terms_agreed");
         }
     }
 
@@ -107,11 +90,17 @@
 
                     // Provide more specific error messages based on status code
                     if (response.status === 400) {
-                        throw new Error(errorText || "Invalid request. Please check your form data and try again.");
+                        isError = true;
+                        errorMessage = "Invalid request. Please check your form data and try again.";
+                        return;
                     } else if (response.status === 500) {
-                        throw new Error(errorText || "Server error. Please try again later.");
+                        isError = true;
+                        errorMessage = "Server error. Please try again later.";
+                        return;
                     } else {
-                        throw new Error(errorText || `Server error: ${response.status}`);
+                        isError = true;
+                        errorMessage = errorText || `Server error: ${response.status}`;
+                        return;
                     }
                 }
 
@@ -132,11 +121,13 @@
 
                 // Check if it was a timeout/abort error
                 if (fetchError instanceof Error && fetchError.name === "AbortError") {
-                    throw new Error("Request timed out. The server took too long to respond. Please try again.");
+                    isError = true;
+                    errorMessage = "Request timed out. The server took too long to respond. Please try again.";
+                    return;
                 }
 
-                // Re-throw other errors
-                throw fetchError;
+                isError = true;
+                errorMessage = "Something went wrong";
             }
         } catch (error) {
             isError = true;
@@ -406,7 +397,6 @@
                 <Checkbox
                         id="finalize-terms-agree"
                         bind:checked={agreedToTerms}
-                        onchange={handleTermsChange}
                         disabled={isLoading}
                         class="mt-1"
                 />
