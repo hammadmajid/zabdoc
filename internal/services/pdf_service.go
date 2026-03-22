@@ -56,6 +56,7 @@ func NewPDFService() *PDFService {
 	}
 }
 
+//goland:noinspection GoUnhandledErrorResult
 func (ps *PDFService) GeneratePDF(data requests.Generate) ([]byte, error) {
 	result, err := ps.cb.Execute(func() (interface{}, error) {
 		var buf bytes.Buffer
