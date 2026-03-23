@@ -7,11 +7,11 @@
 	const numbers = ["1", "2", "3", "4"];
 </script>
 
-<RadioGroup bind:value class="grid grid-cols-4 gap-3 w-full">
+<RadioGroup bind:value class="grid w-full grid-cols-4 gap-3">
 	{#each numbers as num}
 		<label
 			class={cn(
-				"neo-border neo-shadow px-4 py-6 flex items-center justify-center font-black text-lg uppercase cursor-pointer transition-all",
+				"neo-border neo-shadow flex cursor-pointer items-center justify-center px-4 py-6 text-lg font-black uppercase transition-all",
 				value === num
 					? "bg-primary text-primary-foreground"
 					: "bg-card hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none"
@@ -22,4 +22,3 @@
 		</label>
 	{/each}
 </RadioGroup>
-

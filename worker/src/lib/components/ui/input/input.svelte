@@ -24,7 +24,7 @@
 		bind:this={ref}
 		data-slot="input"
 		class={cn(
-			"selection:bg-primary selection:text-primary-foreground neo-border-sm neo-shadow-sm placeholder:text-muted-foreground flex h-10 w-full min-w-0 bg-background px-3 pt-1.5 text-sm font-medium outline-none transition-all disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:translate-x-[2px] focus:translate-y-[2px] focus:shadow-none",
+			"neo-border-sm neo-shadow-sm flex h-10 w-full min-w-0 bg-background px-3 pt-1.5 text-sm font-medium transition-all outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus:translate-x-[2px] focus:translate-y-[2px] focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
 			className
 		)}
 		type="file"
@@ -37,7 +37,7 @@
 		bind:this={ref}
 		data-slot="input"
 		class={cn(
-			"bg-background selection:bg-primary selection:text-primary-foreground neo-border-sm neo-shadow-sm placeholder:text-muted-foreground flex h-10 w-full min-w-0 px-3 py-2 text-base outline-none transition-all disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus:translate-x-[2px] focus:translate-y-[2px] focus:shadow-none",
+			"neo-border-sm neo-shadow-sm flex h-10 w-full min-w-0 bg-background px-3 py-2 text-base transition-all outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground focus:translate-x-[2px] focus:translate-y-[2px] focus:shadow-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
 			className
 		)}
 		{type}

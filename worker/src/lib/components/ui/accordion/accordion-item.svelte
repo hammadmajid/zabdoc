@@ -12,6 +12,6 @@
 <AccordionPrimitive.Item
 	bind:ref
 	data-slot="accordion-item"
-	class={cn("neo-border-sm neo-shadow-sm bg-card mb-3 px-4", className)}
+	class={cn("neo-border-sm neo-shadow-sm mb-3 bg-card px-4", className)}
 	{...restProps}
 />

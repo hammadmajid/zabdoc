@@ -12,19 +12,19 @@
 				outline: "bg-background text-foreground",
 				secondary: "bg-secondary text-secondary-foreground",
 				ghost: "border-transparent shadow-none hover:bg-muted hover:translate-x-0 hover:translate-y-0 hover:shadow-none",
-				link: "text-primary underline-offset-4 hover:underline border-transparent shadow-none hover:translate-x-0 hover:translate-y-0",
+				link: "text-primary underline-offset-4 hover:underline border-transparent shadow-none hover:translate-x-0 hover:translate-y-0"
 			},
 			size: {
 				default: "h-10 px-5 py-2 has-[>svg]:px-4",
 				sm: "h-9 gap-1.5 px-4 has-[>svg]:px-3",
 				lg: "h-12 px-8 text-base has-[>svg]:px-6",
-				icon: "size-10",
-			},
+				icon: "size-10"
+			}
 		},
 		defaultVariants: {
 			variant: "default",
-			size: "default",
-		},
+			size: "default"
+		}
 	});
 
 	export type ButtonVariant = VariantProps<typeof buttonVariants>["variant"];

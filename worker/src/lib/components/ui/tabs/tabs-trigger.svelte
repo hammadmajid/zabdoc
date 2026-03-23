@@ -13,7 +13,7 @@
 	bind:ref
 	data-slot="tabs-trigger"
 	class={cn(
-		"inline-flex flex-1 items-center justify-center px-4 py-3 text-sm font-bold uppercase tracking-wide transition-colors whitespace-nowrap disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+		"inline-flex flex-1 items-center justify-center px-4 py-3 text-sm font-bold tracking-wide whitespace-nowrap uppercase transition-colors disabled:pointer-events-none disabled:opacity-50 data-[state=active]:bg-accent data-[state=active]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 		className
 	)}
 	{...restProps}

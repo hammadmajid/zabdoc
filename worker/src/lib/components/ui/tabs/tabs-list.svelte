@@ -12,9 +12,6 @@
 <TabsPrimitive.List
 	bind:ref
 	data-slot="tabs-list"
-	class={cn(
-		"inline-flex w-full items-center justify-center neo-border-sm bg-card",
-		className
-	)}
+	class={cn("neo-border-sm inline-flex w-full items-center justify-center bg-card", className)}
 	{...restProps}
 />
