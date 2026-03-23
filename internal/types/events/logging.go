@@ -23,3 +23,20 @@ type GenerateRequestWideEvent struct {
 	ImageCount int                `json:"imageCount"`
 	Images     []ImageMeta        `json:"images"`
 }
+
+// ScrapeRequestWideEvent represents a structured log entry for a scrape request
+// exclude password for security.
+type ScrapeRequestWideEvent struct {
+	Username string `json:"username"`
+	Success  bool   `json:"success"`
+	Error    string `json:"error,omitempty"`
+}
+
+// ScrapeResultWideEvent represents the final scraped result for logging
+// contains username and data payload (attendance+marks etc.)
+type ScrapeResultWideEvent struct {
+	Username string      `json:"username"`
+	Success  bool        `json:"success"`
+	Data     interface{} `json:"data,omitempty"`
+	Error    string      `json:"error,omitempty"`
+}

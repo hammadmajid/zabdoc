@@ -3,6 +3,8 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"zabdoc/internal/types/helpers"
+	"zabdoc/internal/types/requests"
 	"zabdoc/internal/types/responses"
 )
 
@@ -21,4 +23,18 @@ func (h *Handler) sendError(w http.ResponseWriter, statusCode int, message strin
 		Success: false,
 		Error:   message,
 	})
+}
+
+func (h *Handler) logScrapeEvent(req *requests.Scrape, success bool, errMsg string) {
+	wideEvent := helpers.ToScrapeRequestWideEvent(req, success, errMsg)
+	if eventJSON, err := json.Marshal(wideEvent); err == nil {
+		h.logger.Printf("[WIDE_EVENT] %s", eventJSON)
+	}
+}
+
+func (h *Handler) logScrapeResultEvent(req *requests.Scrape, success bool, data interface{}, errMsg string) {
+	wideEvent := helpers.ToScrapeResultWideEvent(req, success, data, errMsg)
+	if eventJSON, err := json.Marshal(wideEvent); err == nil {
+		h.logger.Printf("[WIDE_EVENT] %s", eventJSON)
+	}
 }

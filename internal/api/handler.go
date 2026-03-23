@@ -122,17 +122,23 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if reqBody.Username == "" || reqBody.Password == "" {
+		h.logScrapeEvent(&reqBody, false, "username and password are required")
+		h.logScrapeResultEvent(&reqBody, false, nil, "username and password are required")
 		h.sendError(w, http.StatusBadRequest, "Username and password are required")
 		return
 	}
 
 	data, err := h.scraper.ScrapeCourseData(&reqBody)
 	if err != nil {
+		h.logScrapeEvent(&reqBody, false, err.Error())
+		h.logScrapeResultEvent(&reqBody, false, nil, err.Error())
 		h.logger.Printf("Scraping error: %v", err)
 		h.sendError(w, http.StatusInternalServerError, "Failed to fetch attendance and marks data")
 		return
 	}
 
+	h.logScrapeEvent(&reqBody, true, "")
+	h.logScrapeResultEvent(&reqBody, true, data, "")
 	h.sendJSON(w, http.StatusOK, responses.JSONResponse{
 		Success: true,
 		Data:    data,
