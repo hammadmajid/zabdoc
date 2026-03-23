@@ -1,46 +1,8 @@
 import { browser } from "$app/environment";
 import { data, type DataStructure, type CourseInfo } from "$lib/data/data";
+import type { DocumentInfo, ImageItem, Student } from "$lib/types";
 import { wizardStore } from "./wizard-store.svelte";
 import { toast } from "svelte-sonner";
-
-// Types
-export interface Student {
-    id: number;
-    name: string;
-    regNo: string;
-}
-
-export interface DocumentInfo {
-    type: string;
-    marks: string;
-    number: string;
-    date: string;
-}
-
-export interface ImageItem {
-    id: string;
-    file: File;
-    previewUrl: string;
-}
-
-export interface FormState {
-    // Student info
-    studentName: string;
-    regNo: string;
-    isMultiMode: boolean;
-    students: Student[];
-    studentCounter: number;
-
-    // Course info
-    selectedClass: keyof DataStructure | "";
-    selectedCourse: string;
-
-    // Document info
-    document: DocumentInfo;
-
-    // Images
-    images: FileList | null;
-}
 
 // Constants
 export const STUDENT_LIMIT = 6;

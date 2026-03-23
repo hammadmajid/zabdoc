@@ -1,3 +1,5 @@
+import type { DataStructure } from "./data/data";
+
 interface AttendanceRecord {
     lecture: string;
     date: string;
@@ -25,4 +27,44 @@ export interface CourseData {
     instructor: string;
     records: AttendanceRecord[];
     marks: MarkEntry[];
+}
+
+
+// Used by form store
+export interface Student {
+    id: number;
+    name: string;
+    regNo: string;
+}
+
+export interface DocumentInfo {
+    type: string;
+    marks: string;
+    number: string;
+    date: string;
+}
+
+export interface ImageItem {
+    id: string;
+    file: File;
+    previewUrl: string;
+}
+
+export interface FormState {
+    // Student info
+    studentName: string;
+    regNo: string;
+    isMultiMode: boolean;
+    students: Student[];
+    studentCounter: number;
+
+    // Course info
+    selectedClass: keyof DataStructure | "";
+    selectedCourse: string;
+
+    // Document info
+    document: DocumentInfo;
+
+    // Images
+    images: FileList | null;
 }
