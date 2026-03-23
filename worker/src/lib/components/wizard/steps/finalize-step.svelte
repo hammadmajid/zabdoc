@@ -25,6 +25,7 @@
 	let isSuccess = $state(false);
 	let isError = $state(false);
 	let errorMessage = $state("");
+	let termsErrorMessage = $state("");
 	let loadingMessage = $state("");
 	let loadingInterval: ReturnType<typeof setInterval> | null = null;
 	let agreedToTerms = $state(false);
@@ -49,9 +50,11 @@
 	}
 
 	async function handleSubmit() {
+		termsErrorMessage = "";
 		if (!agreedToTerms) {
-			isError = true;
-			errorMessage = "You must agree to the Terms of Use and Privacy Policy to continue.";
+			isError = false;
+			errorMessage = "";
+			termsErrorMessage = "You must agree to the Terms of Use and Privacy Policy to continue.";
 			return;
 		}
 
@@ -144,12 +147,14 @@
 		isSuccess = false;
 		isError = false;
 		errorMessage = "";
+		termsErrorMessage = "";
 		wizardStore.reset();
 	}
 
 	function handleRetry() {
 		isError = false;
 		errorMessage = "";
+		termsErrorMessage = "";
 		handleSubmit();
 	}
 </script>
@@ -397,28 +402,33 @@
 		<!-- Generate Button -->
 		<div class="mt-8 w-full" in:scale={{ duration: 300, delay: 300, easing: quintOut }}>
 			<!-- Terms & Privacy Agreement -->
-			<div class="neo-border neo-shadow-sm mb-6 flex items-start gap-3 bg-card p-4">
-				<Checkbox
-					id="finalize-terms-agree"
-					bind:checked={agreedToTerms}
-					disabled={isLoading}
-					class="mt-1"
-				/>
-				<label for="finalize-terms-agree" class="flex-1 cursor-pointer text-sm font-medium">
-					I agree to the <a
-						href="/terms"
-						target="_blank"
-						rel="noreferrer"
-						class="font-bold text-primary hover:underline">Terms of Use</a
-					>
-					and
-					<a
-						href="/privacy"
-						target="_blank"
-						rel="noreferrer"
-						class="font-bold text-primary hover:underline">Privacy Policy</a
-					>
-				</label>
+			<div class="neo-border neo-shadow-sm mb-6 flex flex-col gap-2 bg-card p-4">
+				<div class="flex items-start gap-3">
+					<Checkbox
+						id="finalize-terms-agree"
+						bind:checked={agreedToTerms}
+						disabled={isLoading}
+						class="mt-1"
+					/>
+					<label for="finalize-terms-agree" class="flex-1 cursor-pointer text-sm font-medium">
+						I agree to the <a
+							href="/terms"
+							target="_blank"
+							rel="noreferrer"
+							class="font-bold text-primary hover:underline">Terms of Use</a
+						>
+						and
+						<a
+							href="/privacy"
+							target="_blank"
+							rel="noreferrer"
+							class="font-bold text-primary hover:underline">Privacy Policy</a
+						>
+					</label>
+				</div>
+				{#if termsErrorMessage}
+					<p class="text-sm font-medium text-destructive">{termsErrorMessage}</p>
+				{/if}
 			</div>
 
 			<button
