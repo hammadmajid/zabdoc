@@ -23,3 +23,16 @@ type Generate struct {
 	Marks      string
 	Images     []Image
 }
+
+// IsMultiMode returns true if more than one student is provided in the generate request.
+func (g Generate) IsMultiMode() bool {
+	return len(g.Students) > 1
+}
+
+// FirstStudent returns the first student, or zero Student if none.
+func (g Generate) FirstStudent() Student {
+	if len(g.Students) > 0 {
+		return g.Students[0]
+	}
+	return Student{}
+}

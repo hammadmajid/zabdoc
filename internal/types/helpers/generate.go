@@ -5,19 +5,6 @@ import (
 	"zabdoc/internal/types/requests"
 )
 
-// IsMultiMode returns true if there are multiple students
-func IsMultiMode(r *requests.Generate) bool {
-	return len(r.Students) > 1
-}
-
-// FirstStudent returns the first student (for single mode templates)
-func FirstStudent(r *requests.Generate) requests.Student {
-	if len(r.Students) > 0 {
-		return r.Students[0]
-	}
-	return requests.Student{}
-}
-
 // ToGenerateRequestWideEvent converts the request to a loggable GenerateRequestWideEvent (excludes image data)
 func ToGenerateRequestWideEvent(r *requests.Generate) events.GenerateRequestWideEvent {
 	imageMetas := make([]events.ImageMeta, len(r.Images))
