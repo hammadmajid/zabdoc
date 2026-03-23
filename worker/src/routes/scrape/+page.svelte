@@ -119,7 +119,7 @@
 			if (result.data && typeof result.data === "object" && !Array.isArray(result.data)) {
 				courseData = Object.entries(result.data as Record<string, any>).map(
 					([courseName, courseValue]) => {
-						const attendance = courseValue?.attendence ?? {};
+						const attendance = courseValue?.attendance ?? courseValue?.attendence ?? {};
 						const marks = courseValue?.marks ?? {};
 
 						return {
