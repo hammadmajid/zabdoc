@@ -16,7 +16,7 @@ type Handler struct {
 	validationService *services.ValidationService
 	fileService       *services.FileService
 	PdfService        *services.PDFService
-	scraper           *services.Scraper
+	scraper           *services.ScraperService
 }
 
 func NewHandler(logger *log.Logger) *Handler {
@@ -25,7 +25,7 @@ func NewHandler(logger *log.Logger) *Handler {
 		validationService: services.NewValidationService(),
 		fileService:       services.NewFileService(logger),
 		PdfService:        services.NewPDFService(),
-		scraper:           services.NewScraper(),
+		scraper:           services.NewScraperService(),
 	}
 }
 

@@ -17,8 +17,8 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// Scraper handles attendance and marks data retrieval from ZabDesk
-type Scraper struct {
+// ScraperService handles attendance and marks data retrieval from ZabDesk
+type ScraperService struct {
 	client *http.Client
 }
 
@@ -33,8 +33,8 @@ var (
 	reTags           = regexp.MustCompile(`<[^>]*>`)
 )
 
-// NewScraper creates a new Scraper instance
-func NewScraper() *Scraper {
+// NewScraperService creates a new Scraper instance
+func NewScraperService() *ScraperService {
 	jar, _ := cookiejar.New(nil)
 	transport := &http.Transport{
 		MaxIdleConns:        100,
@@ -42,7 +42,7 @@ func NewScraper() *Scraper {
 		IdleConnTimeout:     90 * time.Second,
 	}
 
-	return &Scraper{
+	return &ScraperService{
 		client: &http.Client{
 			Jar:       jar,
 			Transport: transport,
@@ -52,7 +52,7 @@ func NewScraper() *Scraper {
 }
 
 // ScrapeCourseData fetches and merges attendance and marks by course name.
-func (s *Scraper) ScrapeCourseData(req *requests.Scrape) (map[string]models.CourseScrapeData, error) {
+func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]models.CourseScrapeData, error) {
 	loginURL := "https://springzabdesk.szabist-isb.edu.pk/VerifyLogin.asp"
 	resp, err := s.client.PostForm(loginURL, url.Values{
 		"txtLoginName": {req.Username},
@@ -109,7 +109,7 @@ func (s *Scraper) ScrapeCourseData(req *requests.Scrape) (map[string]models.Cour
 	return results, nil
 }
 
-func (s *Scraper) scrapeAttendanceByCourse() (map[string]models.CourseAttendance, error) {
+func (s *ScraperService) scrapeAttendanceByCourse() (map[string]models.CourseAttendance, error) {
 	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseAttendance.asp?OptionName=View%20Attendance"
 	listPage, err := s.getPage(listURL)
 	if err != nil {
@@ -157,7 +157,7 @@ func (s *Scraper) scrapeAttendanceByCourse() (map[string]models.CourseAttendance
 	return results, nil
 }
 
-func (s *Scraper) scrapeMarksByCourse() (map[string]models.CourseMarks, error) {
+func (s *ScraperService) scrapeMarksByCourse() (map[string]models.CourseMarks, error) {
 	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseRecapSheet.asp?OptionName=Current%20Semester%20Results"
 	listPage, err := s.getPage(listURL)
 	if err != nil {
@@ -204,7 +204,7 @@ func (s *Scraper) scrapeMarksByCourse() (map[string]models.CourseMarks, error) {
 	return results, nil
 }
 
-func (s *Scraper) getPage(pageURL string) (string, error) {
+func (s *ScraperService) getPage(pageURL string) (string, error) {
 	resp, err := s.client.Get(pageURL)
 	if err != nil {
 		return "", err
@@ -221,7 +221,7 @@ func (s *Scraper) getPage(pageURL string) (string, error) {
 	return string(b), nil
 }
 
-func (s *Scraper) getCourseDetailPage(listURL string, match []string) (string, error) {
+func (s *ScraperService) getCourseDetailPage(listURL string, match []string) (string, error) {
 	if len(match) < 5 {
 		return "", fmt.Errorf("invalid course link data")
 	}
@@ -247,7 +247,7 @@ func (s *Scraper) getCourseDetailPage(listURL string, match []string) (string, e
 	return string(b), nil
 }
 
-func (s *Scraper) parseAttendanceRows(html string) []models.AttendanceRecord {
+func (s *ScraperService) parseAttendanceRows(html string) []models.AttendanceRecord {
 	rows := reAttendanceRows.FindAllStringSubmatch(html, -1)
 	records := make([]models.AttendanceRecord, 0, len(rows))
 
@@ -262,7 +262,7 @@ func (s *Scraper) parseAttendanceRows(html string) []models.AttendanceRecord {
 	return records
 }
 
-func (s *Scraper) extractMarksTable(pageHTML string) string {
+func (s *ScraperService) extractMarksTable(pageHTML string) string {
 	tableMatch := reMarksTable.FindString(pageHTML)
 	if tableMatch != "" {
 		return tableMatch
@@ -271,7 +271,7 @@ func (s *Scraper) extractMarksTable(pageHTML string) string {
 	return pageHTML
 }
 
-func (s *Scraper) parseMarksRows(tableHTML string) []models.MarkEntry {
+func (s *ScraperService) parseMarksRows(tableHTML string) []models.MarkEntry {
 	if tableHTML == "" {
 		return nil
 	}
@@ -331,7 +331,7 @@ func isAllowedMarksHead(head string) bool {
 }
 
 // parseTag extracts a value from an HTML table row by label.
-func (s *Scraper) parseTag(html, label string) string {
+func (s *ScraperService) parseTag(html, label string) string {
 	re := regexp.MustCompile(fmt.Sprintf(`(?i)<th[^>]*>%s</th>\s*<td[^>]*>(.*?)</td>`, regexp.QuoteMeta(label)))
 	m := re.FindStringSubmatch(html)
 	if len(m) > 1 {
