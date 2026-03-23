@@ -15,6 +15,17 @@ export function formatDate(dateString: string): string {
 
 export const changelog: ChangelogEntry[] = [
 	{
+		version: "3.1.1",
+		date: "2026-03-23",
+		changes: [
+			"Codebase refactor and cleanup across services and components",
+			"Fix undefined reference error in template and invalid method usage",
+			"Improve error handling in scraper and file services",
+			"Add stricter CORS policy and dynamic allowed origin support",
+			"Minor typo fixes, lints, and stability patches"
+		]
+	},
+	{
 		version: "3.1.0",
 		date: "2026-03-15",
 		changes: [
