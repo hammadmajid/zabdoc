@@ -1,0 +1,11 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "go build ./cmd/zabdoc/",
+    "dev": "air",
+    "check": "go vet"
+  },
+  "packageManager": "pnpm@10.30.3"
+}
