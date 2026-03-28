@@ -17,10 +17,7 @@ import (
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		panic("env PORT is not defined")
-	}
+	port := "8080"
 
 	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
 	handler := api.NewHandler(logger)

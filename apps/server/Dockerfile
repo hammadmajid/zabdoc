@@ -23,8 +23,8 @@ RUN apk add --no-cache \
 # Copy built binary
 COPY --from=builder /app/zabdoc ./zabdoc
 
-# Heroku requires the port to be set via the PORT env var
-#EXPOSE 8080
+# Do not change. Also hardcoded in go and ts code
+EXPOSE 8080
 
 # Set environment for chromedp
 ENV CHROME_PATH=/usr/bin/chromium-browser
