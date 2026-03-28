@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --ui tui",
     "check": "turbo run check"
   },
   "packageManager": "pnpm@10.30.3",
