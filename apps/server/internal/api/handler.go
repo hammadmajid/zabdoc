@@ -42,7 +42,7 @@ func (h *Handler) Document(w http.ResponseWriter, r *http.Request) {
 
 	// Validate the data
 	if err := h.validationService.ValidateDocumentRequest(&data); err != nil {
-		http.Error(w, "invalid input", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		h.logger.Printf("validation error: %v", err)
 		return
 	}
