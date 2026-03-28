@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "go build -o dist/zabdoc ./cmd/zabdoc/",
     "dev": "wrangler dev",
-    "check": "go vet",
+    "deploy": "wrangler deploy",
+    "check": "go vet ./...",
     "cf-typegen": "wrangler types"
   },
   "packageManager": "pnpm@10.30.3",
