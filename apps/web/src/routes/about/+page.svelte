@@ -28,13 +28,12 @@
 		<p>
 			zabdoc runs on a <a href="https://go.dev" target="_blank" rel="noreferrer">Go</a>
 			backend hosted on
-			<a href="https://www.heroku.com/" target="_blank" rel="noreferrer">Heroku</a>, with a
-			<a href="https://svelte.dev" target="_blank" rel="noreferrer">SvelteKit</a>
-			frontend deployed to
 			<a href="https://workers.cloudflare.com/" target="_blank" rel="noreferrer"
 				>Cloudflare Workers</a
-			>. The backend handles PDF generation and ZabDesk scraping, while the frontend delivers
-			a fast, responsive UI.
+			>, utilizing Cloudflare Containers to run the Go code. The frontend is built with
+			<a href="https://svelte.dev" target="_blank" rel="noreferrer">SvelteKit</a>
+			and also deployed to Cloudflare Workers. The backend handles PDF generation and ZabDesk
+			scraping, while the frontend delivers a fast, responsive UI.
 		</p>
 
 		<h3>PDF Generation</h3>
