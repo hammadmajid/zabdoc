@@ -12,7 +12,7 @@
 	},
 	"routes": [
 		{
-			"pattern": "container.zabdoc.xyz",
+			"pattern": "api.zabdoc.xyz",
 			"custom_domain": true
 		}
 	],
