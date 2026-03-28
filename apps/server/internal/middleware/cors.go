@@ -2,24 +2,24 @@ package middleware
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/go-chi/cors"
 )
 
-func getAllowedOrigin() string {
-	origin := os.Getenv("ALLOWED_ORIGIN")
-	if origin == "" {
-		panic("env ALLOWED_ORIGIN is not defined")
-	}
+func getAllowedOrigin() []string {
+	// TODO: parse comma-separated list
+	// origin := os.Getenv("ALLOWED_ORIGIN")
+	// if origin == "" {
+	// 	panic("env ALLOWED_ORIGIN is not defined")
+	// }
 
-	return origin
+	return []string{"https://zabdoc.xyz", "http://localhost:8080", "http://localhost:5173"}
 }
 
 var CORSOptions = cors.Options{
 	// Allow requests from configured origin only
-	AllowedOrigins: []string{getAllowedOrigin()},
+	AllowedOrigins: getAllowedOrigin(),
 
 	// Only allow methods actually used by frontend (/generate and /scrap endpoints)
 	AllowedMethods: []string{
