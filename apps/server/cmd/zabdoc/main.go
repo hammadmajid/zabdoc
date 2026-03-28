@@ -46,8 +46,6 @@ func main() {
 
 	app.Logger.Println("Shutting down server...")
 
-	app.Handler.PdfService.Shutdown()
-
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 

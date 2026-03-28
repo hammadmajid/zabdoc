@@ -14,8 +14,6 @@ import (
 type Handler struct {
 	logger            *log.Logger
 	validationService *services.ValidationService
-	fileService       *services.FileService
-	PdfService        *services.PDFService
 	scraper           *services.ScraperService
 }
 
@@ -23,8 +21,6 @@ func NewHandler(logger *log.Logger) *Handler {
 	return &Handler{
 		logger:            logger,
 		validationService: services.NewValidationService(),
-		fileService:       services.NewFileService(logger),
-		PdfService:        services.NewPDFService(),
 		scraper:           services.NewScraperService(),
 	}
 }
