@@ -9,27 +9,9 @@ RUN go build -o zabdoc ./cmd/zabdoc/main.go
 # Final stage
 FROM alpine:latest
 WORKDIR /app
-
-# Install Chromium and dependencies
-RUN apk add --no-cache \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont \
-    libstdc++
-
-# Copy built binary
+RUN apk add --no-cache ca-certificates
 COPY --from=builder /app/zabdoc ./zabdoc
 
 # Do not change. Also hardcoded in go and ts code
 EXPOSE 8080
-
-# Set environment for chromedp
-ENV CHROME_PATH=/usr/bin/chromium-browser
-ENV CHROMEDP_HEADLESS=true
-ENV CHROME_EXTRA_ARGS="--no-sandbox --disable-setuid-sandbox"
-
-# Run the app
 CMD ["./zabdoc"]
