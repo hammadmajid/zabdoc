@@ -3,40 +3,38 @@
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "zabdoc-server",
-	"main": "src/index.ts",
-	"compatibility_date": "2026-03-12",
-	"observability": {
-		"enabled": true
-	},
-	"routes": [
-		{
-			"pattern": "api.zabdoc.xyz",
-			"custom_domain": true
-		}
-	],
-	"containers": [
-		{
-			"max_instances": 10,
-			"class_name": "ZabdocContainer",
-			"image": "./Dockerfile",
-		},
-	],
-	"durable_objects": {
-		"bindings": [
-			{
-				"name": "ZabdocContainer",
-				"class_name": "ZabdocContainer",
-			},
-		],
-	},
-	"migrations": [
-		{
-			"tag": "v1",
-			"new_sqlite_classes": [
-				"ZabdocContainer"
-			],
-		},
-	],
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "zabdoc-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-03-12",
+  "observability": {
+    "enabled": true,
+  },
+  "routes": [
+    {
+      "pattern": "api.zabdoc.xyz",
+      "custom_domain": true,
+    },
+  ],
+  "containers": [
+    {
+      "max_instances": 10,
+      "class_name": "ZabdocContainer",
+      "image": "./Dockerfile",
+    },
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "ZabdocContainer",
+        "class_name": "ZabdocContainer",
+      },
+    ],
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["ZabdocContainer"],
+    },
+  ],
 }
