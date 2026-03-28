@@ -8,6 +8,7 @@
 *.so
 *.dylib
 tmp/
+dist/
 
 # Test binary, built with `go test -c`
 *.test
@@ -32,6 +33,6 @@ go.work.sum
 # .idea/
 # .vscode/
 
-.nx/installation
-.nx/cache
-.nx/workspace-data
+# Node.js
+node_modules/
+.wrangler/
