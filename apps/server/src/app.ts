@@ -21,7 +21,7 @@ App.get("/health", (c) => {
   return containerService.fetch(c.req.raw);
 });
 
-App.post("/generate", (c) => {
+App.post("/document", (c) => {
   // Pass the raw request to container
   const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
   return containerService.fetch(c.req.raw);
