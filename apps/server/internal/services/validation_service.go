@@ -55,3 +55,13 @@ func (v *ValidationService) ValidateDocumentRequest(data *requests.Document) err
 
 	return nil
 }
+
+func (ValidationService) ValidateScrapeRequest(data *requests.Scrape) error {
+	if strings.TrimSpace(data.Username) == "" {
+		return fmt.Errorf("username is required")
+	}
+	if strings.TrimSpace(data.Password) == "" {
+		return fmt.Errorf("password is required")
+	}
+	return nil
+}

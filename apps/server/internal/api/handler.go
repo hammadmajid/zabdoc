@@ -72,10 +72,11 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if reqBody.Username == "" || reqBody.Password == "" {
-		h.logScrapeEvent(&reqBody, false, "username and password are required")
-		h.logScrapeResultEvent(&reqBody, false, nil, "username and password are required")
-		h.sendError(w, http.StatusBadRequest, "Username and password are required")
+	h.logScrapeEvent(&reqBody, true, "")
+
+	if err := h.validationService.ValidateScrapeRequest(&reqBody); err != nil {
+		h.logScrapeEvent(&reqBody, false, err.Error())
+		h.sendError(w, http.StatusBadRequest, err.Error())
 		return
 	}
 
