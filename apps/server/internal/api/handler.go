@@ -13,6 +13,7 @@ import (
 
 type Handler struct {
 	logger            *log.Logger
+	documentService  *services.DocumentService
 	validationService *services.ValidationService
 	scraper           *services.ScraperService
 }
@@ -20,6 +21,7 @@ type Handler struct {
 func NewHandler(logger *log.Logger) *Handler {
 	return &Handler{
 		logger:            logger,
+		documentService:   services.NewDocumentService(),
 		validationService: services.NewValidationService(),
 		scraper:           services.NewScraperService(),
 	}
@@ -47,9 +49,14 @@ func (h *Handler) Document(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	docx := []byte("") // TODO: read from file system
+	docx, err := h.documentService.CreateDocument(&data)
+	if err != nil {
+		http.Error(w, "failed to create document", http.StatusInternalServerError)
+		h.logger.Printf("create document: %v", err)
+		return
+	}
 
-	docxMimeType := "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+	docxMimeType:= "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 	w.Header().Set("Content-Type", docxMimeType)
 	w.Header().Set("Content-Disposition", "attachment; filename=document.docx") // TODO: filename should be UUID
 	if _, writeErr := w.Write(docx); writeErr != nil {
@@ -66,7 +73,6 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 
 	// Parse JSON request body
 	var reqBody requests.Scrape
-
 	if err := json.NewDecoder(r.Body).Decode(&reqBody); err != nil {
 		h.sendError(w, http.StatusBadRequest, "Invalid request body")
 		return
@@ -89,7 +95,6 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.logScrapeEvent(&reqBody, true, "")
 	h.logScrapeResultEvent(&reqBody, true, data, "")
 	h.sendJSON(w, http.StatusOK, responses.JSONResponse{
 		Success: true,
