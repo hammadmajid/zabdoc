@@ -1,36 +1,57 @@
 <script lang="ts">
-	import SEO from "$lib/components/seo.svelte";
-	import Database from "@lucide/svelte/icons/database";
-	import FileText from "@lucide/svelte/icons/file-text";
-	import { fade } from "svelte/transition";
+	import { buttonVariants } from "$lib/components/ui/button";
+	import AlertTriangle from "@lucide/svelte/icons/alert-triangle";
+	import Home from "@lucide/svelte/icons/home";
+	import RotateCcw from "@lucide/svelte/icons/rotate-ccw";
 </script>
 
-<SEO
-	title="zabdoc"
-	description="Generate assignment and lab task PDFs for SZABIST students."
-	canonical="https://zabdoc.xyz/"
-	url="https://zabdoc.xyz/"
-/>
+<svelte:head>
+	<title>error | zabdoc</title>
+</svelte:head>
 
-<div class="flex min-h-[70vh] flex-col">
-	<div class="flex flex-1 flex-col items-center justify-center px-4 py-8 text-center">
-		<div class="neo-border neo-shadow-lg mb-8 -rotate-2 bg-primary px-8 py-4">
-			<h2 class="text-4xl font-black tracking-tight uppercase md:text-5xl">
-				Not available
-			</h2>
-		</div>
-
-		<p class="mb-8 max-w-md text-lg font-medium">We're sorry, the service is temporarily down. Please check back later.</p>
-
+<div class="flex h-full flex-col items-center justify-center px-4 text-center">
+	<div class="mb-8">
+		<AlertTriangle class="mx-auto mb-4 h-16 w-16 text-destructive" />
+		<h1 class="text-5xl font-bold tracking-tight">Oops!</h1>
+		<p class="mt-4 max-w-xl text-lg text-muted-foreground">
+			Something went wrong while processing your request.
+			<span class="border-b border-dotted border-foreground/50">zabdoc</span>
+			encountered an unexpected error.
+		</p>
 	</div>
 
-	<!-- Disclaimer -->
-	<div class="mt-4 text-center" in:fade={{ duration: 300, delay: 200 }}>
-		<p class="neo-border-sm inline-block max-w-md bg-muted px-4 py-2 text-sm font-medium">
-			*this project is <em>not sponsored, affiliated, endorsed, or approved by</em> SZABIST.
-			<a href="/about#disclaimer" class="font-bold underline hover:text-primary"
-				>Learn more.</a
+	<div class="mb-8 max-w-md rounded-lg bg-muted p-4">
+		<p class="font-mono text-sm text-muted-foreground">
+			Error 500: Service not available
+		</p>
+	</div>
+
+	<div class="flex gap-4">
+		<button
+			onclick={() => window.location.reload()}
+			class={buttonVariants({ variant: "outline", size: "lg" })}
+		>
+			<RotateCcw class="mr-2 h-4 w-4" />
+			Try Again
+		</button>
+		<a href="/" class={buttonVariants({ variant: "default", size: "lg" })}>
+			<Home class="mr-2 h-4 w-4" />
+			Go Home
+		</a>
+	</div>
+
+	<div class="mt-8">
+		<p class="text-sm text-muted-foreground">
+			If this problem persists, please{" "}
+			<a
+				href="https://github.com/hammadmajid/zabdoc/issues"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="underline hover:no-underline"
 			>
+				report an issue
+			</a>
+			{" "}on GitHub.
 		</p>
 	</div>
 </div>
