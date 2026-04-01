@@ -1,6 +1,9 @@
 import { Hono } from "hono";
 import { getContainer } from "@cloudflare/containers";
 import { cors } from "hono/cors";
+import { documentSchema, scrapeSchema } from "@repo/types"
+import { validator } from 'hono/validator'
+import { constructUrl } from "./utils";
 
 export const App = new Hono<{ Bindings: Env }>();
 
@@ -21,16 +24,38 @@ App.get("/health", (c) => {
   return containerService.fetch(c.req.raw);
 });
 
-App.post("/document", (c) => {
-  // Pass the raw request to container
+App.post("/document", validator('json', (value, c) => {
+  const parsed = documentSchema.safeParse(value);
+  if (!parsed.success) {
+    return c.text(`${parsed.error}`, 400)
+  }
+  return parsed.data
+}), (c) => {
+  const data = c.req.valid('json');
   const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
-  return containerService.fetch(c.req.raw);
+
+  return containerService.containerFetch(constructUrl(c.req.path), {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
 });
 
-App.post("/scrape", (c) => {
-  // Pass the raw request to container
+App.post("/scrape", validator('json', (value, c) => {
+  const parsed = scrapeSchema.safeParse(value);
+  if (!parsed.success) {
+    return c.text(`${parsed.error}`, 400)
+  }
+  return parsed.data
+}), (c) => {
+  const data = c.req.valid('json');
   const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
-  return containerService.fetch(c.req.raw);
+
+  return containerService.containerFetch(constructUrl(c.req.path), {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  }, 8080)
 });
 
 App.get();
