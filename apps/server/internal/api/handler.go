@@ -12,18 +12,16 @@ import (
 )
 
 type Handler struct {
-	logger            *log.Logger
-	documentService  *services.DocumentService
-	validationService *services.ValidationService
-	scraper           *services.ScraperService
+	logger          *log.Logger
+	documentService *services.DocumentService
+	scraper         *services.ScraperService
 }
 
 func NewHandler(logger *log.Logger) *Handler {
 	return &Handler{
-		logger:            logger,
-		documentService:   services.NewDocumentService(),
-		validationService: services.NewValidationService(),
-		scraper:           services.NewScraperService(),
+		logger:          logger,
+		documentService: services.NewDocumentService(),
+		scraper:         services.NewScraperService(),
 	}
 }
 
@@ -42,13 +40,6 @@ func (h *Handler) Document(w http.ResponseWriter, r *http.Request) {
 		h.logger.Printf("[WIDE_EVENT] %s", eventJSON)
 	}
 
-	// Validate the data
-	if err := h.validationService.ValidateDocumentRequest(&data); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		h.logger.Printf("validation error: %v", err)
-		return
-	}
-
 	docx, err := h.documentService.CreateDocument(&data)
 	if err != nil {
 		http.Error(w, "failed to create document", http.StatusInternalServerError)
@@ -56,7 +47,7 @@ func (h *Handler) Document(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	docxMimeType:= "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+	docxMimeType := "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 	w.Header().Set("Content-Type", docxMimeType)
 	w.Header().Set("Content-Disposition", "attachment; filename=document.docx") // TODO: filename should be UUID
 	if _, writeErr := w.Write(docx); writeErr != nil {
@@ -80,12 +71,6 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 
 	h.logScrapeEvent(&reqBody, true, "")
 
-	if err := h.validationService.ValidateScrapeRequest(&reqBody); err != nil {
-		h.logScrapeEvent(&reqBody, false, err.Error())
-		h.sendError(w, http.StatusBadRequest, err.Error())
-		return
-	}
-
 	data, err := h.scraper.ScrapeCourseData(&reqBody)
 	if err != nil {
 		h.logScrapeEvent(&reqBody, false, err.Error())
@@ -104,12 +89,6 @@ func (h *Handler) Scrape(w http.ResponseWriter, r *http.Request) {
 
 //goland:noinspection GoUnusedParameter
 func (h *Handler) Health(w http.ResponseWriter, r *http.Request) {
-	if h.validationService == nil {
-		http.Error(w, "ValidationService unavailable", http.StatusServiceUnavailable)
-		h.logger.Println("Health check failed: ValidationService unavailable")
-		return
-	}
-
 	if h.scraper == nil {
 		http.Error(w, "Scraper unavailable", http.StatusServiceUnavailable)
 		h.logger.Println("Health check failed: Scraper unavailable")
