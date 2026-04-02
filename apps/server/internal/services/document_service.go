@@ -5,23 +5,28 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"os"
 	"strings"
+	"zabdoc/internal/templates"
 	"zabdoc/internal/types/requests"
 )
 
-const templatePath = "templates/cover.docx"
+type DocumentService struct {
+	templates templates.Templates
+}
 
-type DocumentService struct{}
-
-func NewDocumentService() *DocumentService {
-	return &DocumentService{}
+func NewDocumentService(templates *templates.Templates) *DocumentService {
+	return &DocumentService{
+		templates: *templates,
+	}
 }
 
 func (s *DocumentService) CreateDocument(doc *requests.Document) ([]byte, error) {
-	templateBytes, err := os.ReadFile(templatePath)
-	if err != nil {
-		return nil, fmt.Errorf("read template: %w", err)
+	var templateBytes []byte
+
+	if doc.IsMultiMode() {
+		templateBytes = s.templates.BaseMultiBytes()
+	} else {
+		templateBytes = s.templates.BaseSingleBytes()
 	}
 
 	placeholders := buildPlaceholders(doc)
@@ -82,13 +87,13 @@ func buildPlaceholders(doc *requests.Document) map[string]string {
 	// Single student shorthands
 	if len(doc.Students) == 1 {
 		p["{{StudentName}}"] = doc.Students[0].Name
-		p["{{RegNo}}"]       = doc.Students[0].RegNo
+		p["{{RegNo}}"] = doc.Students[0].RegNo
 	}
 
 	// Multi-student: {{Student1Name}}, {{Student1RegNo}}, etc.
 	for i, s := range doc.Students {
 		n := fmt.Sprintf("%d", i+1)
-		p[fmt.Sprintf("{{Student%sName}}", n)]  = s.Name
+		p[fmt.Sprintf("{{Student%sName}}", n)] = s.Name
 		p[fmt.Sprintf("{{Student%sRegNo}}", n)] = s.RegNo
 	}
 

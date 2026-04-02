@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"zabdoc/internal/services"
+	"zabdoc/internal/templates"
 	"zabdoc/internal/types/helpers"
 	"zabdoc/internal/types/requests"
 	"zabdoc/internal/types/responses"
@@ -17,10 +18,10 @@ type Handler struct {
 	scraper         *services.ScraperService
 }
 
-func NewHandler(logger *log.Logger) *Handler {
+func NewHandler(logger *log.Logger, templates *templates.Templates) *Handler {
 	return &Handler{
 		logger:          logger,
-		documentService: services.NewDocumentService(),
+		documentService: services.NewDocumentService(templates),
 		scraper:         services.NewScraperService(),
 	}
 }
