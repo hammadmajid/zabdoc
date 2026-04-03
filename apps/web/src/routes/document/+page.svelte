@@ -25,20 +25,6 @@
 		</a>
 	</div>
 
-	{#if wizardStore.currentStep === "select-document"}
-		<!-- Hero Section - shown only on first step -->
-		<div class="mb-4 text-center" in:fade={{ duration: 300 }}>
-			<div class="neo-border neo-shadow-lg mb-4 inline-block -rotate-2 bg-primary px-8 py-4">
-				<h1 class="text-4xl font-black tracking-tight uppercase md:text-6xl">
-					Generate Document
-				</h1>
-			</div>
-			<p class="mx-auto max-w-xl text-lg font-medium">
-				Create assignment cover sheets and lab tasks in PDF format.
-			</p>
-		</div>
-	{/if}
-
 	<!-- Wizard Component -->
 	<div class="flex-1">
 		<Wizard baseURL={data.baseURL} />
