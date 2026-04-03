@@ -9,7 +9,6 @@ export type WizardStep =
 	| "student-info"
 	| "course-info"
 	| "document-info"
-	| "images"
 	| "finalize";
 
 function createWizardStore() {
@@ -27,14 +26,7 @@ function createWizardStore() {
 			baseSteps.push("student-info");
 		}
 
-		baseSteps.push("course-info", "document-info");
-
-		// Add images step only for Lab Task
-		if (documentType === "Lab Task") {
-			baseSteps.push("images");
-		}
-
-		baseSteps.push("finalize");
+		baseSteps.push("course-info", "document-info", "finalize");
 		return baseSteps;
 	});
 
@@ -123,8 +115,6 @@ function createWizardStore() {
 				return formStore.selectedClass !== "" && formStore.selectedCourse !== "";
 			case "document-info":
 				return formStore.document.number !== "" && formStore.document.date !== "";
-			case "images":
-				return formStore.hasImages === true;
 			case "finalize":
 				return true;
 			default:

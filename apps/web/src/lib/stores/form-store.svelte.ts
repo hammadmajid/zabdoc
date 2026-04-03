@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 import { data, type DataStructure, type CourseInfo } from "$lib/data/data";
-import type { DocumentInfo, ImageItem, Student } from "$lib/types";
+import type { DocumentInfo, Student } from "$lib/types";
 import { wizardStore } from "./wizard-store.svelte";
 import { toast } from "svelte-sonner";
 
@@ -56,9 +56,6 @@ function createFormStore() {
 		date: ""
 	});
 
-	let imageItems = $state<ImageItem[]>([]);
-	let imageCounter = $state(0);
-
 	// Derived values for course selection
 	const classes = $derived(
 		Object.keys(data).map((className) => ({
@@ -101,8 +98,6 @@ function createFormStore() {
 	const courseTriggerContent = $derived(
 		courses.find((c) => c.value === selectedCourse)?.label ?? "Select course"
 	);
-
-	const hasImages = $derived(imageItems.length > 0);
 
 	// Initialize from localStorage (studentName, regNo, and selectedClass)
 	function initFromLocalStorage() {
@@ -190,40 +185,6 @@ function createFormStore() {
 		document.date = date;
 	}
 
-	// Image functions
-	function addImages(files: FileList | File[]) {
-		const fileArray = Array.from(files);
-		const newItems: ImageItem[] = fileArray.map((file) => {
-			imageCounter++;
-			return {
-				id: `img-${imageCounter}-${Date.now()}`,
-				file,
-				previewUrl: URL.createObjectURL(file)
-			};
-		});
-		imageItems = [...imageItems, ...newItems];
-	}
-
-	function removeImage(id: string) {
-		const item = imageItems.find((img) => img.id === id);
-		if (item) {
-			URL.revokeObjectURL(item.previewUrl);
-		}
-		imageItems = imageItems.filter((img) => img.id !== id);
-	}
-
-	function reorderImages(fromIndex: number, toIndex: number) {
-		const newItems = [...imageItems];
-		const [removed] = newItems.splice(fromIndex, 1);
-		newItems.splice(toIndex, 0, removed);
-		imageItems = newItems;
-	}
-
-	function clearImages() {
-		imageItems.forEach((item) => URL.revokeObjectURL(item.previewUrl));
-		imageItems = [];
-	}
-
 	// Build FormData for submission
 	function buildFormData(): FormData {
 		const formData = new FormData();
@@ -261,11 +222,6 @@ function createFormStore() {
 		if (document.number) formData.append("number", document.number);
 		if (document.date) formData.append("date", document.date);
 
-		// Images - appended in order
-		imageItems.forEach((item) => {
-			formData.append("images", item.file);
-		});
-
 		return formData;
 	}
 
@@ -286,7 +242,6 @@ function createFormStore() {
 			number: "",
 			date: ""
 		};
-		clearImages();
 	}
 
 	return {
@@ -338,11 +293,6 @@ function createFormStore() {
 			return document;
 		},
 
-		// Images state
-		get imageItems() {
-			return imageItems;
-		},
-
 		// Derived values
 		get classes() {
 			return classes;
@@ -359,9 +309,6 @@ function createFormStore() {
 		get courseTriggerContent() {
 			return courseTriggerContent;
 		},
-		get hasImages() {
-			return hasImages;
-		},
 
 		// Methods
 		initFromLocalStorage,
@@ -372,10 +319,6 @@ function createFormStore() {
 		setDocumentMarks,
 		setDocumentNumber,
 		setDocumentDate,
-		addImages,
-		removeImage,
-		reorderImages,
-		clearImages,
 		validateSelectedCourse,
 		buildFormData,
 		reset,
