@@ -10,6 +10,29 @@
 	// Reset wizard when landing on document page
 	onMount(() => {
 		wizardStore.reset();
+		
+		// Initialize from URL if step param exists
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlStep = urlParams.get("step");
+		if (urlStep) {
+			wizardStore.initFromURL(urlStep);
+		} else {
+			// Sync initial step to URL
+			wizardStore.syncToURL();
+		}
+
+		// Listen to browser back/forward button
+		const handlePopState = () => {
+			const urlParams = new URLSearchParams(window.location.search);
+			const urlStep = urlParams.get("step");
+			wizardStore.handlePopState(urlStep);
+		};
+
+		window.addEventListener("popstate", handlePopState);
+
+		return () => {
+			window.removeEventListener("popstate", handlePopState);
+		};
 	});
 </script>
 
