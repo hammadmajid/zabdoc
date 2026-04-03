@@ -64,9 +64,9 @@
 		startLoadingMessages();
 
 		try {
-			const formData = formStore.buildFormData();
+			const jsonData = formStore.buildJSON();
 
-			const apiUrl = `${baseURL}/generate`;
+			const apiUrl = `${baseURL}/document`;
 
 			// Create AbortController for timeout
 			const controller = new AbortController();
@@ -75,7 +75,10 @@
 			try {
 				const response = await fetch(apiUrl, {
 					method: "POST",
-					body: formData,
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(jsonData),
 					signal: controller.signal
 				});
 
@@ -94,7 +97,7 @@
 					if (response.status === 400) {
 						isError = true;
 						errorMessage =
-							"Invalid request. Please check your form data and try again.";
+							"Invalid request. Please check your data and try again.";
 						return;
 					} else if (response.status === 500) {
 						isError = true;
@@ -112,7 +115,7 @@
 				const a = document.createElement("a");
 				a.style.display = "none";
 				a.href = url;
-				a.download = smartName(formData);
+				a.download = smartName(jsonData);
 				document.body.appendChild(a);
 				a.click();
 				window.URL.revokeObjectURL(url);

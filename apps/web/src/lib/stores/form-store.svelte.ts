@@ -3,6 +3,7 @@ import { data, type DataStructure, type CourseInfo } from "$lib/data/data";
 import type { DocumentInfo, Student } from "$lib/types";
 import { wizardStore } from "./wizard-store.svelte";
 import { toast } from "svelte-sonner";
+import { documentSchema, type DocumentSchema } from "@repo/types";
 
 // Constants
 export const STUDENT_LIMIT = 6;
@@ -185,44 +186,40 @@ function createFormStore() {
 		document.date = date;
 	}
 
-	// Build FormData for submission
-	function buildFormData(): FormData {
-		const formData = new FormData();
-
-		// Student info
-		formData.append("isMultiMode", isMultiMode.toString());
-		formData.append("isBlankMode", isBlankMode.toString());
+	// Build JSON payload for submission matching zod schema
+	function buildJSON(): DocumentSchema {
+		// Build students array based on mode
+		let studentsArray: { Name: string; RegNo: string }[] = [];
 
 		if (isBlankMode) {
-			// For blank mode, send empty strings so the fields are blank on the PDF
-			formData.append("studentName", "");
-			formData.append("regNo", "");
+			// For blank mode, send empty student
+			studentsArray = [{ Name: "", RegNo: "" }];
 		} else if (isMultiMode) {
-			students.forEach((student, index) => {
-				formData.append(`student-${index + 1}-name`, student.name);
-				formData.append(`student-${index + 1}-regNo`, student.regNo);
-			});
+			// For group mode, send all students
+			studentsArray = students.map((s) => ({
+				Name: s.name,
+				RegNo: s.regNo
+			}));
 		} else {
-			formData.append("studentName", studentName);
-			formData.append("regNo", regNo);
+			// For individual mode, send single student
+			studentsArray = [{ Name: studentName, RegNo: regNo }];
 		}
 
-		// Course info
-		formData.append("class", selectedClass);
-		formData.append("course", selectedCourse);
+		const payload = {
+			Students: studentsArray,
+			Class: selectedClass,
+			Course: selectedCourse,
+			CourseCode: courseDetails?.code || "",
+			Instructor: courseDetails?.instructor || "",
+			DocType: document.type,
+			Number: document.number,
+			Date: document.date,
+			Marks: document.marks
+		};
 
-		if (courseDetails) {
-			formData.append("instructor", courseDetails.instructor);
-			formData.append("courseCode", courseDetails.code);
-		}
-
-		// Document info
-		if (document.type) formData.append("type", document.type);
-		if (document.marks) formData.append("marks", document.marks);
-		if (document.number) formData.append("number", document.number);
-		if (document.date) formData.append("date", document.date);
-
-		return formData;
+		// Validate with zod schema
+		const validated = documentSchema.parse(payload);
+		return validated;
 	}
 
 	// Reset form (except persisted values)
@@ -320,7 +317,7 @@ function createFormStore() {
 		setDocumentNumber,
 		setDocumentDate,
 		validateSelectedCourse,
-		buildFormData,
+		buildJSON,
 		reset,
 		STUDENT_LIMIT
 	};
