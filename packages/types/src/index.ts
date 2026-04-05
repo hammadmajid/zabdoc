@@ -20,6 +20,8 @@ export type DocumentSchema = z.infer<typeof documentSchema>;
 export const scrapeSchema = z.object({
     username: z.string().min(1),
     password: z.string().min(1),
+    campus: z.enum(['isb']),
+    semester: z.enum(['fall', 'spring', 'summer']),
 });
 
 export type ScrapeSchema = z.infer<typeof scrapeSchema>;
