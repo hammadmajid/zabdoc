@@ -2,6 +2,9 @@
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
+    /* Do not emit compiled output. */
+    "noEmit": true,
+
     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "target": "es2021",
     /* Specify a set of bundled library declaration files that describe the target runtime environment. */
