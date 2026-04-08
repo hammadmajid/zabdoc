@@ -53,7 +53,11 @@ func NewScraperService() *ScraperService {
 
 // ScrapeCourseData fetches and merges attendance and marks by course name.
 func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]models.CourseScrapeData, error) {
-	resp, err := s.client.PostForm(req.Url, url.Values{
+	// Construct the login URL based on semester
+	baseURL := s.getBaseURL(req.Semester)
+	loginURL := fmt.Sprintf("%s/VerifyLogin.asp", baseURL)
+
+	resp, err := s.client.PostForm(loginURL, url.Values{
 		"txtLoginName": {req.Username},
 		"txtPassword":  {req.Password},
 		"txtCampus_Id": {"1"},
@@ -73,12 +77,12 @@ func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]mode
 	g := new(errgroup.Group)
 	g.Go(func() error {
 		var scrapeErr error
-		attendanceByCourse, scrapeErr = s.scrapeAttendanceByCourse()
+		attendanceByCourse, scrapeErr = s.scrapeAttendanceByCourse(baseURL)
 		return scrapeErr
 	})
 	g.Go(func() error {
 		var scrapeErr error
-		marksByCourse, scrapeErr = s.scrapeMarksByCourse()
+		marksByCourse, scrapeErr = s.scrapeMarksByCourse(baseURL)
 		return scrapeErr
 	})
 
@@ -108,8 +112,14 @@ func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]mode
 	return results, nil
 }
 
-func (s *ScraperService) scrapeAttendanceByCourse() (map[string]models.CourseAttendance, error) {
-	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseAttendance.asp?OptionName=View%20Attendance"
+// getBaseURL constructs the base URL for ZabDesk based on semester
+// Pattern: https://{semester}zabdesk.szabist-isb.edu.pk
+func (s *ScraperService) getBaseURL(semester string) string {
+	return fmt.Sprintf("https://%szabdesk.szabist-isb.edu.pk", semester)
+}
+
+func (s *ScraperService) scrapeAttendanceByCourse(baseURL string) (map[string]models.CourseAttendance, error) {
+	listURL := fmt.Sprintf("%s/Student/QryCourseAttendance.asp?OptionName=View%%20Attendance", baseURL)
 	listPage, err := s.getPage(listURL)
 	if err != nil {
 		return nil, err
@@ -156,8 +166,8 @@ func (s *ScraperService) scrapeAttendanceByCourse() (map[string]models.CourseAtt
 	return results, nil
 }
 
-func (s *ScraperService) scrapeMarksByCourse() (map[string]models.CourseMarks, error) {
-	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseRecapSheet.asp?OptionName=Current%20Semester%20Results"
+func (s *ScraperService) scrapeMarksByCourse(baseURL string) (map[string]models.CourseMarks, error) {
+	listURL := fmt.Sprintf("%s/Student/QryCourseRecapSheet.asp?OptionName=Current%%20Semester%%20Results", baseURL)
 	listPage, err := s.getPage(listURL)
 	if err != nil {
 		return nil, err

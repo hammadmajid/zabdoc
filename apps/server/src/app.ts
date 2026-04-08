@@ -52,9 +52,8 @@ App.post(
   }),
   async (c) => {
     const data = c.req.valid("json");
-    const url = `https://${data.semester}zabdesk.szabist-${data.campus}.edu.pk`;
 
-    const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
+    const containerService = getContainer(c.env.ZabdocContainer); // uses 'cf-singleton-container' by default
 
     const response = await containerService.containerFetch(constructUrl(c.req.path), {
       method: "POST",
@@ -62,11 +61,19 @@ App.post(
       body: JSON.stringify({
         username: data.username,
         password: data.password,
-        url,
+        semester: data.semester,
       }),
     });
 
-    const parsed = await scrapedData.safeParseAsync(response.body);
+    if (!response.ok) {
+      return c.text(`Failed to scrape: ${response.statusText}`, 500);
+    }
+
+    // Parse response body from Go service
+    const responseJson = await response.json();
+
+    // Validate the scraped data matches our schema
+    const parsed = await scrapedData.safeParseAsync(responseJson);
     if (!parsed.success) {
       // if this doesn't work its on us
       return c.text(`${parsed.error}`, 500);

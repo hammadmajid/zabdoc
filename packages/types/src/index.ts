@@ -26,24 +26,26 @@ export const scrapeInitSchema = z.object({
 
 export type ScrapeInitSchema = z.infer<typeof scrapeInitSchema>;
 
-export const scrapedData = z.object({
-    username: z.string(),
-    name: z.string(),
-    cgpa: z.number(),
-    courses: z.array(z.object({
-        instructor: z.string(),
-        credits: z.number(),
-        attendence: z.object({
-            lecture: z.number(),
-            date: z.date(),
-            status: z.string(),
+export const scrapedData = z.record(
+    z.string(), // course name as key
+    z.object({
+        attendance: z.object({
+            courseName: z.string(),
+            instructor: z.string(),
+            records: z.array(z.object({
+                lecture: z.string(),
+                date: z.string(), // "dd/mm" format from Go scraper
+                status: z.string(),
+            })),
         }),
         marks: z.object({
-            head: z.string(),
-            total: z.number(),
-            obtained: z.number().optional() // optional means "Not entered"
-        })
-    }))
-});
+            entries: z.array(z.object({
+                head: z.string(),
+                max: z.string(),
+                obtained: z.string(),
+            })),
+        }),
+    })
+);
 
 export type ScrapedData = z.infer<typeof scrapedData>;
