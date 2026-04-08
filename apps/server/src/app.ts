@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { getContainer } from "@cloudflare/containers";
 import { cors } from "hono/cors";
-import { documentSchema, scrapeSchema } from "@repo/types"
-import { validator } from 'hono/validator'
+import { documentSchema, scrapeInitSchema, scrapedData } from "@repo/types";
+import { validator } from "hono/validator";
 import { constructUrl } from "./utils";
 
 export const App = new Hono<{ Bindings: Env }>();
@@ -41,21 +41,37 @@ App.post("/document", validator('json', (value, c) => {
   })
 });
 
-App.post("/scrape", validator('json', (value, c) => {
-  const parsed = scrapeSchema.safeParse(value);
-  if (!parsed.success) {
-    return c.text(`${parsed.error}`, 400)
-  }
-  return parsed.data
-}), (c) => {
-  const data = c.req.valid('json');
-  const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
+App.post(
+  "/scrape",
+  validator("json", (value, c) => {
+    const parsed = scrapeInitSchema.safeParse(value);
+    if (!parsed.success) {
+      return c.text(`${parsed.error}`, 400);
+    }
+    return parsed.data;
+  }),
+  async (c) => {
+    const data = c.req.valid("json");
+    const url = `https://${data.semester}zabdesk.szabist-${data.campus}.edu.pk`;
 
-  return containerService.containerFetch(constructUrl(c.req.path), {
-    method: "POST",
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  }, 8080)
-});
+    const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
 
-App.get();
+    const response = await containerService.containerFetch(constructUrl(c.req.path), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: data.username,
+        password: data.password,
+        url,
+      }),
+    });
+
+    const parsed = await scrapedData.safeParseAsync(response.body);
+    if (!parsed.success) {
+      // if this doesn't work its on us
+      return c.text(`${parsed.error}`, 500);
+    }
+
+    return c.json(parsed.data);
+  },
+);

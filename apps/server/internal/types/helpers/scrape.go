@@ -9,6 +9,7 @@ import (
 func ToScrapeRequestWideEvent(r *requests.Scrape, success bool, errMsg string) events.ScrapeRequestWideEvent {
 	return events.ScrapeRequestWideEvent{
 		Username: r.Username,
+		Url:      r.Url,
 		Success:  success,
 		Error:    errMsg,
 	}

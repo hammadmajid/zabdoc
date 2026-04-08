@@ -19,6 +19,7 @@ type DocumentRequestWideEvent struct {
 // exclude password for security.
 type ScrapeRequestWideEvent struct {
 	Username string `json:"username"`
+	Url      string `json:"url"`
 	Success  bool   `json:"success"`
 	Error    string `json:"error,omitempty"`
 }

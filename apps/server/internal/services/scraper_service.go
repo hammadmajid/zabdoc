@@ -53,8 +53,7 @@ func NewScraperService() *ScraperService {
 
 // ScrapeCourseData fetches and merges attendance and marks by course name.
 func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]models.CourseScrapeData, error) {
-	loginURL := "https://springzabdesk.szabist-isb.edu.pk/VerifyLogin.asp"
-	resp, err := s.client.PostForm(loginURL, url.Values{
+	resp, err := s.client.PostForm(req.Url, url.Values{
 		"txtLoginName": {req.Username},
 		"txtPassword":  {req.Password},
 		"txtCampus_Id": {"1"},

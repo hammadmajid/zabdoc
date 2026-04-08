@@ -4,4 +4,5 @@ package requests
 type Scrape struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Url      string `json:"url"`
 }
