@@ -24,8 +24,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.0
       hono:
-        specifier: '>=4.12.7'
-        version: 4.12.9
+        specifier: ^4.12.12
+        version: 4.12.12
     devDependencies:
       '@types/node':
         specifier: ^25.5.0
@@ -1449,8 +1449,8 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  hono@4.12.9:
-    resolution: {integrity: sha512-wy3T8Zm2bsEvxKZM5w21VdHDDcwVS1yUFFY6i8UobSsKfFceT7TOwhbhfKsDyx7tYQlmRM5FLpIuYvNFyjctiA==}
+  hono@4.12.12:
+    resolution: {integrity: sha512-p1JfQMKaceuCbpJKAPKVqyqviZdS0eUxH9v82oWo1kb9xjQ5wA6iP3FNVAPDFlz5/p7d45lO+BpSk1tuSZMF4Q==}
     engines: {node: '>=16.9.0'}
 
   inline-style-parser@0.2.7:
@@ -2798,7 +2798,7 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
-  hono@4.12.9: {}
+  hono@4.12.12: {}
 
   inline-style-parser@0.2.7: {}
 
