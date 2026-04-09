@@ -1,9 +1,12 @@
 package services
 
 import (
+	"context"
+	"crypto/tls"
 	"fmt"
 	htmlstd "html"
 	"io"
+	"net"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -33,20 +36,55 @@ var (
 	reTags           = regexp.MustCompile(`<[^>]*>`)
 )
 
-// NewScraperService creates a new Scraper instance
+// NewScraperService creates a new Scraper instance with proper DNS and TLS configuration
+// for Docker/Tailscale environments
 func NewScraperService() *ScraperService {
 	jar, _ := cookiejar.New(nil)
+
+	// Custom dialer with proper DNS timeout and keep-alive
+	dialer := &net.Dialer{
+		Timeout:   10 * time.Second, // DNS resolution timeout
+		KeepAlive: 30 * time.Second,
+		Resolver: &net.Resolver{
+			PreferGo: true, // Use Go's DNS resolver for consistency across platforms
+			Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+				// Try multiple DNS servers for better reliability in Docker
+				servers := []string{"8.8.8.8:53", "8.8.4.4:53", "1.1.1.1:53"}
+				var lastErr error
+				for _, server := range servers {
+					d := net.Dialer{Timeout: 5 * time.Second}
+					conn, err := d.DialContext(ctx, network, server)
+					if err == nil {
+						return conn, nil
+					}
+					lastErr = err
+				}
+				return nil, lastErr
+			},
+		},
+	}
+
 	transport := &http.Transport{
-		MaxIdleConns:        100,
-		MaxIdleConnsPerHost: 20,
-		IdleConnTimeout:     90 * time.Second,
+		DialContext:            dialer.DialContext,
+		MaxIdleConns:           100,
+		MaxIdleConnsPerHost:    20,
+		IdleConnTimeout:        90 * time.Second,
+		DisableKeepAlives:      false,
+		DisableCompression:     false,
+		MaxResponseHeaderBytes: 1 << 20, // 1MB
+		ExpectContinueTimeout:  1 * time.Second,
+		// TLS configuration for better compatibility and debugging
+		TLSClientConfig: &tls.Config{
+			MinVersion:         tls.VersionTLS12,
+			InsecureSkipVerify: false, // Keep secure, but ensures connection attempts
+		},
 	}
 
 	return &ScraperService{
 		client: &http.Client{
 			Jar:       jar,
 			Transport: transport,
-			Timeout:   20 * time.Second,
+			Timeout:   30 * time.Second, // Increased timeout to account for DNS + TLS + request
 		},
 	}
 }
