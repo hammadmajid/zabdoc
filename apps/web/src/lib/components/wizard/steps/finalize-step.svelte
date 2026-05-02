@@ -28,7 +28,6 @@
 	let loadingMessage = $state("");
 	let loadingInterval: ReturnType<typeof setInterval> | null = null;
 	let agreedToTerms = $state(false);
-	let { baseURL }: { baseURL: string } = $props();
 
 	function getRandomLoadingMessage() {
 		return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
@@ -66,7 +65,7 @@
 		try {
 			const jsonData = formStore.buildJSON();
 
-			const apiUrl = `${baseURL}/document`;
+			const apiUrl = `/api/pdf`;
 
 			// Create AbortController for timeout
 			const controller = new AbortController();

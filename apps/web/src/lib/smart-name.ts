@@ -56,5 +56,5 @@ export function smartName(data: FormData | Record<string, unknown>): string {
 	}
 
 	// If we have parts, join them with spaces, otherwise use default
-	return parts.length > 0 ? `${parts.join(" ")}.docx` : "document.docx";
+	return parts.length > 0 ? `${parts.join(" ")}.pdf` : "document.pdf";
 }
