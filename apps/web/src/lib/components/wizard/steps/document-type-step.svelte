@@ -27,20 +27,23 @@
 			<div class="neo-border-sm bg-secondary p-4">
 				<FileText class="size-10" />
 			</div>
-			<span>Assignment</span>
+			<div class="flex flex-col items-center gap-1">
+				<span>Assignment</span>
+				<span class="text-xs font-medium text-muted-foreground normal-case">Select document type</span>
+			</div>
 		</button>
 		<button
 			type="button"
-			onclick={() => {
-				wizardStore.setDocumentType("Lab Task");
-				wizardStore.nextStep();
-			}}
-			class="neo-border neo-shadow flex cursor-pointer flex-col items-center gap-4 bg-card px-10 py-8 text-xl font-black tracking-wide uppercase transition-all hover:translate-x-1 hover:translate-y-1 hover:bg-accent hover:shadow-none"
+			disabled
+			class="neo-border neo-shadow flex cursor-not-allowed flex-col items-center gap-4 bg-card px-10 py-8 text-xl font-black tracking-wide uppercase opacity-50 transition-all"
 		>
 			<div class="neo-border-sm bg-accent p-4">
 				<ClipboardList class="size-10" />
 			</div>
-			<span>Lab Task</span>
+			<div class="flex flex-col items-center gap-1">
+				<span>Lab Task</span>
+				<span class="text-xs font-medium text-muted-foreground normal-case">Under maintenance</span>
+			</div>
 		</button>
 	</div>
 </div>
