@@ -3,11 +3,12 @@ import { json, type RequestHandler } from '@sveltejs/kit';
 import { buildHTML } from '$lib/html';
 import { documentSchema } from '@repo/types';
 import { CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_API_TOKEN } from "$env/static/private";
+import { Buffer } from "node:buffer";
 
 export const POST: RequestHandler = async ({ request }) => {
   console.log('[PDF API] Incoming POST request');
   console.log('[PDF API] Request headers:', Object.fromEntries(request.headers.entries()));
-  
+
   try {
     // Parse JSON from req
     console.log('[PDF API] Parsing JSON from request body');
@@ -42,11 +43,11 @@ export const POST: RequestHandler = async ({ request }) => {
     console.log('[PDF API] Preparing Cloudflare API request');
     console.log('[PDF API] Account ID:', CLOUDFLARE_ACCOUNT_ID);
     console.log('[PDF API] API Token present:', !!CLOUDFLARE_API_TOKEN);
-    
+
     const cloudflareUrl = `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_ACCOUNT_ID}/browser-rendering/pdf`;
     console.log('[PDF API] Cloudflare URL:', cloudflareUrl);
     console.log('[PDF API] Sending HTML to Cloudflare (size: ' + JSON.stringify({ html }).length + ' bytes)');
-    
+
     const response = await fetch(cloudflareUrl, {
       method: 'POST',
       headers: {
