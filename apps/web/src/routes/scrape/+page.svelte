@@ -311,6 +311,9 @@
 		};
 	}
 
+	// Disable this feature
+	let disabled = $state(true);
+
 </script>
 
 <div class="flex min-h-[70vh] flex-col">
@@ -325,7 +328,22 @@
 		</a>
 	</div>
 
-	{#if !hasResults}
+	{#if disabled}
+		<div class="mx-auto flex w-full max-w-lg flex-col items-center justify-center px-4 py-16">
+			<Card.Root class="w-full border-dashed">
+				<Card.Content class="flex flex-col items-center text-center py-12">
+					<div class="mb-4 rounded-full bg-muted p-4">
+						<XCircle class="size-8 text-muted-foreground" />
+					</div>
+					<Card.Title class="mb-2 text-2xl">Feature Not Available</Card.Title>
+					<Card.Description class="text-base">
+						This feature is currently under maintenance. Please check back soon.
+					</Card.Description>
+				</Card.Content>
+			</Card.Root>
+		</div>
+	{:else}
+		{#if !hasResults}
 		<!-- Login Form -->
 		<div
 			class="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-4 py-8"
@@ -666,4 +684,5 @@
 			{/if}
 		</div>
 	{/if}
+{/if}
 </div>
