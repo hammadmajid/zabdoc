@@ -5,10 +5,13 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --ui tui",
-    "check": "turbo run check"
+    "lint": "oxlint",
+    "fmt": "oxfmt"
   },
   "packageManager": "pnpm@10.30.3",
   "devDependencies": {
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.58.0",
     "turbo": "^2.8.21"
   }
 }

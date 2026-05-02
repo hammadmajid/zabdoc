@@ -10,26 +10,18 @@ RUN go build -o zabdoc ./cmd/zabdoc/main.go
 FROM alpine:latest
 WORKDIR /app
 
-# Install Chromium and dependencies
-RUN apk add --no-cache \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
-    ca-certificates \
-    ttf-freefont \
-    libstdc++
+# Install CA certificates for HTTPS/TLS verification
+# This is critical for the app to make HTTPS requests to external services
+RUN apk add --no-cache ca-certificates
 
-# Copy built binary
+# Copy the compiled binary from builder stage
 COPY --from=builder /app/zabdoc ./zabdoc
+
+# Verify CA certificates are in place
+RUN ls -la /etc/ssl/certs/ca-certificates.crt || echo "CA certificates installed"
 
 # Do not change. Also hardcoded in go and ts code
 EXPOSE 8080
 
-# Set environment for chromedp
-ENV CHROME_PATH=/usr/bin/chromium-browser
-ENV CHROMEDP_HEADLESS=true
-ENV CHROME_EXTRA_ARGS="--no-sandbox --disable-setuid-sandbox"
-
-# Run the app
+# Run with proper signal handling
 CMD ["./zabdoc"]

@@ -14,7 +14,7 @@ func SetupRoutes(app *application.Application) *chi.Mux {
 
 	router.Get("/health", app.Handler.Health)
 
-	router.Post("/generate", app.Handler.Generate)
+	router.Post("/document", app.Handler.Document)
 	router.Post("/scrape", app.Handler.Scrape)
 
 	return router

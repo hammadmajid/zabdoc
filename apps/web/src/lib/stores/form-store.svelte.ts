@@ -1,8 +1,9 @@
 import { browser } from "$app/environment";
 import { data, type DataStructure, type CourseInfo } from "$lib/data/data";
-import type { DocumentInfo, ImageItem, Student } from "$lib/types";
+import type { DocumentInfo, Student } from "$lib/types";
 import { wizardStore } from "./wizard-store.svelte";
 import { toast } from "svelte-sonner";
+import { documentSchema, type DocumentSchema } from "@repo/types";
 
 // Constants
 export const STUDENT_LIMIT = 6;
@@ -56,9 +57,6 @@ function createFormStore() {
 		date: ""
 	});
 
-	let imageItems = $state<ImageItem[]>([]);
-	let imageCounter = $state(0);
-
 	// Derived values for course selection
 	const classes = $derived(
 		Object.keys(data).map((className) => ({
@@ -101,8 +99,6 @@ function createFormStore() {
 	const courseTriggerContent = $derived(
 		courses.find((c) => c.value === selectedCourse)?.label ?? "Select course"
 	);
-
-	const hasImages = $derived(imageItems.length > 0);
 
 	// Initialize from localStorage (studentName, regNo, and selectedClass)
 	function initFromLocalStorage() {
@@ -190,83 +186,40 @@ function createFormStore() {
 		document.date = date;
 	}
 
-	// Image functions
-	function addImages(files: FileList | File[]) {
-		const fileArray = Array.from(files);
-		const newItems: ImageItem[] = fileArray.map((file) => {
-			imageCounter++;
-			return {
-				id: `img-${imageCounter}-${Date.now()}`,
-				file,
-				previewUrl: URL.createObjectURL(file)
-			};
-		});
-		imageItems = [...imageItems, ...newItems];
-	}
-
-	function removeImage(id: string) {
-		const item = imageItems.find((img) => img.id === id);
-		if (item) {
-			URL.revokeObjectURL(item.previewUrl);
-		}
-		imageItems = imageItems.filter((img) => img.id !== id);
-	}
-
-	function reorderImages(fromIndex: number, toIndex: number) {
-		const newItems = [...imageItems];
-		const [removed] = newItems.splice(fromIndex, 1);
-		newItems.splice(toIndex, 0, removed);
-		imageItems = newItems;
-	}
-
-	function clearImages() {
-		imageItems.forEach((item) => URL.revokeObjectURL(item.previewUrl));
-		imageItems = [];
-	}
-
-	// Build FormData for submission
-	function buildFormData(): FormData {
-		const formData = new FormData();
-
-		// Student info
-		formData.append("isMultiMode", isMultiMode.toString());
-		formData.append("isBlankMode", isBlankMode.toString());
+	// Build JSON payload for submission matching zod schema
+	function buildJSON(): DocumentSchema {
+		// Build students array based on mode
+		let studentsArray: { Name: string; RegNo: string }[] = [];
 
 		if (isBlankMode) {
-			// For blank mode, send empty strings so the fields are blank on the PDF
-			formData.append("studentName", "");
-			formData.append("regNo", "");
+			// For blank mode, send empty student
+			studentsArray = [{ Name: "", RegNo: "" }];
 		} else if (isMultiMode) {
-			students.forEach((student, index) => {
-				formData.append(`student-${index + 1}-name`, student.name);
-				formData.append(`student-${index + 1}-regNo`, student.regNo);
-			});
+			// For group mode, send all students
+			studentsArray = students.map((s) => ({
+				Name: s.name,
+				RegNo: s.regNo
+			}));
 		} else {
-			formData.append("studentName", studentName);
-			formData.append("regNo", regNo);
+			// For individual mode, send single student
+			studentsArray = [{ Name: studentName, RegNo: regNo }];
 		}
 
-		// Course info
-		formData.append("class", selectedClass);
-		formData.append("course", selectedCourse);
+		const payload = {
+			Students: studentsArray,
+			Class: selectedClass,
+			Course: selectedCourse,
+			CourseCode: courseDetails?.code || "",
+			Instructor: courseDetails?.instructor || "",
+			DocType: document.type,
+			Number: document.number,
+			Date: document.date,
+			Marks: document.marks
+		};
 
-		if (courseDetails) {
-			formData.append("instructor", courseDetails.instructor);
-			formData.append("courseCode", courseDetails.code);
-		}
-
-		// Document info
-		if (document.type) formData.append("type", document.type);
-		if (document.marks) formData.append("marks", document.marks);
-		if (document.number) formData.append("number", document.number);
-		if (document.date) formData.append("date", document.date);
-
-		// Images - appended in order
-		imageItems.forEach((item) => {
-			formData.append("images", item.file);
-		});
-
-		return formData;
+		// Validate with zod schema
+		const validated = documentSchema.parse(payload);
+		return validated;
 	}
 
 	// Reset form (except persisted values)
@@ -286,7 +239,6 @@ function createFormStore() {
 			number: "",
 			date: ""
 		};
-		clearImages();
 	}
 
 	return {
@@ -338,11 +290,6 @@ function createFormStore() {
 			return document;
 		},
 
-		// Images state
-		get imageItems() {
-			return imageItems;
-		},
-
 		// Derived values
 		get classes() {
 			return classes;
@@ -359,9 +306,6 @@ function createFormStore() {
 		get courseTriggerContent() {
 			return courseTriggerContent;
 		},
-		get hasImages() {
-			return hasImages;
-		},
 
 		// Methods
 		initFromLocalStorage,
@@ -372,12 +316,8 @@ function createFormStore() {
 		setDocumentMarks,
 		setDocumentNumber,
 		setDocumentDate,
-		addImages,
-		removeImage,
-		reorderImages,
-		clearImages,
 		validateSelectedCourse,
-		buildFormData,
+		buildJSON,
 		reset,
 		STUDENT_LIMIT
 	};

@@ -19,7 +19,6 @@
 	import BookOpen from "@lucide/svelte/icons/book-open";
 	import CalendarDays from "@lucide/svelte/icons/calendar-days";
 	import RefreshCw from "@lucide/svelte/icons/refresh-cw";
-	import ImageIcon from "@lucide/svelte/icons/image";
 
 	let isLoading = $state(false);
 	let isSuccess = $state(false);
@@ -29,7 +28,6 @@
 	let loadingMessage = $state("");
 	let loadingInterval: ReturnType<typeof setInterval> | null = null;
 	let agreedToTerms = $state(false);
-	let { baseURL }: { baseURL: string } = $props();
 
 	function getRandomLoadingMessage() {
 		return loadingMessages[Math.floor(Math.random() * loadingMessages.length)];
@@ -65,9 +63,9 @@
 		startLoadingMessages();
 
 		try {
-			const formData = formStore.buildFormData();
+			const jsonData = formStore.buildJSON();
 
-			const apiUrl = `${baseURL}/generate`;
+			const apiUrl = `/api/pdf`;
 
 			// Create AbortController for timeout
 			const controller = new AbortController();
@@ -76,7 +74,10 @@
 			try {
 				const response = await fetch(apiUrl, {
 					method: "POST",
-					body: formData,
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(jsonData),
 					signal: controller.signal
 				});
 
@@ -95,7 +96,7 @@
 					if (response.status === 400) {
 						isError = true;
 						errorMessage =
-							"Invalid request. Please check your form data and try again.";
+							"Invalid request. Please check your data and try again.";
 						return;
 					} else if (response.status === 500) {
 						isError = true;
@@ -113,7 +114,7 @@
 				const a = document.createElement("a");
 				a.style.display = "none";
 				a.href = url;
-				a.download = smartName(formData);
+				a.download = smartName(jsonData);
 				document.body.appendChild(a);
 				a.click();
 				window.URL.revokeObjectURL(url);
@@ -368,35 +369,6 @@
 			</div>
 
 			<!-- Images (Lab Task only) -->
-			{#if wizardStore.documentType === "Lab Task"}
-				<div
-					class="neo-border neo-shadow flex items-center justify-between bg-card p-4"
-					in:scale={{ duration: 300, delay: 250, easing: quintOut }}
-				>
-					<div class="flex items-center gap-3">
-						<div class="neo-border-sm bg-secondary p-2">
-							<ImageIcon class="size-5" />
-						</div>
-						<div>
-							<p class="text-xs font-bold text-muted-foreground uppercase">Images</p>
-							<p class="font-bold">
-								{formStore.imageItems.length} image{formStore.imageItems.length !==
-								1
-									? "s"
-									: ""}
-								attached
-							</p>
-						</div>
-					</div>
-					<button
-						type="button"
-						onclick={() => wizardStore.goToStep("images")}
-						class="neo-border-sm cursor-pointer bg-muted p-2 transition-colors hover:bg-secondary"
-					>
-						<Pencil class="size-4" />
-					</button>
-				</div>
-			{/if}
 		</div>
 
 		<!-- Generate Button -->

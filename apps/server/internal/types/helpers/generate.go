@@ -5,18 +5,10 @@ import (
 	"zabdoc/internal/types/requests"
 )
 
-// ToGenerateRequestWideEvent converts the request to a loggable GenerateRequestWideEvent (excludes image data)
-func ToGenerateRequestWideEvent(r *requests.Generate) events.GenerateRequestWideEvent {
-	imageMetas := make([]events.ImageMeta, len(r.Images))
-	for i, img := range r.Images {
-		imageMetas[i] = events.ImageMeta{
-			MimeType:      img.MimeType,
-			OriginalBytes: img.OriginalBytes,
-			Base64Length:  len(img.Data),
-		}
-	}
+// ToDocumentRequestWideEvent converts the request to a loggable DocumentRequestWideEvent (excludes image data)
+func ToDocumentRequestWideEvent(r *requests.Document) events.DocumentRequestWideEvent {
 
-	return events.GenerateRequestWideEvent{
+	return events.DocumentRequestWideEvent{
 		Students:   r.Students,
 		Class:      r.Class,
 		Course:     r.Course,
@@ -26,7 +18,5 @@ func ToGenerateRequestWideEvent(r *requests.Generate) events.GenerateRequestWide
 		Number:     r.Number,
 		Date:       r.Date,
 		Marks:      r.Marks,
-		ImageCount: len(r.Images),
-		Images:     imageMetas,
 	}
 }

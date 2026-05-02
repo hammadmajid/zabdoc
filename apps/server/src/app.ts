@@ -1,6 +1,9 @@
 import { Hono } from "hono";
 import { getContainer } from "@cloudflare/containers";
 import { cors } from "hono/cors";
+import { documentSchema, scrapeInitSchema, scrapedData } from "@repo/types";
+import { validator } from "hono/validator";
+import { constructUrl } from "./utils";
 
 export const App = new Hono<{ Bindings: Env }>();
 
@@ -21,16 +24,61 @@ App.get("/health", (c) => {
   return containerService.fetch(c.req.raw);
 });
 
-App.post("/generate", (c) => {
-  // Pass the raw request to container
+App.post("/document", validator('json', (value, c) => {
+  const parsed = documentSchema.safeParse(value);
+  if (!parsed.success) {
+    return c.text(`${parsed.error}`, 400)
+  }
+  return parsed.data
+}), (c) => {
+  const data = c.req.valid('json');
   const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
-  return containerService.fetch(c.req.raw);
+
+  return containerService.containerFetch(constructUrl(c.req.path), {
+    method: "POST",
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
 });
 
-App.post("/scrape", (c) => {
-  // Pass the raw request to container
-  const containerService = getContainer(c.env.ZabdocContainer); // uses ‘cf-singleton-container’ by default
-  return containerService.fetch(c.req.raw);
-});
+App.post(
+  "/scrape",
+  validator("json", (value, c) => {
+    const parsed = scrapeInitSchema.safeParse(value);
+    if (!parsed.success) {
+      return c.text(`${parsed.error}`, 400);
+    }
+    return parsed.data;
+  }),
+  async (c) => {
+    const data = c.req.valid("json");
 
-App.get();
+    const containerService = getContainer(c.env.ZabdocContainer); // uses 'cf-singleton-container' by default
+
+    const response = await containerService.containerFetch(constructUrl(c.req.path), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: data.username,
+        password: data.password,
+        semester: data.semester,
+      }),
+    });
+
+    if (!response.ok) {
+      return c.text(`Failed to scrape: ${response.statusText}`, 500);
+    }
+
+    // Parse response body from Go service
+    const responseJson = await response.json();
+
+    // Validate the scraped data matches our schema
+    const parsed = await scrapedData.safeParseAsync(responseJson);
+    if (!parsed.success) {
+      // if this doesn't work its on us
+      return c.text(`${parsed.error}`, 500);
+    }
+
+    return c.json(parsed.data);
+  },
+);

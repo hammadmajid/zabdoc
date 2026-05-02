@@ -1,6 +1,30 @@
-package templates
+// @apps/web/src/lib/html.ts
+// Go template -> JS. No images. URLs for fonts/logo.
 
-const StylesTemplate = `
+interface Student {
+  Name: string;
+  RegNo: string;
+}
+
+interface DocumentData {
+  Students: Student[];
+  Class: string;
+  Course: string;
+  CourseCode: string;
+  Instructor: string;
+  DocType: string;
+  Number: string;
+  Date: string;
+  Marks: string;
+}
+
+// Helper fns matching Go template funcs
+const add = (a: number, b: number) => a + b;
+const div = (a: number, b: number) => (b === 0 ? 0 : Math.floor(a / b));
+const lt = (a: number, b: number) => a < b;
+const ge = (a: number, b: number) => a >= b;
+
+const styles = `
 <style>
     @font-face {
         font-family: "Times New Roman";
@@ -263,133 +287,154 @@ const StylesTemplate = `
         font-size: 14pt;
     }
 
-    /* Content Pages Styles */
-    .content-pages {
-        font-size: 12pt;
-        line-height: 1.6;
-        padding: 5mm;
-    }
-
-    .section-image {
-        max-width: 100%;
-        height: auto;
-        margin-bottom: 1em;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        display: block;
-    }
-
     /* Force backgrounds to always appear in print */
     * {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
-</style>`
+</style>`;
 
-const HeaderTemplate = `
-<div class="header">
-    <div class="header-logo">
-        <img src="https://cdn.zabdoc.xyz/szabist-logo.png" alt="SZABIST Logo">
-    </div>
-    <div class="header-content">
-        <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
-        <div class="header-line2-box"><span class="header-line2">Computer Science Department</span></div>
-    </div>
-</div>`
+function renderStudentTable(students: Student[]): string {
+  if (ge(students.length, 4)) {
+    // 4+ students: 4-column grid
+    const mid = div(add(students.length, 1), 2);
+    let grid = '';
+    for (let i = 0; i < mid; i++) {
+      const left = students[i];
+      const right = students[i + mid];
+      grid += `
+        <div class="student-name">${left.Name}</div>
+        <div class="student-regno">${left.RegNo}</div>
+        ${right ? `
+        <div class="student-name">${right.Name}</div>
+        <div class="student-regno">${right.RegNo}</div>
+        ` : `
+        <div class="student-name"></div>
+        <div class="student-regno"></div>
+        `}
+      `;
+    }
+    return `
+    <div class="student-info-table compact">
+      <div class="student-table-header">
+        <div>Student Name</div>
+        <div>Reg. Number</div>
+        <div>Student Name</div>
+        <div>Reg. Number</div>
+      </div>
+      <div class="student-table-body-grid">
+        ${grid}
+      </div>
+    </div>`;
+  } else {
+    // 1-3 students: 2-column layout
+    const rows = students.map(s => `
+      <div class="student-entry-simple">
+        <div>${s.Name}</div>
+        <div>${s.RegNo}</div>
+      </div>
+    `).join('');
+    return `
+    <div class="student-info-table">
+      <div class="student-table-header-simple">
+        <div>Student Name</div>
+        <div>Reg. Number</div>
+      </div>
+      <div class="student-table-body-simple">
+        ${rows}
+      </div>
+    </div>`;
+  }
+}
 
-const MarksTemplate = `
-<div class="marks">
-    <div class="marks-line">Total Marks: <span class="underline">{{.Marks}}</span></div>
-    <div class="marks-line">Obtained Marks: <span class="underline"></span></div>
-</div>`
+export function buildHTML(data: DocumentData): string {
+  const isMultiMode = ge(data.Students.length, 2);
+  const firstStudent = data.Students[0];
 
-const FooterTemplate = `
-<div class="footer">
-    <div>{{.CourseCode}}</div>
-    <div>{{.Class}}</div>
-    <div>SZABIST-ISB</div>
-</div>`
-
-const InfoTableTemplate = `
-<div class="info-table">
-    <div class="info-row">
+  const infoTable = isMultiMode
+    ? `
+    <div class="info-table">
+      <div class="info-row">
         <div class="info-label">Submitted to:</div>
-        <div class="info-value">{{.Instructor}}</div>
+        <div class="info-value">${data.Instructor}</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Class/Section:</div>
+        <div class="info-value">${data.Class}</div>
+      </div>
     </div>
-    <div class="info-row">
+    `
+    : `
+    <div class="info-table">
+      <div class="info-row">
+        <div class="info-label">Submitted to:</div>
+        <div class="info-value">${data.Instructor}</div>
+      </div>
+      <div class="info-row">
         <div class="info-label">Student Name:</div>
-        <div class="info-value">{{.FirstStudent.Name}}</div>
-    </div>
-    <div class="info-row">
+        <div class="info-value">${firstStudent.Name}</div>
+      </div>
+      <div class="info-row">
         <div class="info-label">Reg. Number:</div>
-        <div class="info-value">{{.FirstStudent.RegNo}}</div>
-    </div>
-    <div class="info-row">
+        <div class="info-value">${firstStudent.RegNo}</div>
+      </div>
+      <div class="info-row">
         <div class="info-label">Class/Section:</div>
-        <div class="info-value">{{.Class}}</div>
+        <div class="info-value">${data.Class}</div>
+      </div>
     </div>
-</div>`
+    `;
 
-const SharedInfoTableTemplate = `
-<div class="info-table">
-    <div class="info-row">
-        <div class="info-label">Submitted to:</div>
-        <div class="info-value">{{.Instructor}}</div>
-    </div>
-    <div class="info-row">
-        <div class="info-label">Class/Section:</div>
-        <div class="info-value">{{.Class}}</div>
-    </div>
-</div>`
+  const spacerSmall = '<div class="spacer-small"></div>';
+  const spacerLarge = '<div class="spacer-large"></div><div class="spacer-large"></div>';
+  const spacerAdaptive = '<div class="spacer-adaptive"></div>';
+  const spacerAdaptiveLarge = '<div class="spacer-adaptive-large"></div>';
 
-const StudentInfoTableTemplate = `
-<div class="student-info-table{{if ge (len .Students) 4}} compact{{end}}">
-    {{if ge (len .Students) 4}}
-    {{/* 4+ students: split into two side-by-side tables */}}
-    <div class="student-table-header">
-        <div>Student Name</div>
-        <div>Reg. Number</div>
-        <div>Student Name</div>
-        <div>Reg. Number</div>
-    </div>
-    <div class="student-table-body-grid">
-        {{$mid := div (add (len .Students) 1) 2}}
-        {{range $index, $student := .Students}}
-            {{if lt $index $mid}}
-            <div class="student-name">{{$student.Name}}</div>
-            <div class="student-regno">{{$student.RegNo}}</div>
-            {{with index $.Students (add $index $mid)}}
-            <div class="student-name">{{.Name}}</div>
-            <div class="student-regno">{{.RegNo}}</div>
-            {{else}}
-            <div class="student-name"></div>
-            <div class="student-regno"></div>
-            {{end}}
-            {{end}}
-        {{end}}
-    </div>
-    {{else}}
-    {{/* 1-3 students: simple two-column layout */}}
-    <div class="student-table-header-simple">
-        <div>Student Name</div>
-        <div>Reg. Number</div>
-    </div>
-    <div class="student-table-body-simple">
-        {{range $student := .Students}}
-        <div class="student-entry-simple">
-            <div>{{$student.Name}}</div>
-            <div>{{$student.RegNo}}</div>
+  return `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>${firstStudent.RegNo}</title>
+    ${styles}
+</head>
+
+<body>
+<!-- Cover Page -->
+<div class="cover-page">
+    <div class="header">
+        <div class="header-logo">
+            <img src="https://cdn.zabdoc.xyz/szabist-logo.png" alt="SZABIST Logo">
         </div>
-        {{end}}
+        <div class="header-content">
+            <div class="header-line1">Shaheed Zulfiqar Ali Bhutto Institute of Science and Technology</div>
+            <div class="header-line2-box"><span class="header-line2">Computer Science Department</span></div>
+        </div>
     </div>
-    {{end}}
-</div>`
 
-const ContentPagesTemplate = `
-{{if .Images}}
-<div class="content-pages">
-    {{range $imgIndex, $image := .Images}}
-    <img src="data:{{$image.MimeType}};base64,{{$image.Data}}" alt="Image {{add $imgIndex 1}}" class="section-image">
-    {{end}}
+    <div class="content">
+        ${isMultiMode ? spacerAdaptive : spacerSmall}
+        <div class="marks">
+            <div class="marks-line">Total Marks: <span class="underline">${data.Marks}</span></div>
+            <div class="marks-line">Obtained Marks: <span class="underline"></span></div>
+        </div>
+        ${isMultiMode ? spacerAdaptiveLarge : spacerLarge}
+        <div class="course-title-section">
+            <div class="course-title">${data.Course}</div>
+            <div class="assignment-number">${data.DocType} #${data.Number}</div>
+            <div class="submission-date">Submission date: ${data.Date}</div>
+        </div>
+        ${isMultiMode ? spacerAdaptiveLarge : spacerLarge}
+        ${infoTable}
+        ${isMultiMode ? renderStudentTable(data.Students) : ''}
+    </div>
+
+    <div class="footer">
+        <div>${data.CourseCode}</div>
+        <div>${data.Class}</div>
+        <div>SZABIST-ISB</div>
+    </div>
 </div>
-{{end}}`
+
+</body>
+</html>`;
+}

@@ -1,9 +1,12 @@
 package services
 
 import (
+	"context"
+	"crypto/tls"
 	"fmt"
 	htmlstd "html"
 	"io"
+	"net"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -33,27 +36,65 @@ var (
 	reTags           = regexp.MustCompile(`<[^>]*>`)
 )
 
-// NewScraperService creates a new Scraper instance
+// NewScraperService creates a new Scraper instance with proper DNS and TLS configuration
+// for Docker/Tailscale environments
 func NewScraperService() *ScraperService {
 	jar, _ := cookiejar.New(nil)
+
+	// Custom dialer with proper DNS timeout and keep-alive
+	dialer := &net.Dialer{
+		Timeout:   10 * time.Second, // DNS resolution timeout
+		KeepAlive: 30 * time.Second,
+		Resolver: &net.Resolver{
+			PreferGo: true, // Use Go's DNS resolver for consistency across platforms
+			Dial: func(ctx context.Context, network, address string) (net.Conn, error) {
+				// Try multiple DNS servers for better reliability in Docker
+				servers := []string{"8.8.8.8:53", "8.8.4.4:53", "1.1.1.1:53"}
+				var lastErr error
+				for _, server := range servers {
+					d := net.Dialer{Timeout: 5 * time.Second}
+					conn, err := d.DialContext(ctx, network, server)
+					if err == nil {
+						return conn, nil
+					}
+					lastErr = err
+				}
+				return nil, lastErr
+			},
+		},
+	}
+
 	transport := &http.Transport{
-		MaxIdleConns:        100,
-		MaxIdleConnsPerHost: 20,
-		IdleConnTimeout:     90 * time.Second,
+		DialContext:            dialer.DialContext,
+		MaxIdleConns:           100,
+		MaxIdleConnsPerHost:    20,
+		IdleConnTimeout:        90 * time.Second,
+		DisableKeepAlives:      false,
+		DisableCompression:     false,
+		MaxResponseHeaderBytes: 1 << 20, // 1MB
+		ExpectContinueTimeout:  1 * time.Second,
+		// TLS configuration for better compatibility and debugging
+		TLSClientConfig: &tls.Config{
+			MinVersion:         tls.VersionTLS12,
+			InsecureSkipVerify: false, // Keep secure, but ensures connection attempts
+		},
 	}
 
 	return &ScraperService{
 		client: &http.Client{
 			Jar:       jar,
 			Transport: transport,
-			Timeout:   20 * time.Second,
+			Timeout:   30 * time.Second, // Increased timeout to account for DNS + TLS + request
 		},
 	}
 }
 
 // ScrapeCourseData fetches and merges attendance and marks by course name.
 func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]models.CourseScrapeData, error) {
-	loginURL := "https://springzabdesk.szabist-isb.edu.pk/VerifyLogin.asp"
+	// Construct the login URL based on semester
+	baseURL := s.getBaseURL(req.Semester)
+	loginURL := fmt.Sprintf("%s/VerifyLogin.asp", baseURL)
+
 	resp, err := s.client.PostForm(loginURL, url.Values{
 		"txtLoginName": {req.Username},
 		"txtPassword":  {req.Password},
@@ -74,12 +115,12 @@ func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]mode
 	g := new(errgroup.Group)
 	g.Go(func() error {
 		var scrapeErr error
-		attendanceByCourse, scrapeErr = s.scrapeAttendanceByCourse()
+		attendanceByCourse, scrapeErr = s.scrapeAttendanceByCourse(baseURL)
 		return scrapeErr
 	})
 	g.Go(func() error {
 		var scrapeErr error
-		marksByCourse, scrapeErr = s.scrapeMarksByCourse()
+		marksByCourse, scrapeErr = s.scrapeMarksByCourse(baseURL)
 		return scrapeErr
 	})
 
@@ -109,8 +150,14 @@ func (s *ScraperService) ScrapeCourseData(req *requests.Scrape) (map[string]mode
 	return results, nil
 }
 
-func (s *ScraperService) scrapeAttendanceByCourse() (map[string]models.CourseAttendance, error) {
-	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseAttendance.asp?OptionName=View%20Attendance"
+// getBaseURL constructs the base URL for ZabDesk based on semester
+// Pattern: https://{semester}zabdesk.szabist-isb.edu.pk
+func (s *ScraperService) getBaseURL(semester string) string {
+	return fmt.Sprintf("https://%szabdesk.szabist-isb.edu.pk", semester)
+}
+
+func (s *ScraperService) scrapeAttendanceByCourse(baseURL string) (map[string]models.CourseAttendance, error) {
+	listURL := fmt.Sprintf("%s/Student/QryCourseAttendance.asp?OptionName=View%%20Attendance", baseURL)
 	listPage, err := s.getPage(listURL)
 	if err != nil {
 		return nil, err
@@ -157,8 +204,8 @@ func (s *ScraperService) scrapeAttendanceByCourse() (map[string]models.CourseAtt
 	return results, nil
 }
 
-func (s *ScraperService) scrapeMarksByCourse() (map[string]models.CourseMarks, error) {
-	listURL := "https://springzabdesk.szabist-isb.edu.pk/Student/QryCourseRecapSheet.asp?OptionName=Current%20Semester%20Results"
+func (s *ScraperService) scrapeMarksByCourse(baseURL string) (map[string]models.CourseMarks, error) {
+	listURL := fmt.Sprintf("%s/Student/QryCourseRecapSheet.asp?OptionName=Current%%20Semester%%20Results", baseURL)
 	listPage, err := s.getPage(listURL)
 	if err != nil {
 		return nil, err

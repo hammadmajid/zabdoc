@@ -16,6 +16,7 @@
 	import loadingMessages from "$lib/loading-msgs";
 	import type { PageProps } from "./$types";
 	import type { CourseData, MarkCategory, MarkEntry, MarkGroup } from "$lib/types";
+	import { scrapeInitSchema, scrapedData } from "@repo/types";
 
 	function getDefaultSemester(): "Fall" | "Spring" | "Summer" {
 		const month = new Date().getMonth() + 1; // 1-12
@@ -60,6 +61,18 @@
 		}
 	}
 
+	/**
+	 * Convert display values to schema-compliant values
+	 */
+	function convertFormValuesToSchema(displaySemester: string): 'fall' | 'spring' | 'summer' {
+		const semesterMap: Record<string, 'fall' | 'spring' | 'summer'> = {
+			'Fall': 'fall',
+			'Spring': 'spring',
+			'Summer': 'summer'
+		};
+		return semesterMap[displaySemester] as 'fall' | 'spring' | 'summer';
+	}
+
 	async function handleScrap() {
 		if (!username.trim() || !password.trim()) {
 			isError = true;
@@ -81,22 +94,37 @@
 		try {
 			const apiUrl = `${data.baseURL}/scrape`;
 
+			// Validate request payload against scrapeInitSchema
+			const requestPayload = {
+				username,
+				password,
+				campus: 'isb' as const, // Match schema enum
+				semester: convertFormValuesToSchema(semester),
+			};
+
+			const schemaValidation = scrapeInitSchema.safeParse(requestPayload);
+			if (!schemaValidation.success) {
+				isError = true;
+				errorMessage = `Invalid request data: ${schemaValidation.error.message}`;
+				return;
+			}
+
 			const response = await fetch(apiUrl, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
 				},
-				body: JSON.stringify({ username, password, campus, semester })
+				body: JSON.stringify(requestPayload)
 			});
 
 			if (!response.ok) {
 				if (response.status === 400) {
 					isError = true;
-					errorMessage = "Invalid username or password";
+					errorMessage = "Invalid request data. Please check your input.";
 					return;
 				} else if (response.status === 500) {
 					isError = true;
-					errorMessage = "Server error. Please try again later.";
+					errorMessage = "Server error. Failed to fetch attendance and marks data.";
 					return;
 				} else {
 					isError = true;
@@ -105,40 +133,40 @@
 				}
 			}
 
-			const result: any = await response.json();
+			const result = await response.json();
 
 			console.log("API Response:", result);
 
-			if (!result.success) {
+			// Validate response against scrapedData schema
+			const validatedData = scrapedData.safeParse(result);
+			if (!validatedData.success) {
 				isError = true;
-				errorMessage = "Failed to fetch attendance and marks data";
+				errorMessage = `Invalid response data from server: ${validatedData.error.message}`;
+				console.error("Validation errors:", validatedData.error);
 				return;
 			}
 
-			// Ensure data is an object: { course_name: { attendance: {}, marks: {} } }
-			if (result.data && typeof result.data === "object" && !Array.isArray(result.data)) {
-				courseData = Object.entries(result.data as Record<string, any>).map(
-					([courseName, courseValue]) => {
-						const attendance = courseValue?.attendance ?? courseValue?.attendence ?? {};
-						const marks = courseValue?.marks ?? {};
+			// Transform validated data into CourseData array for display
+			courseData = Object.entries(validatedData.data).map(
+				([courseName, courseValue]) => {
+					const attendance = courseValue.attendance;
+					const marks = courseValue.marks;
 
-						return {
-							courseName,
-							instructor: attendance?.instructor || "Unknown Instructor",
-							records: Array.isArray(attendance?.records) ? attendance.records : [],
-							marks: Array.isArray(marks?.entries) ? marks.entries : []
-						};
-					}
-				);
-			} else {
-				courseData = [];
-			}
+					return {
+						courseName,
+						instructor: attendance.instructor || "Unknown Instructor",
+						records: attendance.records || [],
+						marks: marks.entries || []
+					};
+				}
+			);
 
 			console.log("Processed courseData:", courseData);
 			hasResults = true;
 		} catch (error) {
 			isError = true;
 			errorMessage = error instanceof Error ? error.message : String(error);
+			console.error("Scrape error:", error);
 		} finally {
 			stopLoadingMessages();
 			loadingMessage = "";
@@ -282,6 +310,10 @@
 			overallObtained: hasOverallObtained ? overallObtained : null
 		};
 	}
+
+	// Disable this feature
+	let disabled = $state(true);
+
 </script>
 
 <div class="flex min-h-[70vh] flex-col">
@@ -296,7 +328,22 @@
 		</a>
 	</div>
 
-	{#if !hasResults}
+	{#if disabled}
+		<div class="mx-auto flex w-full max-w-lg flex-col items-center justify-center px-4 py-16">
+			<Card.Root class="w-full border-dashed">
+				<Card.Content class="flex flex-col items-center text-center py-12">
+					<div class="mb-4 rounded-full bg-muted p-4">
+						<XCircle class="size-8 text-muted-foreground" />
+					</div>
+					<Card.Title class="mb-2 text-2xl">Feature Not Available</Card.Title>
+					<Card.Description class="text-base">
+						This feature is currently under maintenance. Please check back soon.
+					</Card.Description>
+				</Card.Content>
+			</Card.Root>
+		</div>
+	{:else}
+		{#if !hasResults}
 		<!-- Login Form -->
 		<div
 			class="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center px-4 py-8"
@@ -445,7 +492,7 @@
 			{#if courseData.length === 0}
 				<div class="py-12 text-center">
 					<p class="text-lg font-medium text-muted-foreground">
-						No attendance data found.
+						No data found.
 					</p>
 				</div>
 			{:else}
@@ -637,4 +684,5 @@
 			{/if}
 		</div>
 	{/if}
+{/if}
 </div>

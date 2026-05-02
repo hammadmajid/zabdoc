@@ -1,9 +1,23 @@
-export function smartName(formData: FormData): string {
+export function smartName(data: FormData | Record<string, unknown>): string {
 	// Get form values with fallbacks
-	const regNo = formData.get("regNo")?.toString() || "";
-	const courseCode = formData.get("courseCode")?.toString() || "";
-	const type = formData.get("type")?.toString() || "";
-	const number = formData.get("number")?.toString() || "";
+	let regNo: string;
+	let courseCode: string;
+	let type: string;
+	let number: string;
+
+	if (data instanceof FormData) {
+		regNo = data.get("regNo")?.toString() || "";
+		courseCode = data.get("courseCode")?.toString() || "";
+		type = data.get("type")?.toString() || "";
+		number = data.get("number")?.toString() || "";
+	} else {
+		// Handle JSON object
+		const students = data.Students as Array<{ RegNo: string }> | undefined;
+		regNo = students?.[0]?.RegNo || "";
+		courseCode = (data.CourseCode as string) || "";
+		type = (data.DocType as string) || "";
+		number = (data.Number as string) || "";
+	}
 
 	// Build filename parts
 	const parts: string[] = [];

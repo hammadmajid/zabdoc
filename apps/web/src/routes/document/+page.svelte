@@ -10,6 +10,29 @@
 	// Reset wizard when landing on document page
 	onMount(() => {
 		wizardStore.reset();
+		
+		// Initialize from URL if step param exists
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlStep = urlParams.get("step");
+		if (urlStep) {
+			wizardStore.initFromURL(urlStep);
+		} else {
+			// Sync initial step to URL
+			wizardStore.syncToURL();
+		}
+
+		// Listen to browser back/forward button
+		const handlePopState = () => {
+			const urlParams = new URLSearchParams(window.location.search);
+			const urlStep = urlParams.get("step");
+			wizardStore.handlePopState(urlStep);
+		};
+
+		window.addEventListener("popstate", handlePopState);
+
+		return () => {
+			window.removeEventListener("popstate", handlePopState);
+		};
 	});
 </script>
 
@@ -24,20 +47,6 @@
 			Back to Home
 		</a>
 	</div>
-
-	{#if wizardStore.currentStep === "select-document"}
-		<!-- Hero Section - shown only on first step -->
-		<div class="mb-4 text-center" in:fade={{ duration: 300 }}>
-			<div class="neo-border neo-shadow-lg mb-4 inline-block -rotate-2 bg-primary px-8 py-4">
-				<h1 class="text-4xl font-black tracking-tight uppercase md:text-6xl">
-					Generate Document
-				</h1>
-			</div>
-			<p class="mx-auto max-w-xl text-lg font-medium">
-				Create assignment cover sheets and lab tasks in PDF format.
-			</p>
-		</div>
-	{/if}
 
 	<!-- Wizard Component -->
 	<div class="flex-1">

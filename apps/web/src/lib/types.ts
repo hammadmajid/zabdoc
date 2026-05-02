@@ -43,12 +43,6 @@ export interface DocumentInfo {
 	date: string;
 }
 
-export interface ImageItem {
-	id: string;
-	file: File;
-	previewUrl: string;
-}
-
 export interface FormState {
 	// Student info
 	studentName: string;
@@ -63,7 +57,4 @@ export interface FormState {
 
 	// Document info
 	document: DocumentInfo;
-
-	// Images
-	images: FileList | null;
 }

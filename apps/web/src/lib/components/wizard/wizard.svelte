@@ -5,7 +5,6 @@
 	import StudentInfoStep from "./steps/student-info-step.svelte";
 	import CourseInfoStep from "./steps/course-info-step.svelte";
 	import DocumentInfoStep from "./steps/document-info-step.svelte";
-	import ImagesStep from "./steps/images-step.svelte";
 	import FinalizeStep from "./steps/finalize-step.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
 	import ArrowLeft from "@lucide/svelte/icons/arrow-left";
@@ -89,8 +88,6 @@
 					<CourseInfoStep />
 				{:else if wizardStore.currentStep === "document-info"}
 					<DocumentInfoStep />
-				{:else if wizardStore.currentStep === "images"}
-					<ImagesStep />
 				{:else if wizardStore.currentStep === "finalize"}
 					<FinalizeStep {baseURL} />
 				{/if}

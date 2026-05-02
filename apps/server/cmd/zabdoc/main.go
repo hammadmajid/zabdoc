@@ -11,6 +11,7 @@ import (
 	"syscall"
 	"time"
 	"zabdoc/internal/api"
+	"zabdoc/internal/templates"
 
 	"zabdoc/internal/application"
 	"zabdoc/internal/router"
@@ -20,8 +21,16 @@ func main() {
 	port := "8080"
 
 	logger := log.New(os.Stdout, "", log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
-	handler := api.NewHandler(logger)
+
+	templates, err := templates.New()
+	if err != nil {
+		panic(err)
+	}
+
+	handler := api.NewHandler(logger, templates)
+
 	app := application.NewApplication(logger, handler)
+
 	routes := router.SetupRoutes(app)
 
 	server := &http.Server{
@@ -45,8 +54,6 @@ func main() {
 	<-quit
 
 	app.Logger.Println("Shutting down server...")
-
-	app.Handler.PdfService.Shutdown()
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()

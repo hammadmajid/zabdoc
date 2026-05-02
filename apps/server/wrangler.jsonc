@@ -37,4 +37,5 @@
       "new_sqlite_classes": ["ZabdocContainer"],
     },
   ],
+	"logpush": true
 }

@@ -15,11 +15,30 @@ export function formatDate(dateString: string): string {
 
 export const changelog: ChangelogEntry[] = [
 	{
+		version: "4.0.0-alpha",
+		date: "2026-05-02",
+		changes: [
+			"Complete architectural refactor with serverless backend on Cloudflare Workers",
+			"Implement PDF rendering on Cloudflare browser environment",
+			"Remove chromium and chromedp dependencies for lighter deployments",
+			"Implement document service for DOCX file generation",
+			"Add type safety with dedicated packages/types module",
+			"Use Zod schemas in middleware for request validation",
+			"Replace multipart form data with JSON payload for API requests",
+			"Remove image upload step from document wizard for simplification",
+			"Add URL query-based navigation to wizard for better state management",
+			"Handle CA certificates and DNS/TLS configuration inside Docker",
+			"Mark /scrape feature as not available with proper error handling",
+			"Disable lab task button in UI",
+			"Update dependencies and fix dependabot security alerts"
+		]
+	},
+	{
 		version: "3.1.2",
 		date: "2026-03-24",
 		changes: [
 			"Add wide event logging for /scrape request for debugging",
-			"Fix issue with invalid pasrsing of attendence data"
+			"Fix issue with invalid parsing of attendance data"
 		]
 	},
 	{

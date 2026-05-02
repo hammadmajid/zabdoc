@@ -6,18 +6,15 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "check": "go vet ./...",
-    "lint": "oxlint",
-    "fmt": "oxfmt",
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
     "@cloudflare/containers": "^0.2.0",
+    "@repo/types": "workspace:*",
     "hono": "^4.12.5"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
-    "oxfmt": "^0.42.0",
-    "oxlint": "^1.57.0",
     "turbo": "^2.8.20",
     "typescript": "^5.9.3",
     "wrangler": "4.73.0"
