@@ -12,8 +12,17 @@ export const POST: RequestHandler = async ({ request }) => {
     // Validate with schema
     const validated = documentSchema.parse(jsonData);
 
+    // Ensure required fields have defaults
+    const validatedWithDefaults = {
+      ...validated,
+      Students: validated.Students.map(student => ({
+        Name: student.Name || '',
+        RegNo: student.RegNo || '',
+      })),
+    };
+
     // Build HTML
-    const html = buildHTML(validated);
+    const html = buildHTML(validatedWithDefaults);
 
     // Send to Cloudflare
     const response = await fetch(

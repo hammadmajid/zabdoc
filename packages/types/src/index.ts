@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const documentSchema = z.object({
     Students: z.array(z.object({
-        Name: z.string().min(1),
-        RegNo: z.string().min(1),
+        Name: z.string().optional(),
+        RegNo: z.string().optional(),
     })),
     Class: z.string().min(1),
     Course: z.string().min(1),
