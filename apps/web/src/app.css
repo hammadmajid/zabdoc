@@ -1,6 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
 @import "tailwindcss";
 
 @import "tw-animate-css";
+
+/* Excon font - Light */
+@font-face {
+	font-family: 'Excon';
+	src: url('/fonts/excon/Fonts/OTF/Excon-Light.otf') format('opentype'), url('/fonts/excon/Fonts/TTF/Excon-Variable.ttf') format('truetype-variations');
+	font-weight: 300;
+	font-display: swap;
+}
+
+/* Excon font - Regular */
+@font-face {
+	font-family: 'Excon';
+	src: url('/fonts/excon/Fonts/OTF/Excon-Regular.otf') format('opentype'), url('/fonts/excon/Fonts/TTF/Excon-Variable.ttf') format('truetype-variations');
+	font-weight: 400;
+	font-display: swap;
+}
+
+/* Excon font - Medium */
+@font-face {
+	font-family: 'Excon';
+	src: url('/fonts/excon/Fonts/OTF/Excon-Medium.otf') format('opentype'), url('/fonts/excon/Fonts/TTF/Excon-Variable.ttf') format('truetype-variations');
+	font-weight: 500;
+	font-display: swap;
+}
+
+/* Excon font - Bold */
+@font-face {
+	font-family: 'Excon';
+	src: url('/fonts/excon/Fonts/OTF/Excon-Bold.otf') format('opentype'), url('/fonts/excon/Fonts/TTF/Excon-Variable.ttf') format('truetype-variations');
+	font-weight: 700;
+	font-display: swap;
+}
+
+/* Excon font - Black */
+@font-face {
+	font-family: 'Excon';
+	src: url('/fonts/excon/Fonts/OTF/Excon-Black.otf') format('opentype'), url('/fonts/excon/Fonts/TTF/Excon-Variable.ttf') format('truetype-variations');
+	font-weight: 900;
+	font-display: swap;
+}
 
 @plugin "@tailwindcss/typography";
 
@@ -92,6 +134,14 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		font-family: 'Excon', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+		font-weight: 400;
+	}
+	h1, h2, h3 {
+		font-weight: 900;
+	}
+	h4, h5, h6 {
+		font-weight: 700;
 	}
 }
 
