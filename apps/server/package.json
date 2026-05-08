@@ -11,7 +11,7 @@
   "dependencies": {
     "@cloudflare/containers": "^0.2.0",
     "@repo/types": "workspace:*",
-    "hono": "^4.12.5"
+    "hono": "^4.12.16"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
